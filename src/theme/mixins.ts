@@ -19,6 +19,7 @@ export const mixins = {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
+        flexDirection: 'column',
     },
 
     flexBetween: {
