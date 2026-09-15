@@ -1,0 +1,13 @@
+export interface GithubUser {
+    login: string;
+    id: number;
+    avatarUrl: string;
+    type: string;
+    email: string;
+}
+
+export interface GithubSearchResponse {
+    totalCount: number;
+    incompleteResults: boolean;
+    items: GithubUser[];
+}
