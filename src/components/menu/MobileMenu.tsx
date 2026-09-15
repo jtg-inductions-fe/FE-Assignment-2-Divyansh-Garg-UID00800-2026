@@ -2,7 +2,7 @@ import { Close, GitHub, Login, Menu } from '@mui/icons-material';
 import { Divider, Drawer, IconButton } from '@mui/material';
 import { NavLink } from 'react-router';
 
-import { navigationItems } from '@components/navigation/navigation';
+import { useNavigationItems } from '@components/navigation/navigation';
 import LogoutMenu from '@components/actionButtons/LogoutMenu';
 
 import { useExpand } from '@app/hooks';
@@ -30,6 +30,8 @@ interface MobileMenuProps {
 
 const MobileMenu = ({ isAuthenticated, currentPath }: MobileMenuProps) => {
     const { open, handleOpen, handleClose } = useExpand();
+
+    const navigationItems = useNavigationItems();
 
     const visibleNavigationItems = navigationItems.filter(
         (item) => !item.requiresAuth || isAuthenticated,
