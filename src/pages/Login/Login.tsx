@@ -1,29 +1,30 @@
 import { GitHub, Visibility, VisibilityOff } from '@mui/icons-material';
-import {
-    Alert,
-    Box,
-    Button,
-    Card,
-    CircularProgress,
-    IconButton,
-    Stack,
-    TextField,
-    Typography,
-} from '@mui/material';
+import { Alert, Button, CircularProgress, IconButton, TextField } from '@mui/material';
 
-import { useState } from 'react';
+import { useState, type ChangeEvent } from 'react';
 import { useNavigate } from 'react-router';
 
 import Bubble from '@/components/common/Bubble';
 
 import { useAppDispatch } from '@/app/hooks';
 import { loginUser } from '@/features/auth/authSlice';
-import { allowedKeys, type AuthUser } from '@/features/auth/authTypes';
+import { type AuthUser } from '@/features/auth/authTypes';
 
 import { colors } from '@/theme/colors';
 import { pxToRem } from '@/theme/functions';
 
-import { pickKeys, checkRegexFunction } from '@/utils/helperFunctions';
+import { checkRegexFunction } from '@/utils/helperFunctions';
+import {
+    LoginCard,
+    LoginCardFooter,
+    LoginCardHeader,
+    LoginCardHeading,
+    LoginCardLogo,
+    LoginCardMainSection,
+    LoginCardPATGenerateBtn,
+    LoginCardSubheading,
+    LoginPageContent,
+} from '@/components/auth/Auth.styles';
 
 const Login = () => {
     const dispatch = useAppDispatch();
@@ -66,12 +67,27 @@ const Login = () => {
                 throw new Error('Unable to authenticate with GitHub.');
             }
 
-            const githubUser: AuthUser = await response.json();
-            const user = pickKeys<AuthUser>(githubUser, allowedKeys);
+            const data = await response.json();
+
+            const githubUser: AuthUser = {
+                login: data.login,
+                id: data.id,
+                nodeId: data.node_id,
+                avatarUrl: data.avatar_url,
+                htmlUrl: data.html_url,
+                name: data.name,
+                blog: data.blog,
+                location: data.location,
+                email: data.email,
+                bio: data.bio,
+                followers: data.followers,
+                following: data.following,
+                createdAt: data.created_at,
+            };
 
             dispatch(
                 loginUser({
-                    user: user,
+                    user: githubUser,
                     token: trimmedToken,
                 }),
             );
@@ -88,7 +104,7 @@ const Login = () => {
         }
     };
 
-    const handleTokenChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const handleTokenChange = (event: ChangeEvent<HTMLInputElement>) => {
         setToken(event.target.value);
 
         if (error) {
@@ -97,21 +113,7 @@ const Login = () => {
     };
 
     return (
-        <Box
-            sx={(theme) => ({
-                ...theme.mixins.flexCenter,
-                minHeight: `calc(100vh - ${theme.variables.layout.navbarHeight})`,
-                px: theme.variables.layout.pagePadding,
-                py: theme.variables.spacing.xxl,
-
-                position: 'relative',
-                background: colors.primary[50],
-                overflowY: 'clip',
-                overflowX: {
-                    xs: 'clip',
-                },
-            })}
-        >
+        <LoginPageContent>
             <Bubble
                 sx={() => ({
                     backgroundColor: colors.secondary[200],
@@ -128,73 +130,23 @@ const Login = () => {
                 }}
             />
 
-            <Card
-                elevation={0}
-                sx={(theme) => ({
-                    ...theme.mixins.flexCenterCol,
-                    border: `1px solid ${theme.palette.divider}`,
-                    borderRadius: theme.variables.radius.xl,
-                    backgroundColor: `${theme.palette.background.paper}F5`,
-                    boxShadow: theme.variables.shadows.card,
-                    py: theme.variables.spacing.xxl,
-                    px: theme.variables.spacing.xxl,
-                    gap: theme.variables.spacing.xl,
-
-                    position: 'relative',
-                    zIndex: 1,
-                    width: '100%',
-                    maxWidth: pxToRem(640),
-                    minHeight: `calc(70vh - ${theme.variables.layout.navbarHeight})`,
-                })}
-            >
-                <Stack
-                    sx={(theme) => ({
-                        gap: theme.variables.spacing.sm,
-
-                        alignItems: 'center',
-                        width: '100%',
-                    })}
-                >
-                    <Box
-                        sx={(theme) => ({
-                            ...theme.mixins.flexCenter,
-                            borderRadius: theme.variables.radius.lg,
-                            backgroundColor: theme.palette.primary.main,
-                            color: theme.palette.primary.contrastText,
-                            width: theme.variables.iconSize.xxl,
-                            height: theme.variables.iconSize.xxl,
-                        })}
-                    >
+            <LoginCard elevation={0}>
+                <LoginCardHeader>
+                    <LoginCardLogo>
                         <GitHub
                             sx={(theme) => ({
                                 fontSize: theme.variables.iconSize.xl,
                             })}
                         />
-                    </Box>
+                    </LoginCardLogo>
 
-                    <Typography
-                        variant="h3"
-                        sx={(theme) => ({
-                            fontWeight: theme.variables.fontWeight.bold,
+                    <LoginCardHeading variant="h3">Connect GitHub</LoginCardHeading>
 
-                            textAlign: 'center',
-                        })}
-                    >
-                        Connect GitHub
-                    </Typography>
-
-                    <Typography
-                        variant="body1"
-                        sx={{
-                            textAlign: 'center',
-                            width: '80%',
-                            color: colors.primary[900],
-                        }}
-                    >
+                    <LoginCardSubheading variant="body1">
                         Enter your GitHub Personal Access Token to connect your account and start
                         exploring GitHub users.
-                    </Typography>
-                </Stack>
+                    </LoginCardSubheading>
+                </LoginCardHeader>
 
                 {error && (
                     <Alert
@@ -210,13 +162,7 @@ const Login = () => {
                     </Alert>
                 )}
 
-                <Stack
-                    sx={(theme) => ({
-                        alignItems: 'center',
-                        gap: theme.variables.spacing.sm,
-                        width: '100%',
-                    })}
-                >
+                <LoginCardMainSection>
                     <TextField
                         fullWidth
                         label="Personal Access Token"
@@ -250,19 +196,13 @@ const Login = () => {
                         }}
                     />
 
-                    <Button
+                    <LoginCardPATGenerateBtn
                         component="a"
                         href="https://github.com/settings/personal-access-tokens"
                         target="_blank"
-                        sx={{
-                            color: colors.primary[900],
-                            p: 0,
-                            width: '100%',
-                            justifyContent: 'end',
-                        }}
                     >
                         Don't have PAT, Generate it.
-                    </Button>
+                    </LoginCardPATGenerateBtn>
 
                     <Button
                         fullWidth
@@ -277,19 +217,13 @@ const Login = () => {
                     >
                         {loading ? 'Connecting...' : 'Connect GitHub'}
                     </Button>
-                </Stack>
+                </LoginCardMainSection>
 
-                <Typography
-                    variant="body1"
-                    sx={{
-                        textAlign: 'center',
-                        color: colors.primary[900],
-                    }}
-                >
+                <LoginCardFooter variant="body1">
                     Your Personal Access Token is stored locally in your browser.
-                </Typography>
-            </Card>
-        </Box>
+                </LoginCardFooter>
+            </LoginCard>
+        </LoginPageContent>
     );
 };
 
