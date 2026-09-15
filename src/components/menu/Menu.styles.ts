@@ -33,7 +33,7 @@ export const MobileMenuHeader = styled(Box)(({ theme }) => ({
 
 export const MobileNavigationList = styled(List)(({ theme }) => ({
     ...theme.mixins.flexCenterCol,
-    height: `calc(100vh - ${theme.variables.layout.navbarHeight})`,
+    height: `calc(100vh - ${pxToRem(81)})`,
     justifyContent: 'flex-start',
 }));
 

@@ -39,7 +39,8 @@ const LogoutMenu = ({ fun, sx }: LogoutProps) => {
                     (theme) => ({
                         color: colors.error[500],
                         backgroundColor: colors.white,
-                        borderRadius: theme.variables.radius.xl,
+                        borderRadius: theme.variables.radius.pill,
+                        ml: theme.variables.spacing.sm,
 
                         '&:hover': {
                             color: colors.white,
