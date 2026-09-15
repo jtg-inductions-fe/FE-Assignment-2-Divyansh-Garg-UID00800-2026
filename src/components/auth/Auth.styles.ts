@@ -1,5 +1,5 @@
-import { colors } from '@/theme/colors';
-import { pxToRem } from '@/theme/functions';
+import { colors } from '@theme/colors';
+import { pxToRem } from '@theme/functions';
 import { Box, Button, Card, Stack, styled, Typography } from '@mui/material';
 
 export const LoginPageContent = styled(Box)(({ theme }) => ({

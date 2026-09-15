@@ -4,16 +4,16 @@ import { Alert, Button, CircularProgress, IconButton, TextField } from '@mui/mat
 import { useState, type ChangeEvent } from 'react';
 import { useNavigate } from 'react-router';
 
-import Bubble from '@/components/common/Bubble';
+import Bubble from '@components/common/Bubble';
 
-import { useAppDispatch } from '@/app/hooks';
-import { loginUser } from '@/features/auth/authSlice';
-import { type AuthUser } from '@/features/auth/authTypes';
+import { useAppDispatch } from '@app/hooks';
+import { loginUser } from '@features/auth/authSlice';
+import { type AuthUser } from '@features/auth/authTypes';
 
-import { colors } from '@/theme/colors';
-import { pxToRem } from '@/theme/functions';
+import { colors } from '@theme/colors';
+import { pxToRem } from '@theme/functions';
 
-import { checkRegexFunction, snakeToCamelCase } from '@/utils/helperFunctions';
+import { checkRegexFunction, snakeToCamelCase } from '@utils/helperFunctions';
 import {
     LoginCard,
     LoginCardFooter,
@@ -24,7 +24,7 @@ import {
     LoginCardPATGenerateBtn,
     LoginCardSubheading,
     LoginPageContent,
-} from '@/components/auth/Auth.styles';
+} from '@components/auth/Auth.styles';
 
 const Login = () => {
     const dispatch = useAppDispatch();
