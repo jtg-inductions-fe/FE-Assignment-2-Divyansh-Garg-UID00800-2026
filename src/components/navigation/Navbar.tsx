@@ -6,7 +6,6 @@ import { useAppSelector } from '@app/hooks';
 
 import { navigationItems } from '@components/navigation/navigation';
 
-import { checkCurrentRoute } from './NavigationUtils';
 import { NavButton } from './NavButton';
 import MobileMenu from '../menu/MobileMenu';
 import LogoutMenu from '../actionButtons/LogoutMenu';
@@ -57,10 +56,6 @@ const Navbar = () => {
                     }}
                 >
                     {visibleNavigationItems.map((item) => {
-                        if (checkCurrentRoute(location.pathname, item.path)) {
-                            return null;
-                        }
-
                         return (
                             <NavButton
                                 key={item.path}
@@ -71,7 +66,7 @@ const Navbar = () => {
                         );
                     })}
 
-                    {!isAuthenticated && location.pathname !== '/login' && <LoginMenu />}
+                    {!isAuthenticated && <LoginMenu />}
 
                     {isAuthenticated && <LogoutMenu />}
                 </NavLinks>

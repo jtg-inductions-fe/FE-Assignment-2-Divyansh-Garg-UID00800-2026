@@ -45,7 +45,7 @@ export const NavLinks = styled(Box)(({ theme }) => ({
 export const StyledNavLinkButton = styled(Button)(({ theme }) => ({
     textTransform: 'none',
     color: theme.palette.text.secondary,
-    borderRadius: theme.variables.radius.xl,
+    borderRadius: theme.variables.radius.pill,
     paddingLeft: theme.variables.spacing.md,
     paddingRight: theme.variables.spacing.md,
     fontSize: theme.variables.fontSize.sm,
