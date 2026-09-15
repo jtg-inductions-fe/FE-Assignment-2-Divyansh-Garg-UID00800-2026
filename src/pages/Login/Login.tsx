@@ -13,7 +13,7 @@ import { type AuthUser } from '@/features/auth/authTypes';
 import { colors } from '@/theme/colors';
 import { pxToRem } from '@/theme/functions';
 
-import { checkRegexFunction } from '@/utils/helperFunctions';
+import { checkRegexFunction, snakeToCamelCase } from '@/utils/helperFunctions';
 import {
     LoginCard,
     LoginCardFooter,
@@ -68,22 +68,9 @@ const Login = () => {
             }
 
             const data = await response.json();
+            const formattedData = snakeToCamelCase<typeof data, AuthUser>(data);
 
-            const githubUser: AuthUser = {
-                login: data.login,
-                id: data.id,
-                nodeId: data.node_id,
-                avatarUrl: data.avatar_url,
-                htmlUrl: data.html_url,
-                name: data.name,
-                blog: data.blog,
-                location: data.location,
-                email: data.email,
-                bio: data.bio,
-                followers: data.followers,
-                following: data.following,
-                createdAt: data.created_at,
-            };
+            const githubUser: AuthUser = formattedData;
 
             dispatch(
                 loginUser({
