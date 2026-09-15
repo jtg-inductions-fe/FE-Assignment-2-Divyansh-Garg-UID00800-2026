@@ -1,7 +1,7 @@
 export interface GithubUser {
     login: string;
     id: number;
-    avatarUrl: string;
+    avatar_url: string;
     type: string;
     email: string;
 }
