@@ -8,7 +8,6 @@ import { Autocomplete, CircularProgress, IconButton, TextField } from '@mui/mate
 
 import Bubble from '@/components/common/Bubble';
 import {
-    SearchError,
     SearchWrap,
     SearchResult,
     SearchResultContent,
@@ -20,6 +19,7 @@ import { Content } from '@/components/common/Content';
 import { Page } from '@/components/common/Page';
 import { Card } from '@/components/common/Card';
 import { Title, Subtitle } from '@/components/common/Header';
+import { ErrorBox } from '@/components/common/ErrorBox';
 
 import type { GithubSearchResponse, GithubUser } from '@/features/Search/Search';
 
@@ -166,7 +166,7 @@ const Search = () => {
                         Enter GitHub Username of person you wanna watch.
                     </Subtitle>
 
-                    {error && <SearchError severity="error">{error}</SearchError>}
+                    {error && <ErrorBox severity="error">{error}</ErrorBox>}
 
                     <SearchWrap>
                         <Autocomplete
