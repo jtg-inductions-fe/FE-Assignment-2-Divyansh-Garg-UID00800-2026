@@ -115,6 +115,7 @@ declare module '@mui/material/styles' {
     interface Mixins {
         pageContainer: typeof mixins.pageContainer;
         flexCenter: typeof mixins.flexCenter;
+        flexCenterCol: typeof mixins.flexCenterCol;
         flexBetween: typeof mixins.flexBetween;
         card: typeof mixins.card;
         visuallyHidden: typeof mixins.visuallyHidden;

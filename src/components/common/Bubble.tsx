@@ -1,7 +1,7 @@
 import { Box } from '@mui/material';
 import type { SxProps } from '@mui/material';
-import { colors } from '@/theme/colors';
-import { pxToRem } from '@/theme/functions';
+import { colors } from '@theme/colors';
+import { pxToRem } from '@theme/functions';
 
 // for customization
 interface BubbleProps {

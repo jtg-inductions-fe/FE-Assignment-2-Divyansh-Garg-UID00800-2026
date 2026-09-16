@@ -1,11 +1,10 @@
 import { ArrowBack, Home } from '@mui/icons-material';
 import { Button } from '@mui/material';
-import { Link } from 'react-router';
+import { Link, useNavigate } from 'react-router';
 
-import notFoundImage from '@/assets/images/github-404.png';
-import Bubble from '@/components/common/Bubble';
+import Bubble from '@components/common/Bubble';
 
-import { pxToRem } from '@/theme/functions';
+import { pxToRem } from '@theme/functions';
 import {
     BtnBox,
     NotFoundCard,
@@ -14,9 +13,13 @@ import {
     NotFoundImg,
     NotFoundSubHeading,
     NotFoundWrapper,
-} from '@/components/notFound/NotFound.styles';
+} from '@components/notFound/NotFound.styles';
+
+const notFoundImg = 'src/assets/images/github-404.png';
 
 const NotFound = () => {
+    const navigate = useNavigate();
+
     return (
         <NotFoundWrapper>
             <Bubble
@@ -34,7 +37,7 @@ const NotFound = () => {
             />
 
             <NotFoundCard>
-                <NotFoundImg component="img" src={notFoundImage} alt="GitHub 404 image" />
+                <NotFoundImg component="img" src={notFoundImg} alt="GitHub 404 image" />
 
                 <NotFoundHeading variant="h1" color="primary">
                     404
@@ -67,8 +70,7 @@ const NotFound = () => {
                     </Button>
 
                     <Button
-                        component={Link}
-                        to="/"
+                        onClick={() => navigate(-1)}
                         variant="outlined"
                         size="large"
                         startIcon={<ArrowBack />}

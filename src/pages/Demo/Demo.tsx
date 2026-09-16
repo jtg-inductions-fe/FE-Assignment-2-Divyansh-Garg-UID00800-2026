@@ -1,7 +1,7 @@
-import { useAppDispatch, useAppSelector } from '@/app/hooks';
+import { useAppDispatch, useAppSelector } from '@app/hooks';
 
-import { increment, decrement, setMessage } from '@/features/demo/demoSlice';
-import { loginUser, logoutUser } from '@/features/auth/authSlice';
+import { increment, decrement, setMessage } from '@features/demo/demoSlice';
+import { loginUser, logoutUser } from '@features/auth/authSlice';
 
 import Button from '@mui/material/Button';
 
