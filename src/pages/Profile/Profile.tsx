@@ -1,0 +1,278 @@
+import Bubble from '@components/common/Bubble';
+import { colors } from '@theme/colors';
+import { pxToRem } from '@theme/functions';
+
+import { Page } from '@components/common/Page';
+import { Card } from '@components/common/Card';
+import { Content } from '@components/common/Content';
+import { Title } from '@components/common/Header';
+import {
+    AdditionalInfo,
+    Bio,
+    Count,
+    Eyebrow,
+    GridEle,
+    GridEleText,
+    ProfileAvatar,
+    ProfileCard,
+    ProfileCardHeader,
+    ProfileCardHeaderBottom,
+    ProfileCardHeaderTop,
+    ProfileCardTopHeaderInner,
+    ProfileMain,
+    ProfileMainTop,
+    ProfileUsername,
+    StatValue,
+} from '@components/profile/Profile.styles';
+
+import { FollowButton } from '@components/common/FollowBtn';
+import { ErrorBox } from '@components/common/ErrorBox';
+
+import { GitHub } from '@mui/icons-material';
+import { Box, IconButton } from '@mui/material';
+
+import { useEffect, useState } from 'react';
+import { useParams } from 'react-router';
+
+import { useAppSelector } from '@app/hooks';
+import { snakeToCamelCase } from '@utils/helperFunctions';
+import type { AuthUser } from '@features/auth/authTypes';
+
+const Profile = () => {
+    const { username } = useParams<{ username: string }>();
+
+    const [searchUserInfo, setSearchUserInfo] = useState<AuthUser | null>(null);
+    const [_, setLoading] = useState(false);
+    const [error, setError] = useState('');
+
+    const authUser = useAppSelector((state) => state.auth.user);
+    const isAuthenticated = useAppSelector((state) => state.auth.isAuthenticated);
+
+    const isOwnProfile =
+        isAuthenticated &&
+        !!authUser &&
+        !!username &&
+        authUser.login.toLowerCase() === username.toLowerCase();
+
+    useEffect(() => {
+        const handleUserSearch = async (value: string) => {
+            const trimmedUsername = value.trim();
+
+            if (!trimmedUsername) {
+                setSearchUserInfo(null);
+                return;
+            }
+
+            setLoading(true);
+            setError('');
+
+            try {
+                const response = await fetch(`https://api.github.com/users/${trimmedUsername}`, {
+                    headers: {
+                        Accept: 'application/vnd.github+json',
+                    },
+                });
+
+                if (!response.ok) {
+                    if (response.status === 404) {
+                        throw new Error('User Not Found');
+                    }
+
+                    throw new Error('Unable to get the GitHub user profile.');
+                }
+
+                const data = await response.json();
+
+                const formattedData = snakeToCamelCase<typeof data, AuthUser>(data);
+
+                setSearchUserInfo(formattedData);
+            } catch (err) {
+                setSearchUserInfo(null);
+
+                setError(
+                    err instanceof Error
+                        ? err.message
+                        : 'Something went wrong while connecting to GitHub.',
+                );
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        if (username) {
+            handleUserSearch(username);
+        }
+    }, [username]);
+
+    return (
+        <Page>
+            <Bubble
+                sx={{
+                    backgroundColor: colors.primary[200],
+                    top: pxToRem(-120),
+                    right: pxToRem(-120),
+                }}
+            />
+
+            <Bubble
+                sx={{
+                    backgroundColor: colors.primary[200],
+                    bottom: pxToRem(-120),
+                    left: pxToRem(-120),
+                }}
+            />
+
+            <Content
+                sx={{
+                    width: {
+                        lg: '80%',
+                    },
+                }}
+            >
+                <Card>
+                    <Title variant="h3">{isOwnProfile ? 'My Profile' : 'Profile'}</Title>
+
+                    {error ? (
+                        <ErrorBox color="error">{error}</ErrorBox>
+                    ) : (
+                        <ProfileCard>
+                            <ProfileCardHeader>
+                                <ProfileCardHeaderTop>
+                                    {searchUserInfo?.avatarUrl ? (
+                                        <ProfileAvatar
+                                            src={searchUserInfo.avatarUrl}
+                                            alt={searchUserInfo.login}
+                                        />
+                                    ) : (
+                                        <ProfileAvatar />
+                                    )}
+
+                                    <ProfileCardTopHeaderInner>
+                                        <ProfileUsername variant="h6">
+                                            {searchUserInfo?.login}
+                                        </ProfileUsername>
+
+                                        {searchUserInfo?.htmlUrl && (
+                                            <IconButton
+                                                href={searchUserInfo.htmlUrl}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                aria-label="Open GitHub profile"
+                                            >
+                                                <GitHub />
+                                            </IconButton>
+                                        )}
+                                    </ProfileCardTopHeaderInner>
+                                </ProfileCardHeaderTop>
+
+                                <ProfileCardHeaderBottom>
+                                    <Count>
+                                        <StatValue>
+                                            Followers: {searchUserInfo?.followers ?? 'NA'}
+                                        </StatValue>
+                                    </Count>
+
+                                    <Count>
+                                        <StatValue>
+                                            Following: {searchUserInfo?.following ?? 'NA'}
+                                        </StatValue>
+                                    </Count>
+                                </ProfileCardHeaderBottom>
+                            </ProfileCardHeader>
+
+                            <ProfileMain>
+                                <ProfileMainTop>
+                                    <Eyebrow variant="h6">
+                                        {searchUserInfo?.email ?? 'Email is not available.'}
+                                    </Eyebrow>
+
+                                    <Bio variant="h6">
+                                        {searchUserInfo?.bio ?? 'No Bio is available.'}
+                                    </Bio>
+                                </ProfileMainTop>
+
+                                {isAuthenticated && !isOwnProfile && (
+                                    <FollowButton>Follow</FollowButton>
+                                )}
+                            </ProfileMain>
+
+                            {isOwnProfile && searchUserInfo && (
+                                <Box>
+                                    <AdditionalInfo>
+                                        <GridEle>
+                                            <Eyebrow variant="h6">Name:</Eyebrow>
+                                            <GridEleText>
+                                                {searchUserInfo.name ?? 'Not available'}
+                                            </GridEleText>
+                                        </GridEle>
+
+                                        <GridEle>
+                                            <Eyebrow variant="h6">Company:</Eyebrow>
+                                            <GridEleText>
+                                                {searchUserInfo.company ?? 'Not available'}
+                                            </GridEleText>
+                                        </GridEle>
+
+                                        <GridEle>
+                                            <Eyebrow variant="h6">Location:</Eyebrow>
+                                            <GridEleText>
+                                                {searchUserInfo.location ?? 'Not available'}
+                                            </GridEleText>
+                                        </GridEle>
+
+                                        <GridEle>
+                                            <Eyebrow variant="h6">Blog:</Eyebrow>
+                                            <GridEleText>
+                                                {searchUserInfo.blog || 'Not available'}
+                                            </GridEleText>
+                                        </GridEle>
+
+                                        <GridEle>
+                                            <Eyebrow variant="h6">GitHub ID:</Eyebrow>
+                                            <GridEleText>{searchUserInfo.id}</GridEleText>
+                                        </GridEle>
+
+                                        <GridEle>
+                                            <Eyebrow variant="h6">Account Type:</Eyebrow>
+                                            <GridEleText>{searchUserInfo.type}</GridEleText>
+                                        </GridEle>
+
+                                        <GridEle>
+                                            <Eyebrow variant="h6">Public Repositories:</Eyebrow>
+                                            <GridEleText>{searchUserInfo.publicRepos}</GridEleText>
+                                        </GridEle>
+
+                                        <GridEle>
+                                            <Eyebrow variant="h6">Public Gists:</Eyebrow>
+                                            <GridEleText>{searchUserInfo.publicGists}</GridEleText>
+                                        </GridEle>
+
+                                        <GridEle>
+                                            <Eyebrow variant="h6">Account Created: </Eyebrow>
+                                            <GridEleText>
+                                                {searchUserInfo.createdAt
+                                                    ? searchUserInfo.createdAt
+                                                    : 'Not available'}
+                                            </GridEleText>
+                                        </GridEle>
+
+                                        <GridEle>
+                                            <Eyebrow variant="h6">Last Updated: </Eyebrow>
+                                            <GridEleText>
+                                                {searchUserInfo.updatedAt
+                                                    ? searchUserInfo.updatedAt
+                                                    : 'Not available'}
+                                            </GridEleText>
+                                        </GridEle>
+                                    </AdditionalInfo>
+                                </Box>
+                            )}
+                        </ProfileCard>
+                    )}
+                </Card>
+            </Content>
+        </Page>
+    );
+};
+
+export default Profile;
