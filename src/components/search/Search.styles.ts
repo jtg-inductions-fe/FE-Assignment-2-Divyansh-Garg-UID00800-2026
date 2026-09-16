@@ -1,14 +1,7 @@
-import { Alert, Box, styled, Typography } from '@mui/material';
+import { Box, styled, Typography } from '@mui/material';
 
 import { colors } from '@/theme/colors';
 import { pxToRem } from '@/theme/functions';
-
-export const SearchError = styled(Alert)(({ theme }) => ({
-    width: '100%',
-    backgroundColor: colors.error[200],
-    borderRadius: theme.variables.radius.lg,
-    color: colors.black,
-}));
 
 export const SearchWrap = styled(Box)(({ theme }) => ({
     width: '100%',
