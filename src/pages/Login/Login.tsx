@@ -15,16 +15,19 @@ import { pxToRem } from '@theme/functions';
 
 import { checkRegexFunction, snakeToCamelCase } from '@utils/helperFunctions';
 import {
-    LoginCard,
-    LoginCardFooter,
-    LoginCardHeader,
-    LoginCardHeading,
-    LoginCardLogo,
-    LoginCardMainSection,
-    LoginCardPATGenerateBtn,
-    LoginCardSubheading,
-    LoginPageContent,
+    LoginHeader,
+    LoginHeading,
+    LoginMainSection,
+    LoginSubheading,
+    LoginWrapper,
 } from '@components/auth/Auth.styles';
+
+import { Page } from '@components/common/Page';
+import { Content } from '@components/common/Content';
+import { CardLogo, CardFooter, CardLink } from '@components/common/Card';
+
+import { fetchFollowers } from '@utils/followUnfollow';
+import { addFollowers } from '@features/social/socialSlice';
 
 const Login = () => {
     const dispatch = useAppDispatch();
@@ -87,6 +90,10 @@ const Login = () => {
                     : 'Something went wrong while connecting to GitHub.',
             );
         } finally {
+            const socialUsers = await fetchFollowers(token);
+            if (socialUsers) {
+                dispatch(addFollowers(socialUsers));
+            }
             setLoading(false);
         }
     };
@@ -100,7 +107,7 @@ const Login = () => {
     };
 
     return (
-        <LoginPageContent>
+        <Page>
             <Bubble
                 sx={() => ({
                     backgroundColor: colors.secondary[200],
@@ -117,100 +124,110 @@ const Login = () => {
                 }}
             />
 
-            <LoginCard elevation={0}>
-                <LoginCardHeader>
-                    <LoginCardLogo>
-                        <GitHub
+            <Content
+                sx={{
+                    width: {
+                        lg: '80%',
+                    },
+                    justifyContent: 'center',
+                }}
+            >
+                <LoginWrapper>
+                    <LoginHeader>
+                        <CardLogo>
+                            <GitHub
+                                sx={(theme) => ({
+                                    fontSize: theme.variables.iconSize.xl,
+                                })}
+                            />
+                        </CardLogo>
+
+                        <LoginHeading variant="h3">Connect GitHub</LoginHeading>
+
+                        <LoginSubheading variant="body1">
+                            Enter your GitHub Personal Access Token to connect your account and
+                            start exploring GitHub users.
+                        </LoginSubheading>
+                    </LoginHeader>
+
+                    {error && (
+                        <Alert
+                            severity="error"
                             sx={(theme) => ({
-                                fontSize: theme.variables.iconSize.xl,
+                                width: '100%',
+                                backgroundColor: colors.error[200],
+                                borderRadius: theme.variables.radius.lg,
+                                color: colors.black,
                             })}
+                        >
+                            {error}
+                        </Alert>
+                    )}
+
+                    <LoginMainSection>
+                        <TextField
+                            fullWidth
+                            label="Personal Access Token"
+                            placeholder="GitHub PAT"
+                            type={showToken ? 'text' : 'password'}
+                            value={token}
+                            onChange={handleTokenChange}
+                            disabled={loading}
+                            autoComplete="off"
+                            onKeyDown={(event) => {
+                                if (event.key === 'Enter' && !loading) {
+                                    void handleLogin();
+                                }
+                            }}
+                            slotProps={{
+                                input: {
+                                    endAdornment: (
+                                        <IconButton
+                                            disabled={loading}
+                                            onClick={() => setShowToken((previous) => !previous)}
+                                            aria-label={showToken ? 'Hide token' : 'Show token'}
+                                        >
+                                            {showToken ? (
+                                                <VisibilityOff htmlColor={colors.error[500]} />
+                                            ) : (
+                                                <Visibility htmlColor={colors.primary[500]} />
+                                            )}
+                                        </IconButton>
+                                    ),
+                                },
+                            }}
                         />
-                    </LoginCardLogo>
 
-                    <LoginCardHeading variant="h3">Connect GitHub</LoginCardHeading>
+                        <CardLink
+                            href="https://github.com/settings/personal-access-tokens"
+                            target="_blank"
+                        >
+                            Don't have PAT, Generate it.
+                        </CardLink>
 
-                    <LoginCardSubheading variant="body1">
-                        Enter your GitHub Personal Access Token to connect your account and start
-                        exploring GitHub users.
-                    </LoginCardSubheading>
-                </LoginCardHeader>
-
-                {error && (
-                    <Alert
-                        severity="error"
-                        sx={(theme) => ({
-                            width: '100%',
-                            backgroundColor: colors.error[200],
-                            borderRadius: theme.variables.radius.lg,
-                            color: colors.black,
-                        })}
-                    >
-                        {error}
-                    </Alert>
-                )}
-
-                <LoginCardMainSection>
-                    <TextField
-                        fullWidth
-                        label="Personal Access Token"
-                        placeholder="GitHub PAT"
-                        type={showToken ? 'text' : 'password'}
-                        value={token}
-                        onChange={handleTokenChange}
-                        disabled={loading}
-                        autoComplete="off"
-                        onKeyDown={(event) => {
-                            if (event.key === 'Enter' && !loading) {
-                                void handleLogin();
+                        <Button
+                            fullWidth
+                            variant="contained"
+                            size="large"
+                            disabled={loading}
+                            onClick={() => void handleLogin()}
+                            startIcon={
+                                loading ? <CircularProgress size={pxToRem(16)} /> : <GitHub />
                             }
-                        }}
-                        slotProps={{
-                            input: {
-                                endAdornment: (
-                                    <IconButton
-                                        disabled={loading}
-                                        onClick={() => setShowToken((previous) => !previous)}
-                                        aria-label={showToken ? 'Hide token' : 'Show token'}
-                                    >
-                                        {showToken ? (
-                                            <VisibilityOff htmlColor={colors.error[500]} />
-                                        ) : (
-                                            <Visibility htmlColor={colors.primary[500]} />
-                                        )}
-                                    </IconButton>
-                                ),
-                            },
-                        }}
-                    />
+                            sx={(theme) => ({
+                                borderRadius: theme.variables.radius.pill,
+                            })}
+                        >
+                            {loading ? 'Connecting...' : 'Connect GitHub'}
+                        </Button>
+                    </LoginMainSection>
 
-                    <LoginCardPATGenerateBtn
-                        component="a"
-                        href="https://github.com/settings/personal-access-tokens"
-                        target="_blank"
-                    >
-                        Don't have PAT, Generate it.
-                    </LoginCardPATGenerateBtn>
-
-                    <Button
-                        fullWidth
-                        variant="contained"
-                        size="large"
-                        disabled={loading}
-                        onClick={() => void handleLogin()}
-                        startIcon={loading ? <CircularProgress size={pxToRem(16)} /> : <GitHub />}
-                        sx={(theme) => ({
-                            borderRadius: theme.variables.radius.pill,
-                        })}
-                    >
-                        {loading ? 'Connecting...' : 'Connect GitHub'}
-                    </Button>
-                </LoginCardMainSection>
-
-                <LoginCardFooter variant="body1">
-                    Your Personal Access Token is stored locally in your browser.
-                </LoginCardFooter>
-            </LoginCard>
-        </LoginPageContent>
+                    <CardFooter variant="body1">
+                        Your Personal Access Token is stored locally in your browser.
+                    </CardFooter>
+                </LoginWrapper>
+            </Content>
+        </Page>
     );
 };
 
