@@ -6,26 +6,26 @@ import SearchIcon from '@mui/icons-material/Search';
 
 import { Autocomplete, CircularProgress, IconButton, TextField } from '@mui/material';
 
-import Bubble from '@/components/common/Bubble';
+import Bubble from '@components/common/Bubble';
 import {
     SearchWrap,
     SearchResult,
     SearchResultContent,
     SearchResultUsername,
     SearchResultAvatar,
-} from '@/components/search/Search.styles';
+} from '@components/search/Search.styles';
 
-import { Content } from '@/components/common/Content';
-import { Page } from '@/components/common/Page';
-import { Card } from '@/components/common/Card';
-import { Title, Subtitle } from '@/components/common/Header';
-import { ErrorBox } from '@/components/common/ErrorBox';
+import { Content } from '@components/common/Content';
+import { Page } from '@components/common/Page';
+import { Card } from '@components/common/Card';
+import { Title, Subtitle } from '@components/common/Header';
+import { ErrorBox } from '@components/common/ErrorBox';
 
-import type { GithubSearchResponse, GithubUser } from '@/features/Search/Search';
+import type { GithubSearchResponse, GithubUser } from '@features/Search/Search';
 
-import { colors } from '@/theme/colors';
-import { pxToRem } from '@/theme/functions';
-import { snakeToCamelCase } from '@/utils/helperFunctions';
+import { colors } from '@theme/colors';
+import { pxToRem } from '@theme/functions';
+import { snakeToCamelCase } from '@utils/helperFunctions';
 
 const Search = () => {
     const navigate = useNavigate();
