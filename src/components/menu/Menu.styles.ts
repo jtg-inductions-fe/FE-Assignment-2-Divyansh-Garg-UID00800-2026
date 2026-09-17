@@ -11,10 +11,16 @@ import {
 
 import { colors } from '@theme/colors';
 import { pxToRem } from '@theme/functions';
+import { theme } from '@theme/theme';
 
 export const MobileMenuTrigger = styled(Button)({
     padding: 0,
     minWidth: 0,
+    display: 'flex',
+
+    [theme.breakpoints.up('md')]: {
+        display: 'none',
+    },
 });
 
 export const MobileDrawerContent = styled(Box)({

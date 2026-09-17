@@ -17,7 +17,7 @@ const MainLayout = () => {
                 component="main"
                 sx={() => ({
                     flex: 1,
-                    width: '100vw',
+                    width: '100%',
                 })}
             >
                 <Outlet />

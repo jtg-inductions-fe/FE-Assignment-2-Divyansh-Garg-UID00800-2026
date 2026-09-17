@@ -61,7 +61,7 @@ const MobileMenu = ({ isAuthenticated, currentPath }: MobileMenuProps) => {
                         <IconButton onClick={handleClose} aria-label="Close navigation menu">
                             <Close
                                 sx={(theme) => ({
-                                    fontSize: theme.variables.iconSize.lg,
+                                    fontSize: theme.variables.iconSize.xl,
                                 })}
                             />
                         </IconButton>

@@ -11,14 +11,7 @@ import MobileMenu from '../menu/MobileMenu';
 import LogoutMenu from '../actionButtons/LogoutMenu';
 import { LoginMenu } from '../actionButtons/LoginMenu';
 
-import {
-    Brand,
-    Header,
-    HomeLinkWrapper,
-    NavigationBar,
-    NavLinks,
-    ToggleButton,
-} from './Navbar.styles';
+import { Brand, Header, HomeLinkWrapper, NavigationBar, NavLinks } from './Navbar.styles';
 
 const Navbar = () => {
     const location = useLocation();
@@ -73,17 +66,11 @@ const Navbar = () => {
                     {isAuthenticated && <LogoutMenu />}
                 </NavLinks>
 
-                <ToggleButton
+                <MobileMenu
                     aria-label="Open navigation menu"
-                    sx={{
-                        display: {
-                            xs: 'flex',
-                            md: 'none',
-                        },
-                    }}
-                >
-                    <MobileMenu isAuthenticated={isAuthenticated} currentPath={location.pathname} />
-                </ToggleButton>
+                    isAuthenticated={isAuthenticated}
+                    currentPath={location.pathname}
+                />
             </NavigationBar>
         </Header>
     );

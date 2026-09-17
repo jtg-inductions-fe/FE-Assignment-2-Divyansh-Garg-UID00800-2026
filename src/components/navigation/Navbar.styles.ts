@@ -13,11 +13,7 @@ export const Header = styled(AppBar)(({ theme }) => ({
 export const NavigationBar = styled(Toolbar)(({ theme }) => ({
     height: theme.variables.layout.navbarHeight,
     justifyContent: 'space-between',
-    px: {
-        xs: theme.variables.spacing.md,
-        sm: theme.variables.spacing.lg,
-        md: theme.variables.spacing.xl,
-    },
+    padding: theme.variables.spacing.md,
     maxWidth: theme.variables.layout.contentMaxWidth,
 
     width: '100%',
@@ -61,9 +57,3 @@ export const StyledNavLinkButton = styled(Button)(({ theme }) => ({
         fontWeight: theme.variables.fontWeight.semiBold,
     },
 })) as typeof Button;
-
-export const ToggleButton = styled(IconButton)(({ theme }) => ({
-    ml: 'auto',
-    p: 0,
-    fontSize: theme.variables.fontSize.lg,
-}));
