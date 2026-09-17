@@ -1,5 +1,5 @@
 import { colors } from '@theme/colors';
-import { alpha, AppBar, Box, Button, IconButton, styled, Toolbar, Typography } from '@mui/material';
+import { alpha, AppBar, Box, Button, styled, Toolbar, Typography } from '@mui/material';
 
 export const Header = styled(AppBar)(({ theme }) => ({
     ...theme.mixins.flexCenter,
