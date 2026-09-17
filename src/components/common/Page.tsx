@@ -1,4 +1,4 @@
-import { colors } from '@/theme/colors';
+import { colors } from '@theme/colors';
 import { Box, styled } from '@mui/material';
 
 export const Page = styled(Box)(({ theme }) => ({

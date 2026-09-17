@@ -1,4 +1,4 @@
-import { colors } from '@/theme/colors';
+import { colors } from '@theme/colors';
 import { Link, Stack, styled, Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import { pxToRem } from '@theme/functions';
