@@ -1,6 +1,6 @@
 import { useAppDispatch, useAppSelector } from '@/app/hooks';
 
-import { loginNavigationItem, logoutNavigationItem, navigationItems } from './navigation';
+import { loginNavigationItem, logoutNavigationItem, navigationItems } from './navbar';
 import { useNavigate } from 'react-router';
 import { useState } from 'react';
 import { logoutUser } from '@features/auth/authSlice';
@@ -31,11 +31,11 @@ export const useLogout = () => {
 
     const [logoutAnchor, setLogoutAnchor] = useState<HTMLElement | null>(null);
 
-    const handleLogoutClick = (event: React.MouseEvent<HTMLElement>) => {
+    const handleLogoutClick = (event: React.MouseEvent<HTMLElement>): void => {
         setLogoutAnchor(event.currentTarget);
     };
 
-    const handleLogout = () => {
+    const handleLogout = (): void => {
         dispatch(logoutUser());
         setLogoutAnchor(null);
         navigate('/login');

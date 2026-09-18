@@ -1,5 +1,4 @@
-import { alpha, AppBar, Box, Button, Stack, styled, Toolbar, Typography } from '@mui/material';
-import { colors } from '@theme/colors';
+import { alpha, AppBar, Box, Button, styled, Toolbar, Typography } from '@mui/material';
 
 export const StyledAppBar = styled(AppBar)(({ theme }) => ({
     ...theme.mixins.flexCenter,
@@ -38,8 +37,6 @@ export const HomeLinkWrapper = styled(Box)(({ theme }) => ({
 
 export const Brand = styled(Typography)(({ theme }) => ({
     fontWeight: theme.variables.fontWeight.bold,
-
-    color: 'inherit',
 }));
 
 export const NavLinks = styled(Box)(({ theme }) => ({
@@ -91,26 +88,3 @@ export const StyledLogoutButton = styled(StyledNavButton)(({ theme }) => ({
         backgroundColor: alpha(theme.palette.error.main, 0.08),
     },
 })) as typeof Button;
-
-export const LogoutContent = styled(Stack)(({ theme }) => ({
-    gap: theme.variables.spacing.md,
-    padding: theme.variables.spacing.xl,
-
-    backgroundColor: colors.primary[50],
-}));
-
-export const LogoutActions = styled(Stack)(({ theme }) => ({
-    ...theme.mixins.flexCenter,
-
-    flexDirection: 'row',
-
-    gap: theme.variables.spacing.sm,
-}));
-
-export const LogoutActionButton = styled(Button)(({ theme }) => ({
-    width: '50%',
-
-    borderRadius: theme.variables.radius.xl,
-
-    textTransform: 'none',
-}));

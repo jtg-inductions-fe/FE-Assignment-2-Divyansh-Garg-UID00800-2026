@@ -3,12 +3,12 @@ import { NavLink } from 'react-router';
 
 import { NavButton } from './NavButton';
 import { useLogout, useNavigation } from './useNavigation';
-import { LogoutConfirmation } from './LogoutConfirmation';
+import { Modal } from '@components/modal/Modal';
 import MobileMenu from '@components/menu/MobileMenu';
 
 import { Brand, HomeLinkWrapper, NavigationBar, NavLinks } from './navbar.styles';
 
-import { AppBarHeader } from '@components/common/Header';
+import { AppBarHeader } from './NavHeader';
 
 const Navbar = () => {
     const { items, loginItem, logoutItem, isAuthenticated } = useNavigation();
@@ -26,7 +26,12 @@ const Navbar = () => {
 
                 <NavLinks aria-label="Main navigation">
                     {items.map((item) => (
-                        <NavButton to={item.path} icon={item.icon} label={item.label} />
+                        <NavButton
+                            key={item.path}
+                            to={item.path}
+                            icon={item.icon}
+                            label={item.label}
+                        />
                     ))}
 
                     {isAuthenticated ? (
@@ -45,10 +50,19 @@ const Navbar = () => {
                     )}
                 </NavLinks>
 
-                <MobileMenu />
+                <MobileMenu
+                    logoutAnchor={logoutAnchor}
+                    setLogoutAnchor={setLogoutAnchor}
+                    handleLogoutClick={handleLogoutClick}
+                    handleLogout={handleLogout}
+                />
             </NavigationBar>
 
-            <LogoutConfirmation
+            <Modal
+                title="Logout"
+                description="Are you sure you want to logout?"
+                BtnOneLabel="Cancel"
+                BtnTwoLabel="Logout"
                 anchorEl={logoutAnchor}
                 onClose={() => setLogoutAnchor(null)}
                 onConfirm={handleLogout}

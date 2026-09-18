@@ -1,4 +1,4 @@
-import { Box, Button, IconButton, styled } from '@mui/material';
+import { Box, Button, Drawer, IconButton, styled } from '@mui/material';
 
 export const MobileMenuTrigger = styled(Button)(({ theme }) => ({
     color: theme.palette.primary.dark,
@@ -16,10 +16,18 @@ export const MobileMenuTrigger = styled(Button)(({ theme }) => ({
     },
 }));
 
+export const MobileDrawer = styled(Drawer)(() => ({
+    '& .MuiDrawer-paper': {
+        width: '80%',
+        backgroundColor: 'red',
+        scrollbarWidth: 'none',
+    },
+}));
+
 export const MobileDrawerContent = styled(Box)(({ theme }) => ({
     backgroundColor: theme.palette.background.paper,
 
-    width: '80vw',
+    width: '100%',
     height: '100%',
 }));
 
@@ -52,7 +60,6 @@ export const MobileNavigationList = styled(Box)(({ theme }) => ({
     ...theme.mixins.flexCenterCol,
     gap: theme.variables.spacing.xs,
     padding: theme.variables.spacing.md,
-    minHeight: `calc(100vh - ${theme.variables.layout.navbarHeight})`,
 
     justifyContent: 'flex-start',
 }));

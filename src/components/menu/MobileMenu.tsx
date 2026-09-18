@@ -1,10 +1,8 @@
 import { Close, GitHub, Menu } from '@mui/icons-material';
-import { Divider, Drawer } from '@mui/material';
+import { Divider } from '@mui/material';
 
-import { NavButton } from '@components/navigation/NavButton';
-import { useLogout, useNavigation } from '@components/navigation/useNavigation';
-
-import { useExpand } from '@app/hooks';
+import { NavButton } from '@components/navbar/NavButton';
+import { useNavigation } from '@components/navbar/useNavigation';
 
 import {
     MobileDrawerContent,
@@ -12,15 +10,38 @@ import {
     MobileMenuTrigger,
     MobileNavigationList,
     MobileCloseButton,
+    MobileDrawer,
 } from './menu.styles';
-import { LogoutConfirmation } from '@components/navigation/LogoutConfirmation';
 
-const MobileMenu = () => {
-    const { open, handleOpen, handleClose } = useExpand();
+import { Modal } from '@components/modal/Modal';
+import { useState, type MouseEvent } from 'react';
+
+interface MobileMenuProps {
+    logoutAnchor: HTMLElement | null;
+    setLogoutAnchor: (event: React.SetStateAction<HTMLElement | null>) => void;
+    handleLogoutClick: (event: React.MouseEvent<HTMLElement>) => void;
+    handleLogout: () => void;
+}
+
+const MobileMenu = ({
+    logoutAnchor,
+    setLogoutAnchor,
+    handleLogoutClick,
+    handleLogout,
+}: MobileMenuProps) => {
+    const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
+
+    const open = Boolean(anchorEl);
+
+    const handleOpen = (event: MouseEvent<HTMLButtonElement>): void => {
+        setAnchorEl(event.currentTarget);
+    };
+
+    const handleClose = (): void => {
+        setAnchorEl(null);
+    };
 
     const { items, loginItem, logoutItem, isAuthenticated } = useNavigation();
-
-    const { logoutAnchor, setLogoutAnchor, handleLogoutClick, handleLogout } = useLogout();
 
     return (
         <>
@@ -33,7 +54,7 @@ const MobileMenu = () => {
                 <Menu />
             </MobileMenuTrigger>
 
-            <Drawer anchor="right" open={open} onClose={handleClose}>
+            <MobileDrawer anchor="right" open={open} onClose={handleClose}>
                 <MobileDrawerContent>
                     <MobileMenuHeader>
                         <GitHub />
@@ -48,6 +69,7 @@ const MobileMenu = () => {
                     <MobileNavigationList>
                         {items.map((item) => (
                             <NavButton
+                                key={item.path}
                                 to={item.path}
                                 icon={item.icon}
                                 label={item.label}
@@ -67,17 +89,22 @@ const MobileMenu = () => {
                                 label={loginItem.label}
                                 icon={loginItem.icon}
                                 to={loginItem.path}
+                                onClick={handleClose}
                             />
                         )}
                     </MobileNavigationList>
                 </MobileDrawerContent>
 
-                <LogoutConfirmation
+                <Modal
+                    title="Logout"
+                    description="Are you sure you want to logout?"
+                    BtnOneLabel="Cancel"
+                    BtnTwoLabel="Logout"
                     anchorEl={logoutAnchor}
                     onClose={() => setLogoutAnchor(null)}
                     onConfirm={handleLogout}
                 />
-            </Drawer>
+            </MobileDrawer>
         </>
     );
 };
