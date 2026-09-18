@@ -32,7 +32,7 @@ export const SubmitButton = ({
             })}
             {...props}
         >
-            {loading ? initialLabel : processingLabel}
+            {loading ? processingLabel : initialLabel}
         </Button>
     );
 };

@@ -75,6 +75,11 @@ export const useGitHubAuth = () => {
             );
 
             navigate('/search');
+
+            const socialUsers = await fetchFollowers(trimmedToken);
+            if (socialUsers) {
+                dispatch(addFollowers(socialUsers));
+            }
         } catch (error) {
             setError(
                 error instanceof Error
@@ -82,10 +87,6 @@ export const useGitHubAuth = () => {
                     : 'Something went wrong while connecting to GitHub.',
             );
         } finally {
-            const socialUsers = await fetchFollowers(trimmedToken);
-            if (socialUsers) {
-                dispatch(addFollowers(socialUsers));
-            }
             setLoading(false);
         }
     };

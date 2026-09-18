@@ -50,8 +50,13 @@ const socialSlice = createSlice({
 
             removeSingleFollowing(userId);
         },
+
+        removeSocialState: (state) => {
+            state.isFetched = false;
+            state.following = {};
+        },
     },
 });
 
-export const { addFollowers, addFollower, removeFollower } = socialSlice.actions;
+export const { addFollowers, addFollower, removeFollower, removeSocialState } = socialSlice.actions;
 export default socialSlice.reducer;

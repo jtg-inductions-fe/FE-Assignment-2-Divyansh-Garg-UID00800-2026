@@ -4,7 +4,11 @@ const AUTH_STORAGE_KEY = 'GitSearch_Auth';
 const SOCIAL_STORAGE_KEY = 'AuthUser_Following';
 
 export const saveAuth = (authData: AuthData): void => {
-    localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(authData));
+    try {
+        localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(authData));
+    } catch (error) {
+        console.warn('Failed to save Authentication data to LocalStorage:', error);
+    }
 };
 
 export const getAuth = (): AuthData | null => {
@@ -23,6 +27,15 @@ export const getAuth = (): AuthData | null => {
 };
 
 export const clearAuth = (): void => {
-    localStorage.removeItem(AUTH_STORAGE_KEY);
-    localStorage.removeItem(SOCIAL_STORAGE_KEY);
+    try {
+        localStorage.removeItem(AUTH_STORAGE_KEY);
+    } catch (error) {
+        console.warn('Failed to remove Auth key from LocalStorage:', error);
+    }
+
+    try {
+        localStorage.removeItem(SOCIAL_STORAGE_KEY);
+    } catch (error) {
+        console.warn('Failed to remove Social key from LocalStorage:', error);
+    }
 };
