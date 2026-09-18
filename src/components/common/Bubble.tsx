@@ -17,9 +17,9 @@ const Bubble = ({ sx }: BubbleProps) => {
                     width: pxToRem(384),
                     height: pxToRem(384),
                     borderRadius: '50%',
-                    background: colors.primary[100],
-                    opacity: 0.18,
+                    background: colors.primary[200],
                     pointerEvents: 'none',
+                    filter: `blur(${pxToRem(20)})`,
                 },
                 ...(Array.isArray(sx) ? sx : [sx]),
             ]}

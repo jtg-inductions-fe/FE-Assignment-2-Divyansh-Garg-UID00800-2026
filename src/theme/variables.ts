@@ -1,14 +1,12 @@
 import { pxToRem } from './functions';
-import { colors } from './colors';
 
 export const variables = {
-    colors,
-
     layout: {
-        navbarHeight: pxToRem(64),
-        contentMaxWidth: pxToRem(1440),
+        navbarHeight: pxToRem(80),
+        contentMaxWidth: pxToRem(1900),
         pagePadding: pxToRem(24),
         sectionGap: pxToRem(32),
+        logoutMenuWidth: pxToRem(320),
     },
 
     radius: {
@@ -47,6 +45,21 @@ export const variables = {
         lg: 1.4,
         xl: 1.5,
         xxl: 1.6,
+    },
+
+    iconSize: {
+        sm: pxToRem(18),
+        md: pxToRem(20),
+        lg: pxToRem(24),
+        xl: pxToRem(32),
+        xxl: pxToRem(64),
+    },
+
+    fontSize: {
+        xs: pxToRem(8),
+        sm: pxToRem(18),
+        md: pxToRem(24),
+        lg: pxToRem(36),
     },
 
     transitions: {

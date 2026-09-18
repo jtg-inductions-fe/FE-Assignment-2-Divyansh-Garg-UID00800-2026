@@ -34,7 +34,7 @@ export const theme = createTheme({
             secondary: colors.gray[600],
         },
 
-        divider: colors.gray[200],
+        divider: colors.gray[300],
 
         success: {
             light: colors.success[100],

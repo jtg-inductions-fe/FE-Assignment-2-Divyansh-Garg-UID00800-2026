@@ -24,15 +24,15 @@ const NotFound = () => {
         <NotFoundWrapper>
             <Bubble
                 sx={{
-                    top: pxToRem(-160),
-                    right: pxToRem(-128),
+                    top: pxToRem(-120),
+                    right: pxToRem(-120),
                 }}
             />
 
             <Bubble
                 sx={{
-                    bottom: pxToRem(-160),
-                    left: pxToRem(-128),
+                    bottom: pxToRem(-120),
+                    left: pxToRem(-120),
                 }}
             />
 

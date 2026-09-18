@@ -1,15 +1,21 @@
 import { createBrowserRouter } from 'react-router';
 
-import ReduxDemo from '@pages/Demo/Demo';
+import MainLayout from '@layouts/MainLayout';
 import NotFound from '@pages/NotFound/NotFound';
+import ReduxDemo from '@pages/Demo/Demo';
 
 export const router = createBrowserRouter([
     {
-        path: '/',
-        Component: ReduxDemo,
-    },
-    {
-        path: '*',
-        Component: NotFound,
+        element: <MainLayout />,
+        children: [
+            {
+                path: '/',
+                element: <ReduxDemo />,
+            },
+            {
+                path: '*',
+                element: <NotFound />,
+            },
+        ],
     },
 ]);

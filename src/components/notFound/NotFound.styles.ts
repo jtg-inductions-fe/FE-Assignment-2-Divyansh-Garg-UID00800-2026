@@ -6,7 +6,7 @@ export const NotFoundWrapper = styled(Box)(({ theme }) => ({
     ...theme.mixins.flexCenter,
     padding: theme.variables.layout.pagePadding,
 
-    minHeight: '100vh',
+    height: `calc(100vh - ${theme.variables.layout.navbarHeight})`,
     position: 'relative',
     overflow: 'hidden',
     backgroundColor: colors.primary[600],
