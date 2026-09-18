@@ -1,6 +1,9 @@
 import type { SocialUser } from '@features/social/socialTypes';
+import { BASE_URL, FOLLOWING_URL } from './urls';
 
 export const fetchFollowers = async (token: string) => {
+    const URL = `${BASE_URL}/${FOLLOWING_URL}`;
+
     if (!token) {
         return;
     }
@@ -11,7 +14,7 @@ export const fetchFollowers = async (token: string) => {
     }
 
     try {
-        const response = await fetch(`https://api.github.com/user/following`, {
+        const response = await fetch(URL, {
             headers: {
                 Authorization: `Bearer ${trimmedToken}`,
                 Accept: 'application/vnd.github+json',
@@ -32,6 +35,6 @@ export const fetchFollowers = async (token: string) => {
 
         return socialUsers;
     } catch {
-        return null;
+        throw new Error('Something went wrong while connecting to GitHub.');
     }
 };

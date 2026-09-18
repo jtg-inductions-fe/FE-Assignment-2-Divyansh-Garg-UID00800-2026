@@ -24,13 +24,15 @@ export const getAllFollowing = (): SocialState | null => {
 export const saveSingleFollowing = (user: SocialUser): void => {
     const storedState = getAllFollowing();
 
-    const updatedState: SocialState = storedState
-        ? { ...storedState }
-        : { isFetched: true, following: {} };
+    if (!storedState) return;
 
-    updatedState.following[user.id] = user;
+    const updatedFollowers = { ...storedState.following };
+    updatedFollowers[user.id] = user;
 
-    saveAllFollowing(updatedState);
+    saveAllFollowing({
+        ...storedState,
+        following: updatedFollowers,
+    });
 };
 
 export const removeSingleFollowing = (userId: number): void => {

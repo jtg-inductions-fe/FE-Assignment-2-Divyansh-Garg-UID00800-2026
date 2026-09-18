@@ -1,6 +1,4 @@
-import { colors } from '@theme/colors';
-import { pxToRem } from '@theme/functions';
-import { Card, Stack, styled, Typography } from '@mui/material';
+import { Card, Stack, styled } from '@mui/material';
 
 export const LoginWrapper = styled(Card)(({ theme }) => ({
     ...theme.mixins.flexCenterCol,
@@ -14,8 +12,11 @@ export const LoginWrapper = styled(Card)(({ theme }) => ({
     position: 'relative',
     zIndex: 1,
     width: '100%',
-    maxWidth: pxToRem(640),
-    minHeight: `calc(70vh - ${theme.variables.layout.navbarHeight})`,
+    height: '100%',
+    maxWidth: '640px',
+    textAlign: 'center',
+    overflow: 'scroll',
+    scrollbarWidth: 'none',
 }));
 
 export const LoginHeader = styled(Stack)(({ theme }) => ({
@@ -25,20 +26,9 @@ export const LoginHeader = styled(Stack)(({ theme }) => ({
     width: '100%',
 }));
 
-export const LoginHeading = styled(Typography)(({ theme }) => ({
-    fontWeight: theme.variables.fontWeight.bold,
-
-    textAlign: 'center',
-}));
-
-export const LoginSubheading = styled(Typography)(() => ({
-    textAlign: 'center',
-    width: '80%',
-    color: colors.primary[900],
-}));
-
 export const LoginMainSection = styled(Stack)(({ theme }) => ({
-    alignItems: 'end',
     gap: theme.variables.spacing.sm,
+
+    alignItems: 'end',
     width: '100%',
 }));
