@@ -4,6 +4,7 @@ import { loginNavigationItem, logoutNavigationItem, navigationItems } from './na
 import { useNavigate } from 'react-router';
 import { useState } from 'react';
 import { logoutUser } from '@features/auth/authSlice';
+import { removeSocialState } from '@features/social/socialSlice';
 
 export const useNavigation = () => {
     const isAuthenticated = useAppSelector((state) => state.auth.isAuthenticated);
@@ -37,6 +38,7 @@ export const useLogout = () => {
 
     const handleLogout = (): void => {
         dispatch(logoutUser());
+        dispatch(removeSocialState());
         setLogoutAnchor(null);
         navigate('/login');
     };
