@@ -1,27 +1,36 @@
+import type { SvgIconComponent } from '@mui/icons-material';
+import type { ButtonProps } from '@mui/material';
 import { NavLink } from 'react-router';
 
-import { type SxProps } from '@mui/material/styles';
-import type { ButtonProps } from '@mui/material/Button';
+import { StyledLogoutButton, StyledNavButton } from './navbar.styles';
 
-import { StyledNavLinkButton } from './Navbar.styles';
-
-interface NavButtonProps extends Omit<ButtonProps, 'component' | 'to'> {
-    to: string;
-    icon: React.ComponentType;
+interface NavButtonProps extends Omit<ButtonProps, 'children'> {
     label: string;
-    sx?: SxProps;
+    icon: SvgIconComponent;
+    to?: string;
+    isLogout?: boolean;
 }
 
-export const NavButton = ({ to, icon: Icon, label, sx }: NavButtonProps) => {
+export const NavButton = ({
+    label,
+    icon: Icon,
+    to,
+    isLogout = false,
+    ...Props
+}: NavButtonProps) => {
+    const ButtonComponent = isLogout ? StyledLogoutButton : StyledNavButton;
+
+    if (to) {
+        return (
+            <ButtonComponent component={NavLink} to={to} startIcon={<Icon />} {...Props}>
+                {label}
+            </ButtonComponent>
+        );
+    }
+
     return (
-        <StyledNavLinkButton
-            component={NavLink}
-            to={to}
-            startIcon={<Icon />}
-            color="inherit"
-            sx={[...(Array.isArray(sx) ? sx : [sx])]}
-        >
+        <ButtonComponent startIcon={<Icon />} {...Props}>
             {label}
-        </StyledNavLinkButton>
+        </ButtonComponent>
     );
 };

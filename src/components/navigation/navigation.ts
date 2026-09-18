@@ -1,28 +1,45 @@
-import { AccountCircle, Search, TipsAndUpdates } from '@mui/icons-material';
+import type { SvgIconComponent } from '@mui/icons-material';
 
-import { useAppSelector } from '@/app/hooks';
+import { AccountCircle, Login, Logout, Search, TipsAndUpdates } from '@mui/icons-material';
 
-export const useNavigationItems = () => {
-    const user = useAppSelector((state) => state.auth.user);
+export interface NavigationItem {
+    label: string;
+    path: string;
+    icon: SvgIconComponent;
+    requiresAuth: boolean;
+}
 
-    return [
-        {
-            label: 'Search',
-            path: '/search',
-            requiresAuth: false,
-            icon: Search,
-        },
-        {
-            label: 'Suggestions',
-            path: '/suggestions',
-            requiresAuth: true,
-            icon: TipsAndUpdates,
-        },
-        {
-            label: 'Profile',
-            path: user ? `/profile/${user.login}` : '/profile',
-            requiresAuth: true,
-            icon: AccountCircle,
-        },
-    ] as const;
+export const navigationItems: NavigationItem[] = [
+    {
+        label: 'Search',
+        path: '/search',
+        icon: Search,
+        requiresAuth: false,
+    },
+    {
+        label: 'Suggestions',
+        path: '/suggestions',
+        icon: TipsAndUpdates,
+        requiresAuth: true,
+    },
+    {
+        label: 'Profile',
+        path: '/profile',
+        icon: AccountCircle,
+        requiresAuth: true,
+    },
+];
+
+export const loginNavigationItem: NavigationItem = {
+    label: 'Login',
+    path: '/login',
+    icon: Login,
+    requiresAuth: false,
+};
+
+export const logoutNavigationItem: NavigationItem = {
+    label: 'Logout',
+    path: '',
+    icon: Logout,
+    requiresAuth: true,
 };

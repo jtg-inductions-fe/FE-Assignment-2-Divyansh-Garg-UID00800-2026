@@ -1,78 +1,59 @@
 import { GitHub } from '@mui/icons-material';
-
-import { NavLink, useLocation } from 'react-router';
-
-import { useAppSelector } from '@app/hooks';
-
-import { useNavigationItems } from '@components/navigation/navigation';
+import { NavLink } from 'react-router';
 
 import { NavButton } from './NavButton';
-import MobileMenu from '../menu/MobileMenu';
-import LogoutMenu from '../actionButtons/LogoutMenu';
-import { LoginMenu } from '../actionButtons/LoginMenu';
+import { useLogout, useNavigation } from './useNavigation';
+import { LogoutConfirmation } from './LogoutConfirmation';
+import MobileMenu from '@components/menu/MobileMenu';
 
-import { Brand, Header, HomeLinkWrapper, NavigationBar, NavLinks } from './Navbar.styles';
+import { Brand, HomeLinkWrapper, NavigationBar, NavLinks } from './navbar.styles';
+
+import { AppBarHeader } from '@components/common/Header';
 
 const Navbar = () => {
-    const location = useLocation();
+    const { items, loginItem, logoutItem, isAuthenticated } = useNavigation();
 
-    const isAuthenticated = useAppSelector((state) => state.auth.isAuthenticated);
-
-    const navigationItems = useNavigationItems();
-
-    const visibleNavigationItems = navigationItems.filter(
-        (item) => !item.requiresAuth || isAuthenticated,
-    );
+    const { logoutAnchor, setLogoutAnchor, handleLogoutClick, handleLogout } = useLogout();
 
     return (
-        <Header position="sticky" elevation={0}>
+        <AppBarHeader>
             <NavigationBar>
                 <HomeLinkWrapper component={NavLink} to="/" aria-label="GitSearch home">
-                    <GitHub
-                        sx={(theme) => ({
-                            fontSize: theme.variables.iconSize.xl,
-                            color: theme.palette.primary.dark,
-                        })}
-                    />
+                    <GitHub />
 
-                    <Brand variant="h3" component="span">
-                        GitSearch
-                    </Brand>
+                    <Brand variant="h3">GitSearch</Brand>
                 </HomeLinkWrapper>
 
-                <NavLinks
-                    component="nav"
-                    aria-label="Main navigation"
-                    sx={{
-                        display: {
-                            xs: 'none',
-                            md: 'flex',
-                        },
-                    }}
-                >
-                    {visibleNavigationItems.map((item) => {
-                        return (
-                            <NavButton
-                                key={item.path}
-                                to={item.path}
-                                icon={item.icon}
-                                label={item.label}
-                            />
-                        );
-                    })}
+                <NavLinks aria-label="Main navigation">
+                    {items.map((item) => (
+                        <NavButton to={item.path} icon={item.icon} label={item.label} />
+                    ))}
 
-                    {!isAuthenticated && <LoginMenu />}
-
-                    {isAuthenticated && <LogoutMenu />}
+                    {isAuthenticated ? (
+                        <NavButton
+                            label={logoutItem.label}
+                            icon={logoutItem.icon}
+                            isLogout
+                            onClick={handleLogoutClick}
+                        />
+                    ) : (
+                        <NavButton
+                            label={loginItem.label}
+                            icon={loginItem.icon}
+                            to={loginItem.path}
+                        />
+                    )}
                 </NavLinks>
 
-                <MobileMenu
-                    aria-label="Open navigation menu"
-                    isAuthenticated={isAuthenticated}
-                    currentPath={location.pathname}
-                />
+                <MobileMenu />
             </NavigationBar>
-        </Header>
+
+            <LogoutConfirmation
+                anchorEl={logoutAnchor}
+                onClose={() => setLogoutAnchor(null)}
+                onConfirm={handleLogout}
+            />
+        </AppBarHeader>
     );
 };
 

@@ -1,137 +1,82 @@
-import { Close, GitHub, Login, Menu } from '@mui/icons-material';
-import { Divider, Drawer, IconButton } from '@mui/material';
-import { NavLink } from 'react-router';
+import { Close, GitHub, Menu } from '@mui/icons-material';
+import { Divider, Drawer } from '@mui/material';
 
-import { useNavigationItems } from '@components/navigation/navigation';
-import LogoutMenu from '@components/actionButtons/LogoutMenu';
+import { NavButton } from '@components/navigation/NavButton';
+import { useLogout, useNavigation } from '@components/navigation/useNavigation';
 
 import { useExpand } from '@app/hooks';
 
 import {
-    MobileActionButton,
-    MobileActionEntry,
     MobileDrawerContent,
     MobileMenuHeader,
     MobileMenuTrigger,
-    MobileNavigationButton,
-    MobileNavigationIcon,
-    MobileNavigationItem,
     MobileNavigationList,
-    MobileNavigationText,
-} from './Menu.styles';
+    MobileCloseButton,
+} from './menu.styles';
+import { LogoutConfirmation } from '@components/navigation/LogoutConfirmation';
 
-import { variables } from '@theme/variables';
-import { pxToRem } from '@theme/functions';
-
-interface MobileMenuProps {
-    isAuthenticated: boolean;
-    currentPath: string;
-}
-
-const MobileMenu = ({ isAuthenticated, currentPath }: MobileMenuProps) => {
+const MobileMenu = () => {
     const { open, handleOpen, handleClose } = useExpand();
 
-    const navigationItems = useNavigationItems();
+    const { items, loginItem, logoutItem, isAuthenticated } = useNavigation();
 
-    const visibleNavigationItems = navigationItems.filter(
-        (item) => !item.requiresAuth || isAuthenticated,
-    );
+    const { logoutAnchor, setLogoutAnchor, handleLogoutClick, handleLogout } = useLogout();
 
     return (
         <>
-            <MobileMenuTrigger onClick={handleOpen} aria-haspopup="dialog" aria-expanded={open}>
-                <Menu
-                    sx={(theme) => ({
-                        fontSize: theme.variables.iconSize.xl,
-                        color: theme.palette.primary.dark,
-                    })}
-                />
+            <MobileMenuTrigger
+                onClick={handleOpen}
+                aria-haspopup="dialog"
+                aria-expanded={open}
+                aria-label="Open navigation menu"
+            >
+                <Menu />
             </MobileMenuTrigger>
 
             <Drawer anchor="right" open={open} onClose={handleClose}>
-                <MobileDrawerContent role="presentation">
+                <MobileDrawerContent>
                     <MobileMenuHeader>
-                        <GitHub
-                            sx={(theme) => ({
-                                fontSize: theme.variables.iconSize.xl,
-                                color: theme.palette.primary.dark,
-                            })}
-                        />
+                        <GitHub />
 
-                        <IconButton onClick={handleClose} aria-label="Close navigation menu">
-                            <Close
-                                sx={(theme) => ({
-                                    fontSize: theme.variables.iconSize.xl,
-                                })}
-                            />
-                        </IconButton>
+                        <MobileCloseButton onClick={handleClose} aria-label="Close navigation menu">
+                            <Close />
+                        </MobileCloseButton>
                     </MobileMenuHeader>
 
                     <Divider />
 
                     <MobileNavigationList>
-                        {visibleNavigationItems.map((item) => {
-                            const Icon = item.icon;
+                        {items.map((item) => (
+                            <NavButton
+                                to={item.path}
+                                icon={item.icon}
+                                label={item.label}
+                                onClick={handleClose}
+                            />
+                        ))}
 
-                            if (currentPath === item.path) {
-                                return null;
-                            }
-
-                            return (
-                                <MobileNavigationItem key={item.path}>
-                                    <MobileNavigationButton
-                                        component={NavLink}
-                                        to={item.path}
-                                        onClick={handleClose}
-                                    >
-                                        <MobileNavigationIcon>
-                                            <Icon
-                                                sx={{
-                                                    width: pxToRem(35),
-                                                    height: pxToRem(35),
-                                                }}
-                                            />
-                                        </MobileNavigationIcon>
-
-                                        <MobileNavigationText
-                                            disableTypography
-                                            primary={item.label}
-                                        />
-                                    </MobileNavigationButton>
-                                </MobileNavigationItem>
-                            );
-                        })}
-
-                        {!isAuthenticated && currentPath !== '/login' && (
-                            <MobileActionEntry>
-                                <MobileActionButton
-                                    component={NavLink}
-                                    to="/login"
-                                    variant="contained"
-                                    startIcon={<Login />}
-                                    onClick={handleClose}
-                                >
-                                    Login
-                                </MobileActionButton>
-                            </MobileActionEntry>
-                        )}
-
-                        {isAuthenticated && (
-                            <MobileActionEntry>
-                                <LogoutMenu
-                                    fun={handleClose}
-                                    sx={() => ({
-                                        marginLeft: variables.spacing.sm,
-                                        width: '50vw',
-                                        minHeight: variables.spacing.xl,
-                                        borderRadius: variables.radius.pill,
-                                        fontSize: variables.fontSize.md,
-                                    })}
-                                />
-                            </MobileActionEntry>
+                        {isAuthenticated ? (
+                            <NavButton
+                                label={logoutItem.label}
+                                icon={logoutItem.icon}
+                                isLogout
+                                onClick={handleLogoutClick}
+                            />
+                        ) : (
+                            <NavButton
+                                label={loginItem.label}
+                                icon={loginItem.icon}
+                                to={loginItem.path}
+                            />
                         )}
                     </MobileNavigationList>
                 </MobileDrawerContent>
+
+                <LogoutConfirmation
+                    anchorEl={logoutAnchor}
+                    onClose={() => setLogoutAnchor(null)}
+                    onConfirm={handleLogout}
+                />
             </Drawer>
         </>
     );
