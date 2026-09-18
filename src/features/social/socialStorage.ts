@@ -3,7 +3,11 @@ import type { SocialState, SocialUser } from './socialTypes';
 const SOCIAL_STORAGE_KEY = 'AuthUser_Following';
 
 export const saveAllFollowing = (followingData: SocialState): void => {
-    localStorage.setItem(SOCIAL_STORAGE_KEY, JSON.stringify(followingData));
+    try {
+        localStorage.setItem(SOCIAL_STORAGE_KEY, JSON.stringify(followingData));
+    } catch (error) {
+        console.warn('Failed to save Following Users data to LocalStorage:', error);
+    }
 };
 
 export const getAllFollowing = (): SocialState | null => {
