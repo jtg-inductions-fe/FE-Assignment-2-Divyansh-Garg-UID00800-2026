@@ -12,7 +12,6 @@ const StyledFollowButton = styled(Button)(({ theme }) => ({
     borderRadius: theme.variables.radius.pill,
     fontWeight: theme.variables.fontWeight.semiBold,
     transition: theme.variables.transitions.normal,
-
     flexShrink: 0,
     minWidth: pxToRem(120),
     minHeight: pxToRem(44),
