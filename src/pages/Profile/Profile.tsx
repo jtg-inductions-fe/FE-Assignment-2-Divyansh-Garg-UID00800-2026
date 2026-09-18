@@ -28,25 +28,36 @@ import {
 import { FollowButton } from '@components/common/FollowBtn';
 import { ErrorBox } from '@components/common/ErrorBox';
 
-import { GitHub } from '@mui/icons-material';
+import { ArrowOutward } from '@mui/icons-material';
 import { Box, IconButton } from '@mui/material';
 
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 
-import { useAppSelector } from '@app/hooks';
+import { useAppDispatch, useAppSelector } from '@app/hooks';
 import { snakeToCamelCase } from '@utils/helperFunctions';
 import type { AuthUser } from '@features/auth/authTypes';
+
+import type { SocialUser } from '@features/social/socialTypes';
+import { addFollower, removeFollower } from '@features/social/socialSlice';
 
 const Profile = () => {
     const { username } = useParams<{ username: string }>();
 
+    const dispatch = useAppDispatch();
+
     const [searchUserInfo, setSearchUserInfo] = useState<AuthUser | null>(null);
+
     const [_, setLoading] = useState(false);
     const [error, setError] = useState('');
 
     const authUser = useAppSelector((state) => state.auth.user);
     const isAuthenticated = useAppSelector((state) => state.auth.isAuthenticated);
+    const token = useAppSelector((state) => state.auth.token);
+    const isFetched = useAppSelector((state) => state.social.isFetched);
+    const following = useAppSelector((state) => state.social.following);
+
+    let isFollowed = false;
 
     const isOwnProfile =
         isAuthenticated &&
@@ -104,6 +115,93 @@ const Profile = () => {
         }
     }, [username]);
 
+    const handleFollowUnfollow = async (isFollowed: boolean, user: SocialUser | null) => {
+        if (!user) {
+            setError('The Following User is not available');
+            return;
+        }
+
+        const trimmedToken = token?.trim();
+
+        if (!trimmedToken) {
+            setError('Please Login First to follow.');
+            return;
+        }
+
+        setError('');
+        setLoading(true);
+
+        if (isFollowed) {
+            try {
+                const response = await fetch(
+                    `https://api.github.com/user/following/${user.login}`,
+                    {
+                        method: 'DELETE',
+                        headers: {
+                            Authorization: `Bearer ${trimmedToken}`,
+                            Accept: 'application/vnd.github+json',
+                            'Content-Length': '0',
+                        },
+                    },
+                );
+
+                if (!response.ok) {
+                    if (response.status === 401) {
+                        throw new Error('You are not Authorized to follow the user');
+                    }
+
+                    throw new Error('Unable to Follow the user.');
+                }
+
+                dispatch(removeFollower(user));
+                isFollowed = false;
+            } catch (error) {
+                setError(
+                    error instanceof Error
+                        ? error.message
+                        : 'Something went wrong while connecting to GitHub.',
+                );
+            } finally {
+                setLoading(false);
+            }
+        } else {
+            try {
+                const response = await fetch(
+                    `https://api.github.com/user/following/${user.login}`,
+                    {
+                        method: 'PUT',
+                        headers: {
+                            Authorization: `Bearer ${trimmedToken}`,
+                            Accept: 'application/vnd.github+json',
+                            'Content-Length': '0',
+                        },
+                    },
+                );
+
+                if (!response.ok) {
+                    if (response.status === 401) {
+                        throw new Error('You are not Authorized to Unfollow the user');
+                    }
+
+                    throw new Error('Unable to Unfollow the user.');
+                }
+
+                dispatch(addFollower(user));
+                isFollowed = true;
+            } catch (error) {
+                setError(
+                    error instanceof Error
+                        ? error.message
+                        : 'Something went wrong while connecting to GitHub.',
+                );
+            } finally {
+                setLoading(false);
+            }
+        }
+    };
+
+    isFollowed = Boolean(searchUserInfo && String(searchUserInfo.id) in following);
+
     return (
         <Page>
             <Bubble
@@ -148,20 +246,25 @@ const Profile = () => {
                                     )}
 
                                     <ProfileCardTopHeaderInner>
-                                        <ProfileUsername variant="h6">
-                                            {searchUserInfo?.login}
-                                        </ProfileUsername>
+                                        <Box>
+                                            <ProfileUsername variant="h6">
+                                                {searchUserInfo?.login}
+                                            </ProfileUsername>
 
-                                        {searchUserInfo?.htmlUrl && (
-                                            <IconButton
-                                                href={searchUserInfo.htmlUrl}
-                                                target="_blank"
-                                                rel="noopener noreferrer"
-                                                aria-label="Open GitHub profile"
-                                            >
-                                                <GitHub />
-                                            </IconButton>
-                                        )}
+                                            {searchUserInfo?.htmlUrl && (
+                                                <IconButton
+                                                    href={searchUserInfo.htmlUrl}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    aria-label="Open GitHub profile"
+                                                >
+                                                    <ArrowOutward htmlColor={colors.primary[500]} />
+                                                </IconButton>
+                                            )}
+                                        </Box>
+                                        <ProfileUsername variant="body1">
+                                            {searchUserInfo?.name ? searchUserInfo.name : 'NA'}
+                                        </ProfileUsername>
                                     </ProfileCardTopHeaderInner>
                                 </ProfileCardHeaderTop>
 
@@ -187,12 +290,17 @@ const Profile = () => {
                                     </Eyebrow>
 
                                     <Bio variant="h6">
-                                        {searchUserInfo?.bio ?? 'No Bio is available.'}
+                                        {searchUserInfo?.bio ?? 'Bio is not available.'}
                                     </Bio>
                                 </ProfileMainTop>
 
-                                {isAuthenticated && !isOwnProfile && (
-                                    <FollowButton>Follow</FollowButton>
+                                {isAuthenticated && !isOwnProfile && isFetched && (
+                                    <FollowButton
+                                        isFollowed={isFollowed}
+                                        onClick={() =>
+                                            handleFollowUnfollow(isFollowed, searchUserInfo)
+                                        }
+                                    />
                                 )}
                             </ProfileMain>
 

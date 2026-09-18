@@ -8,7 +8,8 @@ export const ProfileCard = styled(Box)(({ theme }) => ({
     boxShadow: theme.variables.shadows.card,
 
     width: '100%',
-    overflow: 'hidden',
+    overflow: 'scroll',
+    scrollbarWidth: 'none',
     backgroundColor: colors.white,
     border: `1px solid ${colors.primary[100]}`,
 }));
@@ -86,10 +87,10 @@ export const ProfileName = styled(Typography)(({ theme }) => ({
 }));
 
 export const ProfileUsername = styled(Typography)(({ theme }) => ({
-    fontSize: theme.variables.fontSize.md,
     fontWeight: theme.variables.fontWeight.bold,
     paddingLeft: theme.variables.spacing.sm,
     paddingRight: theme.variables.spacing.sm,
+    display: 'inline',
 
     color: colors.primary[800],
 }));
@@ -175,6 +176,7 @@ export const AdditionalInfo = styled(Stack)(({ theme }) => ({
     gap: theme.variables.spacing.lg,
     padding: theme.variables.spacing.md,
     justifyContent: 'space-between',
+    overflow: 'hidden',
 
     background: `linear-gradient(
         135deg,
