@@ -19,7 +19,7 @@ export const typography: ThemeOptions['typography'] = {
         fontSize: pxToRem(40),
         fontWeight: variables.fontWeight.bold,
         lineHeight: variables.lineHeight.sm,
-        letterSpacing: variables.spacing.sm,
+        letterSpacing: variables.spacing.xs,
         color: colors.primary[900],
     },
 
@@ -27,7 +27,7 @@ export const typography: ThemeOptions['typography'] = {
         fontSize: pxToRem(32),
         fontWeight: variables.fontWeight.bold,
         lineHeight: variables.lineHeight.md,
-        letterSpacing: variables.spacing.xs,
+        letterSpacing: variables.spacing.sm,
         color: colors.primary[800],
     },
 
