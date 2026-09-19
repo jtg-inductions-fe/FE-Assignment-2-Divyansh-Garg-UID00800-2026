@@ -18,6 +18,7 @@
         "prettier:check": "prettier --check .",
         "prepare": "husky",
         "pre-commit": "lint-staged",
+        "pre-push": "lint-staged",
         "test": "vitest",
         "test:run": "vitest run"
     },
