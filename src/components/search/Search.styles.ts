@@ -1,7 +1,6 @@
-import { Box, styled, Typography } from '@mui/material';
+import { Box, List, ListItem, styled } from '@mui/material';
 
-import { colors } from '@/theme/colors';
-import { pxToRem } from '@/theme/functions';
+import { colors } from '@theme/colors';
 
 export const SearchWrap = styled(Box)(({ theme }) => ({
     width: '100%',
@@ -20,10 +19,13 @@ export const SearchWrap = styled(Box)(({ theme }) => ({
         scrollbarWidth: 'none',
     },
     '& .MuiAutocomplete-option': {
+        ...theme.mixins.flexBetween,
         borderRadius: theme.variables.radius.xl,
         padding: theme.variables.spacing.sm,
         backgroundColor: colors.primary[100],
         marginTop: theme.variables.spacing.sm,
+
+        width: '100%',
     },
     '& .MuiTypography-root': {
         ...theme.mixins.flexBetween,
@@ -31,24 +33,7 @@ export const SearchWrap = styled(Box)(({ theme }) => ({
     },
 }));
 
-export const SearchResult = styled(Box)(({ theme }) => ({
-    ...theme.mixins.flexCenter,
-    width: '100%',
+export const SearchResult = styled(ListItem)(({ theme }) => ({
+    ...theme.mixins.flexBetween,
     gap: theme.variables.spacing.md,
-})) as typeof Box;
-
-export const SearchResultAvatar = styled(Box)(({ theme }) => ({
-    width: pxToRem(40),
-    height: pxToRem(40),
-    flexShrink: 0,
-    borderRadius: theme.variables.radius.pill,
-})) as typeof Box;
-
-export const SearchResultContent = styled(Box)({
-    flex: 1,
-    minWidth: 0,
-});
-
-export const SearchResultUsername = styled(Typography)({
-    textAlign: 'left',
-});
+}));

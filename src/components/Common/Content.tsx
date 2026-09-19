@@ -10,9 +10,9 @@ export const Content = styled(Box)(({ theme }) => ({
     width: '100%',
     overflow: 'scroll',
     scrollbarWidth: 'none',
+    justifyContent: 'flex-start',
 
     [theme.breakpoints.up('lg')]: {
         width: '80%',
-        justifyContent: 'flex-start',
     },
 }));
