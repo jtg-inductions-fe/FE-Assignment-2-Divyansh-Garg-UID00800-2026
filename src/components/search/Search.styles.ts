@@ -1,4 +1,4 @@
-import { Box, List, ListItem, styled } from '@mui/material';
+import { Box, ListItem, styled } from '@mui/material';
 
 import { colors } from '@theme/colors';
 
