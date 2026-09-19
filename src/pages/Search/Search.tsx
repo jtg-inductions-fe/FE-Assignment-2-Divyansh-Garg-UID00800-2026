@@ -52,7 +52,7 @@ const Search = () => {
 
             <Content>
                 <Card>
-                    <Typography variant="h2">Search GitHub Account</Typography>
+                    <Typography variant="h3">Search GitHub Account</Typography>
 
                     <Typography variant="h4">
                         Enter GitHub Username of person you wanna watch.
