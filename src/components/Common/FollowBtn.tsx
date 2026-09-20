@@ -1,9 +1,10 @@
 import { colors } from '@theme/colors';
 import { pxToRem } from '@theme/functions';
-import { Button, styled } from '@mui/material';
+import { Button, CircularProgress, styled, type ButtonProps } from '@mui/material';
 
-interface FollowButtonProps {
+interface FollowButtonProps extends ButtonProps {
     isFollowed: boolean;
+    loading: boolean;
     onClick?: VoidFunction;
 }
 
@@ -13,14 +14,16 @@ const StyledFollowButton = styled(Button)(({ theme }) => ({
     borderRadius: theme.variables.radius.pill,
     fontWeight: theme.variables.fontWeight.semiBold,
     transition: theme.variables.transitions.normal,
+
     flexShrink: 0,
     minWidth: pxToRem(120),
     minHeight: pxToRem(44),
 })) as typeof Button;
 
-export const FollowButton = ({ isFollowed, onClick }: FollowButtonProps) => {
+export const FollowButton = ({ isFollowed, loading, onClick }: FollowButtonProps) => {
     return (
         <StyledFollowButton
+            disabled={loading}
             onClick={onClick}
             sx={
                 isFollowed
@@ -40,7 +43,7 @@ export const FollowButton = ({ isFollowed, onClick }: FollowButtonProps) => {
                       }
             }
         >
-            {isFollowed ? 'Unfollow' : 'Follow'}
+            {loading ? <CircularProgress size={20} /> : isFollowed ? 'Unfollow' : 'Follow'}
         </StyledFollowButton>
     );
 };
