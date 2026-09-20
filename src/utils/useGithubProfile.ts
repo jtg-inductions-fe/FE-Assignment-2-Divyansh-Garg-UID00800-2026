@@ -1,9 +1,9 @@
 import { useRef, useState } from 'react';
 
-import type { AuthUser } from '@redux/auth';
+import type { AuthUser } from '@redux/auth/authTypes';
 
 import { fetchGitHubProfile } from '@utils/services/githubProfile';
-import { useAppSelector } from '@utils';
+import { useAppSelector } from './storeHooks';
 
 export const useGithubProfile = () => {
     // we do not have any redux state for profile, that's why these states are made using useState
