@@ -58,7 +58,7 @@ export const MobileCloseButton = styled(IconButton)(({ theme }) => ({
 
 export const MobileNavigationList = styled(Box)(({ theme }) => ({
     ...theme.mixins.flexCenterCol,
-    gap: theme.variables.spacing.xs,
+    gap: theme.variables.spacing.md,
     padding: theme.variables.spacing.md,
 
     justifyContent: 'flex-start',

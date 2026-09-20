@@ -1,7 +1,6 @@
 import { colors } from '@theme/colors';
 import { Link, Stack, styled } from '@mui/material';
 import { Box } from '@mui/system';
-import { pxToRem } from '@theme/functions';
 
 export const Card = styled(Stack)(({ theme }) => ({
     ...theme.mixins.flexCenterCol,
@@ -30,9 +29,9 @@ export const CardLogo = styled(Box)(({ theme }) => ({
     },
 }));
 
-export const CardLink = styled(Link)(() => ({
-    textDecoration: 'none',
+export const CardLink = styled(Link)(({ theme }) => ({
+    fontWeight: theme.variables.fontWeight.extraBold,
+
+    fontSize: '14px',
     color: colors.primary[900],
-    padding: 0,
-    marginBottom: pxToRem(24),
 })) as typeof Link;

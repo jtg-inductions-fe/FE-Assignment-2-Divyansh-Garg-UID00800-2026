@@ -1,13 +1,12 @@
 import { GitHub } from '@mui/icons-material';
 import { NavLink } from 'react-router';
 
-import { NavButton } from './NavButton';
-import { useLogout, useNavigation } from './useNavigation';
 import { Modal } from '@components/modal/Modal';
 import MobileMenu from '@components/menu/MobileMenu';
 
+import { NavButton } from './NavButton';
+import { useLogout, useNavigation } from './useNavigation';
 import { Brand, HomeLinkWrapper, NavigationBar, NavLinks } from './navbar.styles';
-
 import { AppBarHeader } from './NavHeader';
 
 const Navbar = () => {
@@ -50,12 +49,7 @@ const Navbar = () => {
                     )}
                 </NavLinks>
 
-                <MobileMenu
-                    logoutAnchor={logoutAnchor}
-                    setLogoutAnchor={setLogoutAnchor}
-                    handleLogoutClick={handleLogoutClick}
-                    handleLogout={handleLogout}
-                />
+                <MobileMenu onLogoutClick={handleLogoutClick} />
             </NavigationBar>
 
             <Modal

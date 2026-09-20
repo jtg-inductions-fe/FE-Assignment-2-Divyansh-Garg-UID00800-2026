@@ -1,10 +1,10 @@
-import { useAppDispatch, useAppSelector } from '@/app/hooks';
+import { useAppDispatch, useAppSelector } from '@utils/hooks/storeHooks';
 
 import { loginNavigationItem, logoutNavigationItem, navigationItems } from './navbar';
 import { useNavigate } from 'react-router';
 import { useState } from 'react';
-import { logoutUser } from '@features/auth/authSlice';
-import { removeSocialState } from '@features/social/socialSlice';
+import { logoutUser } from '@redux/auth/authSlice';
+import { removeSocialState } from '@redux/social/socialSlice';
 
 export const useNavigation = () => {
     const isAuthenticated = useAppSelector((state) => state.auth.isAuthenticated);

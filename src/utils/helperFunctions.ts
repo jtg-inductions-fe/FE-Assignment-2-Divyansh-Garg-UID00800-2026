@@ -1,5 +1,4 @@
-const reqRegexClassic = /^ghp_[a-zA-Z0-9]{36}$/;
-const reqRegexFineGrained = /^github_pat_[a-zA-Z0-9]{22}_[a-zA-Z0-9]{59}$/;
+import { reqRegexClassic, reqRegexFineGrained } from './constants';
 
 function snakeToCamel(str: string): string {
     return str

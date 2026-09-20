@@ -1,13 +1,11 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
-import type { SocialUser, SocialState } from './socialTypes';
-import {
-    getAllFollowing,
-    removeSingleFollowing,
-    saveAllFollowing,
-    saveSingleFollowing,
-} from './socialStorage';
 
-const storedState = getAllFollowing();
+import { localStorageUtils } from '@utils/localstorage';
+import { STORAGE_KEYS } from '@utils/storageKeys';
+
+import type { SocialState, SocialUser } from './socialTypes';
+
+const storedState = localStorageUtils.get<SocialState>(STORAGE_KEYS.following);
 
 const initialState: SocialState = {
     isFetched: storedState?.isFetched ?? false,
@@ -16,23 +14,24 @@ const initialState: SocialState = {
 
 const socialSlice = createSlice({
     name: 'social',
+
     initialState,
+
     reducers: {
         addFollowers: (state, action: PayloadAction<SocialUser[]>) => {
-            const followingArray = action.payload;
+            const following = action.payload.reduce<Record<number, SocialUser>>(
+                (accumulator, user) => {
+                    accumulator[user.id] = user;
+
+                    return accumulator;
+                },
+                {},
+            );
 
             state.isFetched = true;
-            const following = followingArray.reduce<Record<number, SocialUser>>((acc, user) => {
-                acc[user.id] = user;
-                return acc;
-            }, {});
-
             state.following = following;
 
-            saveAllFollowing({
-                isFetched: true,
-                following: following,
-            });
+            localStorageUtils.set(STORAGE_KEYS.following, { isFetched: true, following });
         },
 
         addFollower: (state, action: PayloadAction<SocialUser>) => {
@@ -40,7 +39,10 @@ const socialSlice = createSlice({
 
             state.following[user.id] = user;
 
-            saveSingleFollowing(user);
+            localStorageUtils.set(STORAGE_KEYS.following, {
+                isFetched: state.isFetched,
+                following: state.following,
+            });
         },
 
         removeFollower: (state, action: PayloadAction<SocialUser>) => {
@@ -48,15 +50,21 @@ const socialSlice = createSlice({
 
             delete state.following[userId];
 
-            removeSingleFollowing(userId);
+            localStorageUtils.set(STORAGE_KEYS.following, {
+                isFetched: state.isFetched,
+                following: state.following,
+            });
         },
 
         removeSocialState: (state) => {
             state.isFetched = false;
             state.following = {};
+
+            localStorageUtils.remove(STORAGE_KEYS.following);
         },
     },
 });
 
 export const { addFollowers, addFollower, removeFollower, removeSocialState } = socialSlice.actions;
+
 export default socialSlice.reducer;

@@ -13,7 +13,7 @@ import {
     NotFoundImg,
     NotFoundSubHeading,
     NotFoundWrapper,
-} from '@components/notFound/NotFound.styles';
+} from '@pages/NotFound/NotFound.styles';
 
 const notFoundImg = 'src/assets/images/github-404.png';
 

@@ -1,36 +1,57 @@
-import { GitHub, Visibility, VisibilityOff } from '@mui/icons-material';
-import { IconButton, TextField, Typography } from '@mui/material';
+import { useState, type ChangeEvent } from 'react';
+import { useNavigate } from 'react-router';
+
+import { GitHub, Info, Visibility, VisibilityOff } from '@mui/icons-material';
+import { Button, CircularProgress, IconButton, Stack, TextField, Typography } from '@mui/material';
 
 import Bubble from '@components/common/Bubble';
+import { CardLink, CardLogo } from '@components/common/Card';
+import { Content } from '@components/common/Content';
+import { ErrorBox } from '@components/common/ErrorBox';
+import { Page } from '@components/common/Page';
+
+import { LoginHeader, LoginMainSection, LoginWrapper } from '@pages/Login/Auth.styles';
+import { useGitHubAuth } from '@utils/hooks/useGithubAuth';
 
 import { colors } from '@theme/colors';
 import { pxToRem } from '@theme/functions';
 
-import { LoginHeader, LoginMainSection, LoginWrapper } from '@components/auth/Auth.styles';
-
-import { Page } from '@components/common/Page';
-import { Content } from '@components/common/Content';
-import { CardLogo, CardLink } from '@components/common/Card';
-
-import { ErrorBox } from '@components/common/ErrorBox';
-import { SubmitButton } from '@components/common/SubmitButton';
-import { useGitHubAuth } from '@components/auth/useGithubAuth';
-import { BASE_URL, PAT_GENERATION_URL } from '@utils/urls';
+import { BASE_URL, PAT_GENERATION_URL } from '@utils/apiUrls';
 
 const Login = () => {
-    const patUrl: string = `${BASE_URL}/${PAT_GENERATION_URL}`;
+    const navigate = useNavigate();
 
-    const { token, showToken, loading, error, handleTokenChange, toggleShowToken, handleLogin } =
-        useGitHubAuth();
+    const patUrl = `${BASE_URL}/${PAT_GENERATION_URL}`;
+
+    const [token, setToken] = useState('');
+    const [showToken, setShowToken] = useState(false);
+
+    const { loading, error, handleLogin } = useGitHubAuth();
+
+    const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
+        setToken(event.target.value);
+    };
+
+    const toggleVisibility = () => {
+        setShowToken((previous) => !previous);
+    };
+
+    const handleSubmit = async () => {
+        const result = await handleLogin(token);
+
+        if (result) {
+            navigate('/search');
+        }
+    };
 
     return (
         <Page>
             <Bubble
-                sx={() => ({
+                sx={{
                     backgroundColor: colors.secondary[200],
                     top: pxToRem(-120),
                     right: pxToRem(-120),
-                })}
+                }}
             />
 
             <Bubble
@@ -43,7 +64,7 @@ const Login = () => {
 
             <Content
                 sx={{
-                    maxHeight: '700px',
+                    maxHeight: pxToRem(700),
                 }}
             >
                 <LoginWrapper>
@@ -69,12 +90,12 @@ const Login = () => {
                             placeholder="GitHub PAT"
                             type={showToken ? 'text' : 'password'}
                             value={token}
-                            onChange={handleTokenChange}
+                            onChange={handleInputChange}
                             disabled={loading}
                             autoComplete="off"
                             onKeyDown={(event) => {
                                 if (event.key === 'Enter' && !loading) {
-                                    void handleLogin();
+                                    void handleSubmit();
                                 }
                             }}
                             slotProps={{
@@ -82,7 +103,7 @@ const Login = () => {
                                     endAdornment: (
                                         <IconButton
                                             disabled={loading}
-                                            onClick={toggleShowToken}
+                                            onClick={toggleVisibility}
                                             aria-label={showToken ? 'Hide token' : 'Show token'}
                                         >
                                             {showToken ? (
@@ -96,22 +117,47 @@ const Login = () => {
                             }}
                         />
 
-                        <CardLink href={patUrl} target="_blank">
-                            Don't have PAT, Generate it.
-                        </CardLink>
+                        <Typography
+                            variant="body2"
+                            sx={{
+                                marginBottom: pxToRem(24),
+                            }}
+                        >
+                            {"Don't have PAT? "}
+                            <CardLink href={patUrl} target="_blank">
+                                Generate it.
+                            </CardLink>
+                        </Typography>
 
-                        <SubmitButton
-                            loading={loading}
-                            initialLabel="Connecting..."
-                            processingLabel="Connect GitHub"
-                            onClick={handleLogin}
-                            icon={GitHub}
-                        />
+                        <Button
+                            fullWidth
+                            variant="contained"
+                            size="large"
+                            disabled={loading}
+                            onClick={handleSubmit}
+                            startIcon={
+                                loading ? <CircularProgress size={pxToRem(16)} /> : <GitHub />
+                            }
+                            sx={(theme) => ({
+                                borderRadius: theme.variables.radius.pill,
+                            })}
+                        >
+                            {loading ? 'Connecting...' : 'Connect GitHub'}
+                        </Button>
                     </LoginMainSection>
 
-                    <Typography variant="body1">
-                        Your Personal Access Token is stored locally in your browser.
-                    </Typography>
+                    <Stack
+                        sx={{
+                            flexDirection: 'row',
+                            gap: pxToRem(5),
+                        }}
+                    >
+                        <Info htmlColor={colors.secondary[900]} />
+
+                        <Typography>
+                            Your Personal Access Token is stored locally in your browser.
+                        </Typography>
+                    </Stack>
                 </LoginWrapper>
             </Content>
         </Page>

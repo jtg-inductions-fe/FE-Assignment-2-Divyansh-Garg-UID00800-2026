@@ -1,23 +1,27 @@
 import { createBrowserRouter } from 'react-router';
 
+import AuthGuard from '@components/guard/AuthGuard';
 import MainLayout from '@layouts/MainLayout';
-import NotFound from '@pages/NotFound/NotFound';
-import Login from '@pages/Login/Login';
 
-import { guestLoader } from '@utils/loaders';
+import Login from '@pages/Login/Login';
+import NotFound from '@pages/NotFound/NotFound';
 
 export const router = createBrowserRouter([
     {
         element: <MainLayout />,
         children: [
             {
-                path: '/login',
-                element: <Login />,
-                loader: guestLoader,
-            },
-            {
-                path: '*',
-                element: <NotFound />,
+                element: <AuthGuard />,
+                children: [
+                    {
+                        path: '/login',
+                        element: <Login />,
+                    },
+                    {
+                        path: '*',
+                        element: <NotFound />,
+                    },
+                ],
             },
         ],
     },

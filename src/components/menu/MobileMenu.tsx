@@ -1,34 +1,24 @@
 import { Close, GitHub, Menu } from '@mui/icons-material';
 import { Divider } from '@mui/material';
+import { useState, type MouseEvent } from 'react';
 
 import { NavButton } from '@components/navbar/NavButton';
 import { useNavigation } from '@components/navbar/useNavigation';
 
 import {
+    MobileCloseButton,
+    MobileDrawer,
     MobileDrawerContent,
     MobileMenuHeader,
     MobileMenuTrigger,
     MobileNavigationList,
-    MobileCloseButton,
-    MobileDrawer,
 } from './menu.styles';
 
-import { Modal } from '@components/modal/Modal';
-import { useState, type MouseEvent } from 'react';
-
 interface MobileMenuProps {
-    logoutAnchor: HTMLElement | null;
-    setLogoutAnchor: (event: React.SetStateAction<HTMLElement | null>) => void;
-    handleLogoutClick: (event: React.MouseEvent<HTMLElement>) => void;
-    handleLogout: () => void;
+    onLogoutClick: (event: React.MouseEvent<HTMLElement>) => void;
 }
 
-const MobileMenu = ({
-    logoutAnchor,
-    setLogoutAnchor,
-    handleLogoutClick,
-    handleLogout,
-}: MobileMenuProps) => {
+const MobileMenu = ({ onLogoutClick }: MobileMenuProps) => {
     const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
 
     const open = Boolean(anchorEl);
@@ -82,7 +72,7 @@ const MobileMenu = ({
                                 label={logoutItem.label}
                                 icon={logoutItem.icon}
                                 isLogout
-                                onClick={handleLogoutClick}
+                                onClick={onLogoutClick}
                             />
                         ) : (
                             <NavButton
@@ -94,16 +84,6 @@ const MobileMenu = ({
                         )}
                     </MobileNavigationList>
                 </MobileDrawerContent>
-
-                <Modal
-                    title="Logout"
-                    description="Are you sure you want to logout?"
-                    BtnOneLabel="Cancel"
-                    BtnTwoLabel="Logout"
-                    anchorEl={logoutAnchor}
-                    onClose={() => setLogoutAnchor(null)}
-                    onConfirm={handleLogout}
-                />
             </MobileDrawer>
         </>
     );

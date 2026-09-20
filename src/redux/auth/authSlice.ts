@@ -1,9 +1,11 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
 
-import { clearAuth, getAuth, saveAuth } from './authStorage';
+import { localStorageUtils } from '@utils/localstorage';
+import { STORAGE_KEYS } from '@utils/storageKeys';
+
 import type { AuthData, AuthState } from './authTypes';
 
-const storedAuth = getAuth();
+const storedAuth = localStorageUtils.get<AuthData>(STORAGE_KEYS.auth);
 
 const initialState: AuthState = {
     user: storedAuth?.user ?? null,
@@ -13,7 +15,9 @@ const initialState: AuthState = {
 
 const authSlice = createSlice({
     name: 'auth',
+
     initialState,
+
     reducers: {
         loginUser: (state, action: PayloadAction<AuthData>) => {
             const { user, token } = action.payload;
@@ -22,10 +26,7 @@ const authSlice = createSlice({
             state.token = token;
             state.isAuthenticated = true;
 
-            saveAuth({
-                user,
-                token,
-            });
+            localStorageUtils.set(STORAGE_KEYS.auth, { user, token });
         },
 
         logoutUser: (state) => {
@@ -33,7 +34,8 @@ const authSlice = createSlice({
             state.token = null;
             state.isAuthenticated = false;
 
-            clearAuth();
+            localStorageUtils.remove(STORAGE_KEYS.auth);
+            localStorageUtils.remove(STORAGE_KEYS.following);
         },
     },
 });
