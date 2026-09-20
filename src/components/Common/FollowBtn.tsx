@@ -3,8 +3,8 @@ import { Button, CircularProgress, styled, type ButtonProps } from '@mui/materia
 
 interface FollowButtonProps extends ButtonProps {
     isFollowed: boolean;
-    loading: boolean;
-    onClick?: VoidFunction;
+    loading?: boolean;
+    onClick: VoidFunction;
 }
 
 const StyledFollowButton = styled(Button)(({ theme }) => ({
@@ -12,6 +12,7 @@ const StyledFollowButton = styled(Button)(({ theme }) => ({
     borderRadius: theme.variables.radius.pill,
     fontWeight: theme.variables.fontWeight.semiBold,
     transition: theme.variables.transitions.normal,
+
     flexShrink: 0,
     minWidth: pxToRem(120),
     minHeight: pxToRem(44),

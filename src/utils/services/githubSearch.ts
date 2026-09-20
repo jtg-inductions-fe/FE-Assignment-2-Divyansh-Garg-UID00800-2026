@@ -6,6 +6,7 @@ export interface GithubUser {
     avatar_url: string;
     type: string;
     email: string;
+    html_url: string;
 }
 
 export interface GithubSearchResponse {
