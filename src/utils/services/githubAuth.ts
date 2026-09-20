@@ -1,14 +1,9 @@
-import type { AuthUser } from '@redux/auth/authTypes';
+import type { AuthData, AuthUser } from '@redux/auth/authTypes';
 
 import { snakeToCamelCase } from '@utils/helperFunctions';
 import { getLoginUrl } from '@utils/apiUrls';
 
-export interface GitHubAuthResponse {
-    user: AuthUser;
-    token: string;
-}
-
-export const authenticateWithGitHub = async (token: string): Promise<GitHubAuthResponse> => {
+export const authenticateWithGitHub = async (token: string): Promise<AuthData> => {
     const trimmedToken = token.trim();
 
     const response = await fetch(getLoginUrl(), {
