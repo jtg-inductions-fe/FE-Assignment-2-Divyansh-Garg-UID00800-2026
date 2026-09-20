@@ -5,11 +5,24 @@ import { MainLayout } from '@layouts';
 
 import { Login } from '@pages/Login';
 import { NotFound } from '@pages/NotFound';
+import Search from '@pages/Search/Search';
 
 export const router = createBrowserRouter([
     {
         element: <MainLayout />,
         children: [
+            {
+                path: '/',
+                element: <Search />,
+            },
+            {
+                path: '/search',
+                element: <Search />,
+            },
+            {
+                path: '/search/:username',
+                element: <Search />,
+            },
             {
                 element: <AuthGuard />,
                 children: [

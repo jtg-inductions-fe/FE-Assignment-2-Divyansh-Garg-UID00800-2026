@@ -9,7 +9,7 @@ export const SearchWrap = styled(Box)(({ theme }) => ({
         paddingLeft: theme.variables.spacing.md,
     },
     '& .MuiPaper-root': {
-        borderRadius: theme.variables.radius.xl,
+        borderRadius: '45px',
         padding: theme.variables.spacing.md,
         backgroundColor: colors.primary[50],
         marginTop: theme.variables.spacing.md,
@@ -20,7 +20,7 @@ export const SearchWrap = styled(Box)(({ theme }) => ({
     },
     '& .MuiAutocomplete-option': {
         ...theme.mixins.flexBetween,
-        borderRadius: theme.variables.radius.xl,
+        borderRadius: theme.variables.radius.pill,
         padding: theme.variables.spacing.sm,
         backgroundColor: colors.primary[100],
         marginTop: theme.variables.spacing.sm,

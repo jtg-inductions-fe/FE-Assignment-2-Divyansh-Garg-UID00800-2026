@@ -1,36 +1,83 @@
-import { Fragment } from 'react';
+import { Fragment, useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router';
 
-import { Close } from '@mui/icons-material';
-import SearchIcon from '@mui/icons-material/Search';
-
+import { Close, Search as SearchIcon } from '@mui/icons-material';
 import { Autocomplete, CircularProgress, IconButton, TextField, Typography } from '@mui/material';
-
-import { SearchWrap, SearchResult } from '@components/search/Search.styles';
-import { useGitHubSearch } from '@components/search/useGitHubSearch';
-
-import Bubble from '@components/common/Bubble';
-import { Content } from '@components/common/Content';
-import { Page } from '@components/common/Page';
-import { Card } from '@components/common/Card';
-import { ErrorBox } from '@components/common/ErrorBox';
-import { StyledAvatar } from '@components/common/StyledAvatar';
 
 import { colors } from '@theme/colors';
 import { pxToRem } from '@theme/functions';
 
+import { Page } from '@components/common/Page';
+import { Content } from '@components/common/Content';
+import { Card } from '@components/common/Card';
+import { StyledAvatar } from '@components/common/StyledAvatar';
+import Bubble from '@components/common/Bubble';
+import { ErrorBox } from '@components/common/ErrorBox';
+
+import { SearchResult, SearchWrap } from './Search.styles';
+
+import { useGitHubSearch } from '@utils/hooks/useGithubSearch';
+
 const Search = () => {
-    const {
-        open,
-        error,
-        options,
-        loading,
-        searchUsername,
-        setOpen,
-        handleClear,
-        handleNavigation,
-        setSearchUsername,
-        handleSubmitSearch,
-    } = useGitHubSearch();
+    const navigate = useNavigate();
+    const { username } = useParams<string>();
+
+    const { loading, error, response, handleSearch } = useGitHubSearch();
+
+    const [searchUsername, setSearchUsername] = useState(username ?? '');
+    const [open, setOpen] = useState(false);
+
+    const options = response?.items ?? [];
+
+    useEffect(() => {
+        const trimmedUsername = searchUsername.trim();
+
+        if (!trimmedUsername) {
+            return;
+        }
+
+        const timer = window.setTimeout(() => {
+            void handleSearch(trimmedUsername);
+        }, 400);
+
+        return () => {
+            window.clearTimeout(timer);
+        };
+    }, [searchUsername]);
+
+    useEffect(() => {
+        const trimmedUsername = searchUsername.trim();
+
+        if (trimmedUsername) {
+            navigate(`/search/${trimmedUsername}`, {
+                replace: true,
+            });
+        } else {
+            navigate('/search', {
+                replace: true,
+            });
+        }
+    }, [searchUsername, navigate]);
+
+    const handleClear = () => {
+        setSearchUsername('');
+        setOpen(false);
+    };
+
+    const handleNavigation = (login: string) => {
+        setOpen(false);
+        navigate(`/profile/${login}`);
+    };
+
+    const handleSubmitSearch = () => {
+        const trimmedUsername = searchUsername.trim();
+
+        if (!trimmedUsername) {
+            return;
+        }
+
+        handleNavigation(trimmedUsername);
+    };
 
     return (
         <Page>
@@ -52,7 +99,7 @@ const Search = () => {
 
             <Content>
                 <Card>
-                    <Typography variant="h2">Search GitHub Account</Typography>
+                    <Typography variant="h3">Search GitHub Account</Typography>
 
                     <Typography variant="h4">
                         Enter GitHub Username of person you wanna watch.
@@ -69,19 +116,14 @@ const Search = () => {
                             onClose={() => setOpen(false)}
                             value={null}
                             inputValue={searchUsername}
-                            disablePortal={true}
+                            disablePortal
                             onInputChange={(_event, value, reason) => {
                                 if (reason === 'reset') {
                                     return;
                                 }
 
                                 setSearchUsername(value);
-
-                                if (value.trim()) {
-                                    setOpen(true);
-                                } else {
-                                    setOpen(false);
-                                }
+                                setOpen(Boolean(value.trim()));
                             }}
                             onChange={(_event, value) => {
                                 if (!value) {
@@ -116,11 +158,10 @@ const Search = () => {
                             renderInput={(params) => (
                                 <TextField
                                     {...params}
-                                    placeholder="Search Hub username..."
+                                    placeholder="Search GitHub username..."
                                     onKeyDown={(event) => {
                                         if (event.key === 'Enter') {
                                             event.preventDefault();
-
                                             handleSubmitSearch();
                                         }
                                     }}
