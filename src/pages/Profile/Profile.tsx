@@ -1,36 +1,86 @@
-import Bubble from '@components/common/Bubble';
-import { colors } from '@theme/colors';
-import { pxToRem } from '@theme/functions';
+import { useEffect } from 'react';
+import { useParams } from 'react-router';
 
-import { Page } from '@components/common/Page';
-import { Card, CardMain, Label, Value } from '@components/common/Card';
+import { ArrowOutward } from '@mui/icons-material';
+import { Box, IconButton, Typography } from '@mui/material';
+
+import Bubble from '@components/common/Bubble';
+import { Card, CardHeader, CardMain, Label, Value } from '@components/common/Card';
 import { Content } from '@components/common/Content';
+import { ErrorBox } from '@components/common/ErrorBox';
+import { FollowButton } from '@components/common/FollowBtn';
+import { Grid, GridEle } from '@components/common/Grid';
+import { Count, CountBox } from '@components/common/Count';
+import { Page } from '@components/common/Page';
+import { StyledAvatar } from '@components/common/StyledAvatar';
+
 import {
     ProfileCard,
     ProfileCardHeaderTop,
     ProfileCardTopHeaderInner,
     ProfileMainTop,
     ProfileUsername,
-    StatValue,
 } from '@pages/Profile/Profile.styles';
 
-import { FollowButton } from '@components/common/FollowBtn';
-import { ErrorBox } from '@components/common/ErrorBox';
-import { CardHeader } from '@components/common/Card';
+import { addFollower, removeFollower } from '@redux/social/socialSlice';
+import { useAppDispatch, useAppSelector } from '@utils/hooks/storeHooks';
 
-import { ArrowOutward } from '@mui/icons-material';
-import { Box, IconButton, Typography } from '@mui/material';
+import { colors } from '@theme/colors';
+import { pxToRem } from '@theme/functions';
 
-import { StyledAvatar } from '@components/common/StyledAvatar';
-import { Grid, GridEle } from '@components/common/Grid';
-import { Count, CountBox } from '@components/common/Count';
-import { useGithubProfile } from '@components/profile/useGithubProfile';
-import { useGithubSocial } from '@components/follow/useGithubSocial';
+import { useGithubProfile } from '@utils/hooks/useGithubProfile';
+import { useGithubSocial } from '@utils/hooks/useGithubSocial';
 
 const Profile = () => {
-    const { isFollowed, searchUserInfo, isOwnProfile, error, isAuthenticated } = useGithubProfile();
+    const { username } = useParams<{ username: string }>();
 
-    const { isFetched, handleFollowUnfollow } = useGithubSocial();
+    const dispatch = useAppDispatch();
+
+    const authUser = useAppSelector((state) => state.auth.user);
+    const token = useAppSelector((state) => state.auth.token);
+    const isAuthenticated = useAppSelector((state) => state.auth.isAuthenticated);
+    const following = useAppSelector((state) => state.social.following);
+    const isFetched = useAppSelector((state) => state.social.isFetched);
+
+    const { loading, error, response, handleProfileSearch } = useGithubProfile();
+
+    const { loading: followLoading, error: followError, handleFollowUnfollow } = useGithubSocial();
+
+    const isOwnProfile =
+        isAuthenticated &&
+        !!authUser &&
+        !!username &&
+        authUser.login.toLowerCase() === username.toLowerCase();
+
+    const searchUserInfo = response;
+
+    const isFollowed = Boolean(searchUserInfo && String(searchUserInfo.id) in following);
+
+    useEffect(() => {
+        if (!username) {
+            return;
+        }
+
+        void handleProfileSearch(username);
+    }, [username]);
+
+    const handleFollow = async () => {
+        if (!searchUserInfo || !token) {
+            return;
+        }
+
+        const result = await handleFollowUnfollow(searchUserInfo.login, isFollowed, token);
+
+        if (result === null) {
+            return;
+        }
+
+        if (result) {
+            dispatch(addFollower(searchUserInfo));
+        } else {
+            dispatch(removeFollower(searchUserInfo));
+        }
+    };
 
     return (
         <Page>
@@ -62,6 +112,8 @@ const Profile = () => {
 
                     {error ? (
                         <ErrorBox color="error">{error}</ErrorBox>
+                    ) : loading ? (
+                        <Typography variant="body1">Loading profile...</Typography>
                     ) : (
                         <ProfileCard>
                             <CardHeader>
@@ -96,8 +148,9 @@ const Profile = () => {
                                                 </IconButton>
                                             )}
                                         </Box>
+
                                         <ProfileUsername variant="h6">
-                                            {searchUserInfo?.name ? searchUserInfo.name : 'NA'}
+                                            {searchUserInfo?.name ?? 'NA'}
                                         </ProfileUsername>
                                     </ProfileCardTopHeaderInner>
                                 </ProfileCardHeaderTop>
@@ -128,14 +181,18 @@ const Profile = () => {
                                     </Typography>
                                 </ProfileMainTop>
 
-                                {isAuthenticated && !isOwnProfile && isFetched && (
-                                    <FollowButton
-                                        isFollowed={isFollowed}
-                                        onClick={() =>
-                                            handleFollowUnfollow(isFollowed, searchUserInfo)
-                                        }
-                                    />
-                                )}
+                                {followError && <ErrorBox color="error">{followError}</ErrorBox>}
+
+                                {isAuthenticated &&
+                                    !isOwnProfile &&
+                                    isFetched &&
+                                    searchUserInfo && (
+                                        <FollowButton
+                                            isFollowed={isFollowed}
+                                            loading={followLoading}
+                                            onClick={handleFollow}
+                                        />
+                                    )}
                             </CardMain>
 
                             {isOwnProfile && searchUserInfo && (
@@ -181,7 +238,7 @@ const Profile = () => {
                                     </GridEle>
 
                                     <GridEle>
-                                        <Label variant="h6">Account Created: </Label>
+                                        <Label variant="h6">Account Created:</Label>
                                         <Value>
                                             {searchUserInfo.createdAt
                                                 ? new Date(searchUserInfo.createdAt).toDateString()
@@ -190,7 +247,7 @@ const Profile = () => {
                                     </GridEle>
 
                                     <GridEle>
-                                        <Label variant="h6">Last Updated: </Label>
+                                        <Label variant="h6">Last Updated:</Label>
                                         <Value>
                                             {searchUserInfo.updatedAt
                                                 ? new Date(searchUserInfo.updatedAt).toDateString()

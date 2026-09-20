@@ -3,6 +3,7 @@ export const PAT_GENERATION_URL = 'settings/personal-access-tokens';
 export const AUTH_URL = 'user';
 export const FOLLOWING_URL = 'user/following';
 export const SEARCH_URL = 'search/users';
+export const PROFILE_URL = 'users';
 
 export const getLoginUrl = (): string => `${BASE_URL}/${AUTH_URL}`;
 
