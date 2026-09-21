@@ -16,6 +16,7 @@ export const SuggestionsListItem = styled(ListItem)(({ theme }) => ({
     ...theme.mixins.flexCenter,
     gap: theme.variables.spacing.md,
     padding: theme.variables.spacing.md,
+    borderBottom: `1px solid ${colors.primary[200]}`,
     cursor: 'pointer',
 
     justifyContent: 'space-between',
