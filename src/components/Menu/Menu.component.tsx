@@ -73,10 +73,7 @@ export const MobileMenu = ({ onLogoutClick }: MobileMenuProps) => {
                                 label={logoutItem.label}
                                 icon={logoutItem.icon}
                                 isLogout
-                                onClick={(event) => {
-                                    onLogoutClick(event);
-                                    handleClose();
-                                }}
+                                onClick={onLogoutClick}
                             />
                         ) : (
                             <NavButton
