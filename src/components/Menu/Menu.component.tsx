@@ -1,8 +1,6 @@
-import type { MouseEvent } from 'react';
-
 import { Close, GitHub, Menu } from '@mui/icons-material';
 import { Divider } from '@mui/material';
-import { useState, type MouseEvent } from 'react';
+import { type MouseEvent } from 'react';
 
 import { NavButton, useNavigation } from '@components/Navbar';
 
@@ -75,7 +73,10 @@ export const MobileMenu = ({ onLogoutClick }: MobileMenuProps) => {
                                 label={logoutItem.label}
                                 icon={logoutItem.icon}
                                 isLogout
-                                onClick={onLogoutClick}
+                                onClick={(event) => {
+                                    onLogoutClick(event);
+                                    handleClose();
+                                }}
                             />
                         ) : (
                             <NavButton
