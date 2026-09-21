@@ -4,21 +4,15 @@ import { useNavigate, useParams } from 'react-router';
 import { Close, Search as SearchIcon } from '@mui/icons-material';
 import { Autocomplete, CircularProgress, IconButton, TextField, Typography } from '@mui/material';
 
-import { colors } from '@theme/colors';
-import { pxToRem } from '@theme/functions';
+import { colors, pxToRem } from '@theme';
 
-import { Page } from '@components/common/Page';
-import { Content } from '@components/common/Content';
-import { Card } from '@components/common/Card';
-import { StyledAvatar } from '@components/common/StyledAvatar';
-import Bubble from '@components/common/Bubble';
-import { ErrorBox } from '@components/common/ErrorBox';
+import { Page, Content, Card, StyledAvatar, Bubble, ErrorBox } from '@components/Common';
 
 import { SearchResult, SearchWrap } from './Search.styles';
 
-import { useGitHubSearch } from '@utils/hooks/useGithubSearch';
+import { useGitHubSearch } from './useGithubSearch';
 
-const Search = () => {
+export const Search = () => {
     const navigate = useNavigate();
     const { username } = useParams<string>();
 
@@ -117,6 +111,23 @@ const Search = () => {
                             value={null}
                             inputValue={searchUsername}
                             disablePortal
+                            slotProps={{
+                                popper: {
+                                    placement: 'bottom',
+                                    modifiers: [
+                                        {
+                                            name: 'flip',
+                                            enabled: false,
+                                        },
+                                        {
+                                            name: 'preventOverflow',
+                                            options: {
+                                                boundary: 'viewport',
+                                            },
+                                        },
+                                    ],
+                                },
+                            }}
                             onInputChange={(_event, value, reason) => {
                                 if (reason === 'reset') {
                                     return;
@@ -136,11 +147,6 @@ const Search = () => {
                             getOptionLabel={(option) => option.login}
                             options={options}
                             loading={loading}
-                            noOptionsText={
-                                searchUsername.trim()
-                                    ? 'No GitHub user found.'
-                                    : 'Start typing a username.'
-                            }
                             renderOption={(props, option) => (
                                 <SearchResult
                                     {...props}
@@ -200,5 +206,3 @@ const Search = () => {
         </Page>
     );
 };
-
-export default Search;

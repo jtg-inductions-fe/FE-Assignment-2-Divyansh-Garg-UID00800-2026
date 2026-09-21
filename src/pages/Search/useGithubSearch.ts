@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import { searchGitHubUsers, type GithubSearchResponse } from '@utils/services/githubSearch';
+import { searchGitHubUsers, type GithubSearchResponse } from '@utils/services';
 
 export const useGitHubSearch = () => {
     const [loading, setLoading] = useState(false);

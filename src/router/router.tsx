@@ -5,7 +5,7 @@ import { MainLayout } from '@layouts';
 
 import { Login } from '@pages/Login';
 import { NotFound } from '@pages/NotFound';
-import Search from '@pages/Search/Search';
+import { Search } from '@pages/Search';
 
 export const router = createBrowserRouter([
     {

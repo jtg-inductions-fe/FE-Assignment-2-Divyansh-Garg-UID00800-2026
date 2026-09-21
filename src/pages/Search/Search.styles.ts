@@ -1,6 +1,6 @@
 import { Box, ListItem, styled } from '@mui/material';
 
-import { colors } from '@theme/colors';
+import { colors } from '@theme';
 
 export const SearchWrap = styled(Box)(({ theme }) => ({
     width: '100%',
@@ -24,8 +24,6 @@ export const SearchWrap = styled(Box)(({ theme }) => ({
         padding: theme.variables.spacing.sm,
         backgroundColor: colors.primary[100],
         marginTop: theme.variables.spacing.sm,
-
-        width: '100%',
     },
     '& .MuiTypography-root': {
         ...theme.mixins.flexBetween,

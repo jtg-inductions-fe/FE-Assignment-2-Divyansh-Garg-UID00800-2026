@@ -7,3 +7,5 @@ export { Content } from './Content';
 export { ErrorBox } from './ErrorBox';
 
 export { Page } from './Page';
+
+export { StyledAvatar } from './StyledAvatar';
