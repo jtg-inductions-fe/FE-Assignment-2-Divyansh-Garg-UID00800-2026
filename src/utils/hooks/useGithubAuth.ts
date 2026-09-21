@@ -8,15 +8,14 @@ import { useAppDispatch } from '@utils/hooks/storeHooks';
 import { checkRegexFunction } from '@utils/helperFunctions';
 import { authenticateWithGitHub } from '@utils/services/githubAuth';
 import { fetchFollowing } from '@utils/services/githubFollowing';
+import type { AuthData } from '@redux/auth/authTypes';
 
 export const useGitHubAuth = () => {
     const dispatch = useAppDispatch();
 
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
-    const [response, setResponse] = useState<Awaited<
-        ReturnType<typeof authenticateWithGitHub>
-    > | null>(null);
+    const [response, setResponse] = useState<AuthData | null>(null);
 
     const handleLogin = async (token: string) => {
         const trimmedToken = token.trim();
