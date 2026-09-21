@@ -99,6 +99,15 @@ const Suggestions = () => {
                                     gitURL={option.html_url}
                                 />
                             ))}
+
+                            <Typography
+                                variant="h6"
+                                sx={{
+                                    marginTop: '10px',
+                                }}
+                            >
+                                Refresh to see new Suggestions...
+                            </Typography>
                         </SuggestionsList>
                     )}
                 </Card>
