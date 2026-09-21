@@ -1,5 +1,4 @@
-import { colors } from '@theme/colors';
-import { pxToRem } from '@theme/functions';
+import { colors, pxToRem } from '@theme';
 import { Box, Stack, styled, Typography } from '@mui/material';
 
 export const NotFoundWrapper = styled(Box)(({ theme }) => ({

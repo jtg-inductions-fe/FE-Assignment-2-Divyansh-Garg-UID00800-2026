@@ -1,5 +1,5 @@
-import type { SocialUser } from '@redux/social/socialTypes';
-import { getFollowingsUrl } from '@utils/apiUrls';
+import type { SocialUser } from '@redux/social';
+import { getFollowingsUrl } from '@utils';
 
 export const fetchFollowing = async (token: string): Promise<SocialUser[]> => {
     const trimmedToken = token.trim();

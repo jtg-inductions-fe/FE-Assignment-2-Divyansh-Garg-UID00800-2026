@@ -1,13 +1,11 @@
 import { configureStore } from '@reduxjs/toolkit';
 
-import demoReducer from './demo/demoSlice';
-import authReducer from './auth/authSlice';
-import socialReducer from './social/socialSlice';
+import { authReducer } from './auth';
+import { socialReducer } from './social';
 
 export const store = configureStore({
     reducer: {
         auth: authReducer,
-        demo: demoReducer,
         social: socialReducer,
     },
 });

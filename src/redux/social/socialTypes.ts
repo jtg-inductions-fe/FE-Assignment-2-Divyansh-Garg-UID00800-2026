@@ -6,4 +6,8 @@ export interface SocialUser {
 export interface SocialState {
     isFetched: boolean;
     following: Record<number, SocialUser>;
+    fetchFollowingsLoading: boolean;
+    fetchFollowingsError: string | null;
+    followUnfollowLoading: boolean;
+    followUnfollowError: string | null;
 }

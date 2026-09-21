@@ -1,9 +1,9 @@
 import { Box } from '@mui/material';
 import { Outlet } from 'react-router';
 
-import Navbar from '@components/navbar/Navbar';
+import { Navbar } from '@components/Navbar';
 
-const MainLayout = () => {
+export const MainLayout = () => {
     return (
         <Box
             sx={(theme) => ({
@@ -26,5 +26,3 @@ const MainLayout = () => {
         </Box>
     );
 };
-
-export default MainLayout;

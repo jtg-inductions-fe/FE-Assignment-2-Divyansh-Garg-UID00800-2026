@@ -1,7 +1,6 @@
-import type { AuthData } from '@redux/auth/authTypes';
+import type { AuthData } from '@redux/auth';
 
-import { localStorageUtils } from '@utils/localstorage';
-import { STORAGE_KEYS } from '@utils/storageKeys';
+import { localStorageUtils, STORAGE_KEYS } from '@utils';
 
 export const hasValidToken = (): boolean => {
     const authData = localStorageUtils.get<AuthData>(STORAGE_KEYS.auth);

@@ -4,21 +4,15 @@ import { useNavigate } from 'react-router';
 import { GitHub, Info, Visibility, VisibilityOff } from '@mui/icons-material';
 import { Button, CircularProgress, IconButton, Stack, TextField, Typography } from '@mui/material';
 
-import Bubble from '@components/common/Bubble';
-import { CardLink, CardLogo } from '@components/common/Card';
-import { Content } from '@components/common/Content';
-import { ErrorBox } from '@components/common/ErrorBox';
-import { Page } from '@components/common/Page';
+import { Bubble, CardLink, CardLogo, Content, ErrorBox, Page } from '@components/Common';
 
-import { LoginHeader, LoginMainSection, LoginWrapper } from '@pages/Login/Auth.styles';
-import { useGitHubAuth } from '@utils/hooks/useGithubAuth';
+import { LoginHeader, LoginMainSection, LoginWrapper, useGitHubAuth } from '@pages/Login';
 
-import { colors } from '@theme/colors';
-import { pxToRem } from '@theme/functions';
+import { colors, pxToRem } from '@theme';
 
-import { BASE_URL, PAT_GENERATION_URL } from '@utils/apiUrls';
+import { BASE_URL, PAT_GENERATION_URL } from '@utils';
 
-const Login = () => {
+export const Login = () => {
     const navigate = useNavigate();
 
     const patUrl = `${BASE_URL}/${PAT_GENERATION_URL}`;
@@ -163,5 +157,3 @@ const Login = () => {
         </Page>
     );
 };
-
-export default Login;

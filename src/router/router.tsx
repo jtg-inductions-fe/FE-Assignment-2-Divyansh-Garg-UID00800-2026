@@ -1,10 +1,10 @@
 import { createBrowserRouter } from 'react-router';
 
-import AuthGuard from '@components/guard/AuthGuard';
-import MainLayout from '@layouts/MainLayout';
+import { AuthGuard } from '@components/AuthGuard';
+import { MainLayout } from '@layouts';
 
-import Login from '@pages/Login/Login';
-import NotFound from '@pages/NotFound/NotFound';
+import { Login } from '@pages/Login';
+import { NotFound } from '@pages/NotFound';
 
 export const router = createBrowserRouter([
     {

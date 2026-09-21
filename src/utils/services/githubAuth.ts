@@ -1,7 +1,6 @@
-import type { AuthData, AuthUser } from '@redux/auth/authTypes';
+import type { AuthData, AuthUser } from '@redux/auth';
 
-import { snakeToCamelCase } from '@utils/helperFunctions';
-import { getLoginUrl } from '@utils/apiUrls';
+import { snakeToCamelCase, getLoginUrl } from '@utils';
 
 export const authenticateWithGitHub = async (token: string): Promise<AuthData> => {
     const trimmedToken = token.trim();

@@ -1,7 +1,6 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
 
-import { localStorageUtils } from '@utils/localstorage';
-import { STORAGE_KEYS } from '@utils/storageKeys';
+import { localStorageUtils, STORAGE_KEYS } from '@utils';
 
 import type { AuthData, AuthState } from './authTypes';
 
@@ -11,22 +10,34 @@ const initialState: AuthState = {
     user: storedAuth?.user ?? null,
     token: storedAuth?.token ?? null,
     isAuthenticated: storedAuth !== null,
+    loading: false,
+    error: null,
 };
 
 const authSlice = createSlice({
     name: 'auth',
-
     initialState,
-
     reducers: {
-        loginUser: (state, action: PayloadAction<AuthData>) => {
+        loginPending: (state) => {
+            state.loading = true;
+            state.error = null;
+        },
+
+        loginSuccess: (state, action: PayloadAction<AuthData>) => {
             const { user, token } = action.payload;
 
             state.user = user;
             state.token = token;
             state.isAuthenticated = true;
+            state.loading = false;
+            state.error = null;
 
-            localStorageUtils.set(STORAGE_KEYS.auth, { user, token });
+            localStorageUtils.set(STORAGE_KEYS.auth, action.payload);
+        },
+
+        loginFailure: (state, action: PayloadAction<string>) => {
+            state.loading = false;
+            state.error = action.payload;
         },
 
         logoutUser: (state) => {
@@ -40,6 +51,6 @@ const authSlice = createSlice({
     },
 });
 
-export const { loginUser, logoutUser } = authSlice.actions;
+export const { loginPending, loginSuccess, loginFailure, logoutUser } = authSlice.actions;
 
 export default authSlice.reducer;
