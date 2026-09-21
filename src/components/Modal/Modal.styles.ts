@@ -1,14 +1,8 @@
-import { alpha, Button, Popover, Stack, styled } from '@mui/material';
+import { Button, Popover, Stack, styled } from '@mui/material';
 import { colors } from '@theme';
 
-export const StyledPopover = styled(Popover)(({ theme }) => ({
-    ...theme.mixins.flexCenter,
-
-    '& .MuiBackdrop-root': {
-        background: alpha(colors.gray[700], 0.4),
-        backdropFilter: 'blur(8px)',
-    },
-
+export const StyledPopover = styled(Popover)(() => ({
+    marginTop: '15px',
     '& .MuiPaper-root': {
         borderRadius: '25px',
     },

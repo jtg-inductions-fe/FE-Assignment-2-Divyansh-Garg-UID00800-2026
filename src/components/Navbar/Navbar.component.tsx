@@ -15,6 +15,7 @@ import { useAppDispatch } from '@utils';
 
 import { logoutUser } from '@redux/auth';
 import { removeSocialState } from '@redux/social';
+import { closeSidebar } from '@redux/sidebar';
 
 export const Navbar = () => {
     const dispatch = useAppDispatch();
@@ -31,6 +32,7 @@ export const Navbar = () => {
     const handleLogout = (): void => {
         dispatch(logoutUser());
         dispatch(removeSocialState());
+        dispatch(closeSidebar());
         setLogoutAnchor(null);
         navigate('/login');
     };

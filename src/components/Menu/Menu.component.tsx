@@ -1,4 +1,4 @@
-import { useState, type MouseEvent } from 'react';
+import type { MouseEvent } from 'react';
 
 import { Close, GitHub, Menu } from '@mui/icons-material';
 import { Divider } from '@mui/material';
@@ -13,22 +13,24 @@ import {
     MobileMenuTrigger,
     MobileNavigationList,
 } from './Menu.styles';
+import { useAppDispatch, useAppSelector } from '@utils';
+import { closeSidebar, openSidebar } from '@redux/sidebar';
 
 interface MobileMenuProps {
     onLogoutClick: (event: MouseEvent<HTMLElement>) => void;
 }
 
 export const MobileMenu = ({ onLogoutClick }: MobileMenuProps) => {
-    const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
+    const dispatch = useAppDispatch();
 
-    const open = Boolean(anchorEl);
+    const isOpen = useAppSelector((state) => state.sidebar.isOpen);
 
-    const handleOpen = (event: MouseEvent<HTMLButtonElement>): void => {
-        setAnchorEl(event.currentTarget);
+    const handleOpen = (): void => {
+        dispatch(openSidebar());
     };
 
     const handleClose = (): void => {
-        setAnchorEl(null);
+        dispatch(closeSidebar());
     };
 
     const { items, loginItem, logoutItem, isAuthenticated } = useNavigation();
@@ -38,13 +40,13 @@ export const MobileMenu = ({ onLogoutClick }: MobileMenuProps) => {
             <MobileMenuTrigger
                 onClick={handleOpen}
                 aria-haspopup="dialog"
-                aria-expanded={open}
+                aria-expanded={isOpen}
                 aria-label="Open navigation menu"
             >
                 <Menu />
             </MobileMenuTrigger>
 
-            <MobileDrawer anchor="right" open={open} onClose={handleClose}>
+            <MobileDrawer anchor="right" open={isOpen} onClose={handleClose}>
                 <MobileDrawerContent>
                     <MobileMenuHeader>
                         <GitHub />
@@ -72,10 +74,7 @@ export const MobileMenu = ({ onLogoutClick }: MobileMenuProps) => {
                                 label={logoutItem.label}
                                 icon={logoutItem.icon}
                                 isLogout
-                                onClick={(event) => {
-                                    onLogoutClick(event);
-                                    handleClose();
-                                }}
+                                onClick={onLogoutClick}
                             />
                         ) : (
                             <NavButton

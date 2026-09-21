@@ -24,7 +24,20 @@ export const Modal = ({
     const open = Boolean(anchorEl);
 
     return (
-        <StyledPopover open={open} anchorEl={anchorEl} onClose={onClose} anchorReference="none">
+        <StyledPopover
+            open={open}
+            anchorEl={anchorEl}
+            onClose={onClose}
+
+            anchorOrigin={{
+                vertical: 'bottom',
+                horizontal: 'center',
+            }}
+            transformOrigin={{
+                vertical: 'top',
+                horizontal: 'center',
+            }}
+        >
             <PopoverContent>
                 <Stack>
                     <Typography variant="h5">{title}</Typography>
