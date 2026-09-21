@@ -12,10 +12,6 @@ export const router = createBrowserRouter([
         element: <MainLayout />,
         children: [
             {
-                path: '/',
-                element: <Search />,
-            },
-            {
                 path: '/search',
                 element: <Search />,
             },
@@ -27,14 +23,18 @@ export const router = createBrowserRouter([
                 element: <AuthGuard />,
                 children: [
                     {
+                        path: '/',
+                        element: <Search />,
+                    },
+                    {
                         path: '/login',
                         element: <Login />,
                     },
-                    {
-                        path: '*',
-                        element: <NotFound />,
-                    },
                 ],
+            },
+            {
+                path: '*',
+                element: <NotFound />,
             },
         ],
     },
