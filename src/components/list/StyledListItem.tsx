@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router';
 
-import { Box, Divider, IconButton, Stack, Typography } from '@mui/material';
+import { Box, IconButton, Stack, Typography } from '@mui/material';
 
 import { ArrowOutward } from '@mui/icons-material';
 
