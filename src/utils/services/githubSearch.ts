@@ -1,5 +1,5 @@
-import { snakeToCamelCase } from '@utils/helperFunctions';
-import { getSearchUsersUrl } from '@utils/apiUrls';
+import { snakeToCamelCase } from '@utils';
+import { getSearchUsersUrl } from '@utils';
 
 export interface GithubUser {
     login: string;

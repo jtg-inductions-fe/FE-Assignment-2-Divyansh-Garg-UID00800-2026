@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { searchGitHubUsers, type GithubSearchResponse } from '@utils/services';
 
 export const useGitHubSearch = () => {
+    // we do not have any redux state for search, that's why these states are made using useState
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
     const [response, setResponse] = useState<GithubSearchResponse | null>(null);
