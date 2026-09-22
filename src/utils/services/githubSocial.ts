@@ -1,4 +1,4 @@
-import { getFollowingUserUrl } from '@utils';
+import { getFollowingUserUrl, getHeaders } from '@utils';
 
 export const updateGitHubFollow = async (
     username: string,
@@ -7,10 +7,7 @@ export const updateGitHubFollow = async (
 ): Promise<void> => {
     const response = await fetch(getFollowingUserUrl(username), {
         method: isFollowed ? 'DELETE' : 'PUT',
-        headers: {
-            Authorization: `Bearer ${token}`,
-            Accept: 'application/vnd.github+json',
-        },
+        headers: getHeaders(token),
     });
 
     if (!response.ok) {

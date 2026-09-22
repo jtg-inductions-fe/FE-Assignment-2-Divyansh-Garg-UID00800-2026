@@ -1,4 +1,4 @@
-import { snakeToCamelCase, getSearchUsersUrl } from '@utils';
+import { snakeToCamelCase, getSearchUsersUrl, getHeaders } from '@utils';
 
 export interface GithubUser {
     login: string;

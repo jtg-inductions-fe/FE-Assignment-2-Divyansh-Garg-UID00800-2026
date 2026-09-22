@@ -32,7 +32,8 @@ import {
     ProfileUsername,
 } from './Profile.styles';
 
-import { useAppSelector, useGithubSocial } from '@utils';
+import { useAppSelector } from '@utils';
+import { useGithubSocial } from '@pages/Common';
 import { colors, pxToRem } from '@theme';
 
 import { useGithubProfile } from './useGithubProfile';

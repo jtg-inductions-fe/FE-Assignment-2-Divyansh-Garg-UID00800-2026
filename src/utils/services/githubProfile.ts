@@ -1,6 +1,6 @@
 import type { AuthUser } from '@redux/auth';
 
-import { snakeToCamelCase, getProfileUrl } from '@utils';
+import { snakeToCamelCase, getProfileUrl, getHeaders } from '@utils';
 
 export const fetchGitHubProfile = async (
     username: string,

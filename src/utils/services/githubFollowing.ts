@@ -1,5 +1,5 @@
 import type { SocialUser } from '@redux/social';
-import { getFollowingsUrl } from '@utils';
+import { getFollowingsUrl, getHeaders } from '@utils';
 
 export const fetchFollowing = async (token: string): Promise<SocialUser[]> => {
     const trimmedToken = token.trim();
@@ -9,10 +9,7 @@ export const fetchFollowing = async (token: string): Promise<SocialUser[]> => {
     }
 
     const response = await fetch(getFollowingsUrl(), {
-        headers: {
-            Authorization: `Bearer ${trimmedToken}`,
-            Accept: 'application/vnd.github+json',
-        },
+        headers: getHeaders(trimmedToken),
     });
 
     if (!response.ok) {

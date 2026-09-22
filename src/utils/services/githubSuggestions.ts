@@ -1,15 +1,12 @@
 import type { GithubUser } from '@utils/services/githubSearch';
-import { getSuggestionsUrl } from '@utils/apiUrls';
+import { getSuggestionsUrl, getHeaders } from '@utils';
 
 export const fetchGitHubSuggestions = async (
     token: string,
     since: number,
 ): Promise<GithubUser[]> => {
     const response = await fetch(getSuggestionsUrl(since), {
-        headers: {
-            Authorization: `Bearer ${token}`,
-            Accept: 'application/vnd.github+json',
-        },
+        headers: getHeaders(token),
     });
 
     if (!response.ok) {

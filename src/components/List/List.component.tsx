@@ -3,7 +3,8 @@ import { useNavigate } from 'react-router';
 import { Box, IconButton, Stack, Typography } from '@mui/material';
 import { ArrowOutward } from '@mui/icons-material';
 
-import { useAppSelector, useGithubSocial } from '@utils';
+import { useAppSelector } from '@utils';
+import { useGithubSocial } from '@pages/Common';
 import { colors } from '@/theme';
 
 import { FollowButton, StyledAvatar } from '@components/Common';
