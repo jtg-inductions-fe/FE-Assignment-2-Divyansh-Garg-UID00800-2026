@@ -15,11 +15,26 @@ export interface GithubSearchResponse {
     items: GithubUser[];
 }
 
-export const searchGitHubUsers = async (username: string): Promise<GithubSearchResponse> => {
+let activeController: AbortController | null = null;
+
+export const searchGitHubUsers = async (
+    username: string,
+    token: string | null,
+): Promise<GithubSearchResponse> => {
+    if (activeController) {
+        activeController.abort();
+    }
+
+    activeController = new AbortController();
+
+    const trimmedToken = token?.trim();
+
     const response = await fetch(getSearchUsersUrl(username), {
         headers: {
+            ...(trimmedToken && { Authorization: `Bearer ${trimmedToken}` }),
             Accept: 'application/vnd.github+json',
         },
+        signal: activeController.signal,
     });
 
     if (!response.ok) {

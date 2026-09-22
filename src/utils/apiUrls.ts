@@ -9,4 +9,4 @@ export const getLoginUrl = (): string => `${BASE_URL}/${AUTH_URL}`;
 export const getFollowingsUrl = (): string => `${BASE_URL}/${FOLLOWING_URL}`;
 
 export const getSearchUsersUrl = (username: string): string =>
-    `${BASE_URL}/${SEARCH_URL}?q=${username}`;
+    `${BASE_URL}/${SEARCH_URL}?q=${encodeURIComponent(username)}`;

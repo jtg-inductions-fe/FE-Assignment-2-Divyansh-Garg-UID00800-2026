@@ -1,12 +1,15 @@
 import { useState } from 'react';
 
 import { searchGitHubUsers, type GithubSearchResponse } from '@utils/services';
+import { useAppSelector } from '@utils';
 
 export const useGitHubSearch = () => {
     // we do not have any redux state for search, that's why these states are made using useState
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
     const [response, setResponse] = useState<GithubSearchResponse | null>(null);
+
+    const token = useAppSelector((state) => state.auth.token);
 
     const handleSearch = async (username: string) => {
         const trimmedUsername = username.trim();
@@ -23,7 +26,7 @@ export const useGitHubSearch = () => {
         setResponse(null);
 
         try {
-            const data = await searchGitHubUsers(trimmedUsername);
+            const data = await searchGitHubUsers(trimmedUsername, token);
             setResponse(data);
 
             return data;
