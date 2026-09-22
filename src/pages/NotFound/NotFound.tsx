@@ -1,10 +1,12 @@
-import { ArrowBack, Home } from '@mui/icons-material';
-import { Button } from '@mui/material';
 import { Link, useNavigate } from 'react-router';
 
-import Bubble from '@components/common/Bubble';
+import { ArrowBack, Home } from '@mui/icons-material';
+import { Button } from '@mui/material';
 
-import { pxToRem } from '@theme/functions';
+import { Bubble } from '@components/Common';
+
+import { pxToRem } from '@theme';
+
 import {
     BtnBox,
     NotFoundCard,
@@ -13,11 +15,11 @@ import {
     NotFoundImg,
     NotFoundSubHeading,
     NotFoundWrapper,
-} from '@components/notFound/NotFound.styles';
+} from './NotFound.styles';
 
 const notFoundImg = 'src/assets/images/github-404.png';
 
-const NotFound = () => {
+export const NotFound = () => {
     const navigate = useNavigate();
 
     return (
@@ -85,5 +87,3 @@ const NotFound = () => {
         </NotFoundWrapper>
     );
 };
-
-export default NotFound;

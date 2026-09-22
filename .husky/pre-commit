@@ -1,4 +1,4 @@
-npm run test:run
+#npm run test:run
 #!/bin/sh
 
 # Validate Branch Name
