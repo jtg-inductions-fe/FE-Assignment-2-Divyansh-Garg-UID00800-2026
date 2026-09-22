@@ -1,18 +1,20 @@
 import { Box, Stack, styled } from '@mui/material';
 import { colors } from '@theme';
 
+export const CountContainer = styled(Box)(() => ({
+    display: 'grid',
+    gridTemplateColumns: '1fr 1fr 1fr',
+    gap: '10px',
+}));
+
 export const CountBox = styled(Box)(({ theme }) => ({
-    ...theme.mixins.flexBetween,
+    ...theme.mixins.flexCenter,
     gap: theme.variables.spacing.xs,
     padding: theme.variables.spacing.xs,
     borderRadius: theme.variables.radius.pill,
 
-    backgroundColor: colors.primary[50],
+    backgroundColor: colors.secondary[50],
     border: `1px solid ${colors.primary[100]}`,
-
-    [theme.breakpoints.down('sm')]: {
-        width: '100%',
-    },
 }));
 
 export const Count = styled(Stack)(({ theme }) => ({

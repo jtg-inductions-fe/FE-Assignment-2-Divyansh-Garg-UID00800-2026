@@ -12,6 +12,6 @@ export { StyledAvatar } from './StyledAvatar';
 
 export { Grid, GridEle } from './Grid';
 
-export { CountBox, Count } from './Count';
+export { CountContainer, CountBox, Count } from './Count';
 
 export { FollowButton } from './FollowBtn';
