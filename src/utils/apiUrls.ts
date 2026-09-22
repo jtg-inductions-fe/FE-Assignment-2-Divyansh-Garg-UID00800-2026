@@ -11,3 +11,9 @@ export const getFollowingsUrl = (): string => `${BASE_URL}/${FOLLOWING_URL}`;
 
 export const getSearchUsersUrl = (username: string): string =>
     `${BASE_URL}/${SEARCH_URL}?q=${encodeURIComponent(username)}`;
+
+export const getProfileUrl = (username: string): string =>
+    `${BASE_URL}/${PROFILE_URL}/${encodeURIComponent(username)}`;
+
+export const getFollowingUserUrl = (username: string): string =>
+    `${BASE_URL}/${FOLLOWING_URL}/${encodeURIComponent(username)}`;
