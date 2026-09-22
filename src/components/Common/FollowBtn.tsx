@@ -1,5 +1,4 @@
-import { colors } from '@theme/colors';
-import { pxToRem } from '@theme/functions';
+import { colors, pxToRem } from '@theme';
 import { Button, CircularProgress, styled, type ButtonProps } from '@mui/material';
 
 interface FollowButtonProps extends ButtonProps {

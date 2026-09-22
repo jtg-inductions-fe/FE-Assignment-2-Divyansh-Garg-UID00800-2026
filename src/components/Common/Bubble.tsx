@@ -1,6 +1,5 @@
 import { Box, styled } from '@mui/material';
-import { colors } from '@theme';
-import { pxToRem } from '@theme';
+import { colors, pxToRem } from '@theme';
 
 export const Bubble = styled(Box)(() => ({
     position: 'absolute',

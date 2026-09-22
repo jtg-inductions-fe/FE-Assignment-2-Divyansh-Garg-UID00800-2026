@@ -1,4 +1,4 @@
-import { getFollowingUserUrl } from '@utils/apiUrls';
+import { getFollowingUserUrl } from '@utils';
 
 export const updateGitHubFollow = async (
     username: string,

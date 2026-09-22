@@ -1,59 +1,67 @@
-import { useState } from 'react';
-
-import { updateGitHubFollow } from '@utils/services/githubSocial';
+import { updateGitHubFollow } from '@utils/services';
+import { useAppDispatch, useAppSelector } from './storeHooks';
+import {
+    addFollowingSuccess,
+    followUnfollowFailure,
+    followUnfollowPending,
+    removeFollowingSuccess,
+} from '@redux/social';
 
 export const useGithubSocial = () => {
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState('');
-    const [response, setResponse] = useState<boolean | null>(null);
+    const dispatch = useAppDispatch();
 
-    const handleFollowUnfollow = async (username: string, isFollowed: boolean, token: string) => {
+    const { followUnfollowLoading, followUnfollowError } = useAppSelector((state) => state.social);
+
+    const handleFollowUnfollow = async (
+        id: number,
+        username: string,
+        isFollowed: boolean,
+        token: string,
+    ) => {
         const trimmedUsername = username.trim();
         const trimmedToken = token.trim();
 
         if (!trimmedUsername) {
-            setError('The Following User is not available.');
-            setResponse(null);
+            dispatch(followUnfollowFailure('The Following User is not available.'));
 
             return null;
         }
 
         if (!trimmedToken) {
-            setError('Please Login First to follow.');
-            setResponse(null);
+            dispatch(followUnfollowFailure('Please Login First to follow.'));
 
             return null;
         }
 
-        setLoading(true);
-        setError('');
-        setResponse(null);
+        dispatch(followUnfollowPending());
 
         try {
             await updateGitHubFollow(trimmedUsername, trimmedToken, isFollowed);
 
-            const updatedFollowState = !isFollowed;
+            const socialUser = {
+                id: id,
+                login: username,
+            };
 
-            setResponse(updatedFollowState);
-
-            return updatedFollowState;
+            if (isFollowed) {
+                dispatch(removeFollowingSuccess(socialUser));
+            } else {
+                dispatch(addFollowingSuccess(socialUser));
+            }
         } catch (error) {
-            setError(
-                error instanceof Error
-                    ? error.message
-                    : 'Something went wrong while connecting to GitHub.',
+            dispatch(
+                followUnfollowFailure(
+                    error instanceof Error
+                        ? error.message
+                        : 'Something went wrong while connecting to GitHub.',
+                ),
             );
-
-            return null;
-        } finally {
-            setLoading(false);
         }
     };
 
     return {
-        loading,
-        error,
-        response,
+        followUnfollowLoading,
+        followUnfollowError,
         handleFollowUnfollow,
     };
 };

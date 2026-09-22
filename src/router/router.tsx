@@ -6,7 +6,7 @@ import { MainLayout } from '@layouts';
 import { Login } from '@pages/Login';
 import { NotFound } from '@pages/NotFound';
 import { Search } from '@pages/Search';
-import Profile from '@pages/Profile/Profile';
+import { Profile } from '@pages/Profile';
 
 export const router = createBrowserRouter([
     {
