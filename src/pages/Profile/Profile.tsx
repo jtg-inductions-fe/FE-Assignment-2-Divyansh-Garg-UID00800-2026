@@ -1,8 +1,8 @@
 import { useEffect } from 'react';
 import { useParams } from 'react-router';
 
-import { ArrowOutward, Article, Email, FormatItalic } from '@mui/icons-material';
-import { Box, IconButton, Stack, Typography } from '@mui/material';
+import { ArrowOutward, Article, Email } from '@mui/icons-material';
+import { Box, IconButton, Typography } from '@mui/material';
 
 import {
     Bubble,
@@ -32,7 +32,7 @@ import {
 } from './Profile.styles';
 
 import { useAppSelector } from '@utils';
-import { colors, pxToRem, theme } from '@theme';
+import { colors, pxToRem } from '@theme';
 
 import { useGithubProfile } from './useGithubProfile';
 import { useGithubSocial } from '@utils/useGithubSocial';
