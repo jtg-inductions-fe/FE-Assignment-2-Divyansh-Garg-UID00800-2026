@@ -1,6 +1,6 @@
 export { Bubble } from './Bubble';
 
-export { Card, CardLogo, CardLink, CardMain, CardHeader, Label, Value } from './Card';
+export { Card, CardLogo, CardLink, CardMain, CardHeader, Label, Value, CardPill } from './Card';
 
 export { Content } from './Content';
 

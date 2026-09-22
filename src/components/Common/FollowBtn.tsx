@@ -1,4 +1,4 @@
-import { colors, pxToRem } from '@theme';
+import { colors, pxToRem, variables } from '@theme';
 import { Button, CircularProgress, styled, type ButtonProps } from '@mui/material';
 
 interface FollowButtonProps extends ButtonProps {
@@ -8,8 +8,7 @@ interface FollowButtonProps extends ButtonProps {
 }
 
 const StyledFollowButton = styled(Button)(({ theme }) => ({
-    paddingLeft: theme.variables.spacing.lg,
-    paddingRight: theme.variables.spacing.lg,
+    padding: theme.variables.spacing.md,
     borderRadius: theme.variables.radius.pill,
     fontWeight: theme.variables.fontWeight.semiBold,
     transition: theme.variables.transitions.normal,
@@ -29,6 +28,7 @@ export const FollowButton = ({ isFollowed, loading, onClick }: FollowButtonProps
                     ? {
                           color: colors.white,
                           backgroundColor: colors.secondary[900],
+                          fontSize: variables.fontSize.sm,
                           '&:hover': {
                               backgroundColor: colors.secondary[500],
                           },
@@ -36,13 +36,14 @@ export const FollowButton = ({ isFollowed, loading, onClick }: FollowButtonProps
                     : {
                           color: colors.white,
                           backgroundColor: colors.primary[900],
+                          fontSize: variables.fontSize.sm,
                           '&:hover': {
                               backgroundColor: colors.primary[500],
                           },
                       }
             }
         >
-            {loading ? <CircularProgress size={20} /> : isFollowed ? 'Unfollow' : 'Follow'}
+            {loading ? <CircularProgress size={31} /> : isFollowed ? 'Unfollow' : 'Follow'}
         </StyledFollowButton>
     );
 };
