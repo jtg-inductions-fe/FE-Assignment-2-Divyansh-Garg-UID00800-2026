@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useParams } from 'react-router';
 
-import { ArrowOutward, Article, CorporateFare, Email } from '@mui/icons-material';
+import { ArrowOutward, Article, CorporateFare, Email, Place } from '@mui/icons-material';
 import { Box, IconButton, Typography } from '@mui/material';
 
 import {
@@ -16,11 +16,11 @@ import {
     FollowButton,
     Grid,
     GridEle,
-    Count,
     CountBox,
     Page,
     StyledAvatar,
     CountContainer,
+    CardPill,
 } from '@components/Common';
 
 import {
@@ -142,36 +142,57 @@ export const Profile = () => {
                                             )}
                                         </Box>
 
-                                        <ProfileUsername variant="h6">
+                                        <ProfileUsername variant="body1">
                                             {searchUserInfo?.login}
                                         </ProfileUsername>
                                     </ProfileCardTopHeaderInner>
                                 </ProfileCardHeaderTop>
 
-                                <CountContainer>
-                                    <CountBox>
-                                        <Count>
-                                            <Typography>
-                                                Followers: {searchUserInfo?.followers ?? 'NA'}
-                                            </Typography>
-                                        </Count>
-                                    </CountBox>
-                                    <CountBox>
-                                        <Count>
-                                            <Typography>
-                                                Following: {searchUserInfo?.following ?? 'NA'}
-                                            </Typography>
-                                        </Count>
-                                    </CountBox>
-                                    <CountBox>
-                                        <Count>
-                                            <Typography>
-                                                Repos: {searchUserInfo?.publicRepos ?? 'NA'}
-                                            </Typography>
-                                        </Count>
-                                    </CountBox>
-                                </CountContainer>
+                                <CardPill variant="body1">
+                                    {searchUserInfo?.type.toUpperCase() ?? 'USER'}
+                                </CardPill>
                             </CardHeader>
+
+                            <CardMain>
+                                <CaptionBox>
+                                    <ProfileCardHeaderTop>
+                                        <Place fontSize="small" />
+                                        <Typography>
+                                            {searchUserInfo?.location ??
+                                                'Location is not available.'}
+                                        </Typography>
+                                    </ProfileCardHeaderTop>
+                                    <Label
+                                        variant="h6"
+                                        sx={{
+                                            fontStyle: 'italic',
+                                        }}
+                                    >
+                                        #{searchUserInfo?.id}
+                                    </Label>
+                                </CaptionBox>
+                            </CardMain>
+
+                            <CountContainer>
+                                <CountBox>
+                                    <Typography>Followers</Typography>
+                                    <Typography variant="h4">
+                                        {searchUserInfo?.followers ?? 'NA'}
+                                    </Typography>
+                                </CountBox>
+                                <CountBox>
+                                    <Typography>Following</Typography>
+                                    <Typography variant="h4">
+                                        {searchUserInfo?.following ?? 'NA'}
+                                    </Typography>
+                                </CountBox>
+                                <CountBox>
+                                    <Typography>Repos</Typography>
+                                    <Typography variant="h4">
+                                        {searchUserInfo?.publicRepos ?? 'NA'}
+                                    </Typography>
+                                </CountBox>
+                            </CountContainer>
 
                             <CardMain>
                                 <ProfileMainTop>
@@ -201,7 +222,11 @@ export const Profile = () => {
                                                 fontStyle: 'italic',
                                             }}
                                         >
-                                            {searchUserInfo?.blog ?? 'Blog is not available.'}
+                                            {searchUserInfo?.blog
+                                                ? searchUserInfo.blog === ''
+                                                    ? 'Blog is not available.'
+                                                    : searchUserInfo.blog
+                                                : 'Blog is not available.'}
                                         </Label>
                                     </CaptionBox>
 
@@ -235,27 +260,7 @@ export const Profile = () => {
                             {isOwnProfile && searchUserInfo && (
                                 <Grid>
                                     <GridEle>
-                                        <Label variant="h6">Location:</Label>
-                                        <Value>{searchUserInfo.location ?? 'Not available'}</Value>
-                                    </GridEle>
-
-                                    <GridEle>
-                                        <Label variant="h6">Blog:</Label>
-                                        <Value>{searchUserInfo.blog || 'Not available'}</Value>
-                                    </GridEle>
-
-                                    <GridEle>
-                                        <Label variant="h6">GitHub ID:</Label>
-                                        <Value>{searchUserInfo.id}</Value>
-                                    </GridEle>
-
-                                    <GridEle>
-                                        <Label variant="h6">Account Type:</Label>
-                                        <Value>{searchUserInfo.type}</Value>
-                                    </GridEle>
-
-                                    <GridEle>
-                                        <Label variant="h6">Account Created:</Label>
+                                        <Label>Account Created:</Label>
                                         <Value>
                                             {searchUserInfo.createdAt
                                                 ? new Date(searchUserInfo.createdAt).toDateString()
@@ -264,7 +269,7 @@ export const Profile = () => {
                                     </GridEle>
 
                                     <GridEle>
-                                        <Label variant="h6">Last Updated:</Label>
+                                        <Label>Last Updated:</Label>
                                         <Value>
                                             {searchUserInfo.updatedAt
                                                 ? new Date(searchUserInfo.updatedAt).toDateString()

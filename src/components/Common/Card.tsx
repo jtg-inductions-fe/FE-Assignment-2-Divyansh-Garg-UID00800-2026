@@ -58,11 +58,6 @@ export const CardHeader = styled(Box)(({ theme }) => ({
     )`,
 
     borderBottom: `1px solid ${colors.primary[100]}`,
-
-    [theme.breakpoints.down('md')]: {
-        flexDirection: 'column',
-        alignItems: 'stretch',
-    },
 }));
 
 export const Label = styled(Typography)(() => ({
@@ -76,4 +71,13 @@ export const Label = styled(Typography)(() => ({
 
 export const Value = styled(Typography)(() => ({
     color: colors.secondary[700],
+}));
+
+export const CardPill = styled(Typography)(({ theme }) => ({
+    background: colors.primary[100],
+    paddingLeft: theme.variables.spacing.sm,
+    paddingRight: theme.variables.spacing.sm,
+    height: 'fit-content',
+    borderRadius: theme.variables.radius.pill,
+    border: `2px solid ${colors.primary[900]}`,
 }));

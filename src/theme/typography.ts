@@ -61,7 +61,7 @@ export const typography: ThemeOptions['typography'] = {
 
     body1: {
         fontSize: pxToRem(16),
-        fontWeight: variables.fontWeight.regular,
+        fontWeight: variables.fontWeight.extraBold,
         lineHeight: variables.lineHeight.xxl,
         color: colors.secondary[900],
     },
