@@ -1,9 +1,7 @@
 import { useState, type ChangeEvent } from 'react';
 import { useNavigate } from 'react-router';
-
 import { GitHub, Info, Visibility, VisibilityOff } from '@mui/icons-material';
 import { Button, CircularProgress, IconButton, Stack, TextField, Typography } from '@mui/material';
-
 import { Bubble, CardLink, CardLogo, Content, ErrorBox, Page } from '@components/Common';
 import { LoginHeader, LoginMainSection, LoginWrapper, useGitHubAuth } from '@pages/Login';
 import { colors, pxToRem } from '@theme';
