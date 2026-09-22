@@ -47,7 +47,7 @@ const socialSlice = createSlice({
             state.fetchFollowingsError = action.payload;
         },
 
-        addFollowingPending: (state) => {
+        followUnfollowPending: (state) => {
             state.followUnfollowLoading = true;
             state.followUnfollowError = null;
         },
@@ -65,16 +65,6 @@ const socialSlice = createSlice({
             });
         },
 
-        addFollowingFailure: (state, action: PayloadAction<string>) => {
-            state.followUnfollowLoading = false;
-            state.followUnfollowError = action.payload;
-        },
-
-        removeFollowingPending: (state) => {
-            state.followUnfollowLoading = true;
-            state.followUnfollowError = null;
-        },
-
         removeFollowingSuccess: (state, action: PayloadAction<SocialUser>) => {
             const userId = action.payload.id;
 
@@ -88,7 +78,7 @@ const socialSlice = createSlice({
             });
         },
 
-        removeFollowingFailure: (state, action: PayloadAction<string>) => {
+        followUnfollowFailure: (state, action: PayloadAction<string>) => {
             state.followUnfollowLoading = false;
             state.followUnfollowError = action.payload;
         },
@@ -106,9 +96,10 @@ export const {
     fetchFollowingsPending,
     fetchFollowingsSuccess,
     fetchFollowingsFailure,
-    addFollowingPending,
+    followUnfollowPending,
     addFollowingSuccess,
-    addFollowingFailure,
+    removeFollowingSuccess,
+    followUnfollowFailure,
     removeSocialState,
 } = socialSlice.actions;
 

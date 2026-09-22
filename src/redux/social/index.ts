@@ -4,9 +4,10 @@ export {
     fetchFollowingsPending,
     fetchFollowingsSuccess,
     fetchFollowingsFailure,
-    addFollowingPending,
+    followUnfollowPending,
     addFollowingSuccess,
-    addFollowingFailure,
+    removeFollowingSuccess,
+    followUnfollowFailure,
     removeSocialState,
 } from './socialSlice';
 
