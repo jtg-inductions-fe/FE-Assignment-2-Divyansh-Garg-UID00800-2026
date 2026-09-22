@@ -5,6 +5,7 @@ export {
     FOLLOWING_URL,
     getFollowingsUrl,
     getLoginUrl,
+    getSearchUsersUrl,
 } from './apiUrls';
 
 export { hasValidToken } from './auth';

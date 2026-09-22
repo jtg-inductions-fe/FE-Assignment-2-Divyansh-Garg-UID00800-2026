@@ -1,7 +1,6 @@
-import type { MouseEvent } from 'react';
-
 import { Close, GitHub, Menu } from '@mui/icons-material';
 import { Divider } from '@mui/material';
+import { type MouseEvent } from 'react';
 
 import { NavButton, useNavigation } from '@components/Navbar';
 
