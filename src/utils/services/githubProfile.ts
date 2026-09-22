@@ -2,18 +2,11 @@ import type { AuthUser } from '@redux/auth';
 
 import { snakeToCamelCase, getProfileUrl } from '@utils';
 
-let activeController: AbortController | null = null;
-
 export const fetchGitHubProfile = async (
     username: string,
     token: string | null,
+    signal?: AbortSignal,
 ): Promise<AuthUser> => {
-    if (activeController) {
-        activeController.abort();
-    }
-
-    activeController = new AbortController();
-
     const trimmedToken = token?.trim();
 
     const response = await fetch(getProfileUrl(username), {
@@ -21,7 +14,7 @@ export const fetchGitHubProfile = async (
             ...(trimmedToken && { Authorization: `Bearer ${trimmedToken}` }),
             Accept: 'application/vnd.github+json',
         },
-        signal: activeController.signal,
+        signal,
     });
 
     if (!response.ok) {

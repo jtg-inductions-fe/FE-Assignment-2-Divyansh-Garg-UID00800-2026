@@ -20,6 +20,7 @@ import {
     CountBox,
     Page,
     StyledAvatar,
+    CountContainer,
 } from '@components/Common';
 
 import {
@@ -147,25 +148,29 @@ export const Profile = () => {
                                     </ProfileCardTopHeaderInner>
                                 </ProfileCardHeaderTop>
 
-                                <CountBox>
-                                    <Count>
-                                        <Typography>
-                                            Followers: {searchUserInfo?.followers ?? 'NA'}
-                                        </Typography>
-                                    </Count>
-
-                                    <Count>
-                                        <Typography>
-                                            Following: {searchUserInfo?.following ?? 'NA'}
-                                        </Typography>
-                                    </Count>
-
-                                    <Count>
-                                        <Typography>
-                                            Repos: {searchUserInfo?.publicRepos ?? 'NA'}
-                                        </Typography>
-                                    </Count>
-                                </CountBox>
+                                <CountContainer>
+                                    <CountBox>
+                                        <Count>
+                                            <Typography>
+                                                Followers: {searchUserInfo?.followers ?? 'NA'}
+                                            </Typography>
+                                        </Count>
+                                    </CountBox>
+                                    <CountBox>
+                                        <Count>
+                                            <Typography>
+                                                Following: {searchUserInfo?.following ?? 'NA'}
+                                            </Typography>
+                                        </Count>
+                                    </CountBox>
+                                    <CountBox>
+                                        <Count>
+                                            <Typography>
+                                                Repos: {searchUserInfo?.publicRepos ?? 'NA'}
+                                            </Typography>
+                                        </Count>
+                                    </CountBox>
+                                </CountContainer>
                             </CardHeader>
 
                             <CardMain>
