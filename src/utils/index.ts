@@ -8,6 +8,7 @@ export {
     getSearchUsersUrl,
     getProfileUrl,
     getFollowingUserUrl,
+    getSuggestionsUrl,
 } from './apiUrls';
 
 export { hasValidToken } from './auth';
@@ -21,3 +22,5 @@ export { localStorageUtils } from './localstorage';
 export { STORAGE_KEYS } from './storageKeys';
 
 export { useAppSelector, useAppDispatch } from './storeHooks';
+
+export { getHeaders } from './getHeaders';

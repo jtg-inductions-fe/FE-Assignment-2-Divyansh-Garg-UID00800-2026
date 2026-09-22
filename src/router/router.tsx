@@ -7,6 +7,7 @@ import { Login } from '@pages/Login';
 import { NotFound } from '@pages/NotFound';
 import { Search } from '@pages/Search';
 import { Profile } from '@pages/Profile';
+import { Suggestions } from '@pages/Suggestions';
 
 export const router = createBrowserRouter([
     {
@@ -38,6 +39,10 @@ export const router = createBrowserRouter([
                     {
                         path: '/login',
                         element: <Login />,
+                    },
+                    {
+                        path: '/suggestions',
+                        element: <Suggestions />,
                     },
                 ],
             },

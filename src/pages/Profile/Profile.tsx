@@ -33,10 +33,10 @@ import {
 } from './Profile.styles';
 
 import { useAppSelector } from '@utils';
+import { useGithubSocial } from '@pages/Common';
 import { colors, pxToRem } from '@theme';
 
 import { useGithubProfile } from './useGithubProfile';
-import { useGithubSocial } from '@utils/useGithubSocial';
 
 export const Profile = () => {
     const { username } = useParams<{ username: string }>();

@@ -1,32 +1,27 @@
 import { useRef, useState } from 'react';
 
-import type { AuthUser } from '@redux/auth';
+import type { GithubUser } from '@utils/services';
+import { fetchGitHubSuggestions } from '@utils/services';
 
-import { fetchGitHubProfile } from '@utils/services';
-import { useAppSelector } from '@utils';
-
-export const useGithubProfile = () => {
-    // we do not have any redux state for profile, that's why these states are made using useState
+export const useGithubSuggestions = () => {
+    // we do not have any redux state for search, that's why these states are made using useState
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
-    const [response, setResponse] = useState<AuthUser | null>(null);
-
-    const token = useAppSelector((state) => state.auth.token);
+    const [response, setResponse] = useState<GithubUser[]>([]);
 
     const controllerRef = useRef<AbortController | null>(null);
 
-    const handleProfileSearch = async (username: string) => {
-        const trimmedUsername = username.trim();
+    const handleSuggestionsSearch = async (token: string, since: number) => {
+        const trimmedToken = token.trim();
 
-        if (!trimmedUsername) {
-            setError('Please enter a GitHub username.');
-            setResponse(null);
-
+        if (!trimmedToken) {
+            setError('Please Login again to access Suggestions.');
+            setResponse([]);
             return null;
         }
 
-        if (controllerRef.current) {
-            controllerRef.current.abort();
+        if (controllerRef) {
+            controllerRef.current?.abort();
         }
 
         const controller = new AbortController();
@@ -34,15 +29,17 @@ export const useGithubProfile = () => {
 
         setLoading(true);
         setError('');
-        setResponse(null);
+        setResponse([]);
 
         try {
-            const data = await fetchGitHubProfile(trimmedUsername, token, controller.signal);
+            const data = await fetchGitHubSuggestions(trimmedToken, since, controller.signal);
 
             setResponse(data);
 
             return data;
         } catch (error) {
+            setResponse([]);
+
             if (error instanceof Error && error.name === 'AbortError') {
                 return null;
             }
@@ -55,7 +52,9 @@ export const useGithubProfile = () => {
 
             return null;
         } finally {
-            setLoading(false);
+            if (!controller.signal.aborted) {
+                setLoading(false);
+            }
         }
     };
 
@@ -63,6 +62,6 @@ export const useGithubProfile = () => {
         loading,
         error,
         response,
-        handleProfileSearch,
+        handleSuggestionsSearch,
     };
 };

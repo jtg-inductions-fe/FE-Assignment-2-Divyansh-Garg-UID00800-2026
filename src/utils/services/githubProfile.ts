@@ -1,6 +1,6 @@
 import type { AuthUser } from '@redux/auth';
 
-import { snakeToCamelCase, getProfileUrl } from '@utils';
+import { snakeToCamelCase, getProfileUrl, getHeaders } from '@utils';
 
 export const fetchGitHubProfile = async (
     username: string,
@@ -10,10 +10,7 @@ export const fetchGitHubProfile = async (
     const trimmedToken = token?.trim();
 
     const response = await fetch(getProfileUrl(username), {
-        headers: {
-            ...(trimmedToken && { Authorization: `Bearer ${trimmedToken}` }),
-            Accept: 'application/vnd.github+json',
-        },
+        headers: getHeaders(trimmedToken),
         signal,
     });
 
