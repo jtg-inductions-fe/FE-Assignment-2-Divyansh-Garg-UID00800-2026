@@ -32,11 +32,10 @@ import {
     ProfileUsername,
 } from './Profile.styles';
 
-import { useAppSelector } from '@utils';
+import { useAppSelector, useGithubSocial } from '@utils';
 import { colors, pxToRem } from '@theme';
 
 import { useGithubProfile } from './useGithubProfile';
-import { useGithubSocial } from '@utils/useGithubSocial';
 
 export const Profile = () => {
     const { username } = useParams<{ username: string }>();

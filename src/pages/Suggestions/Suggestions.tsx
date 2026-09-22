@@ -3,21 +3,16 @@ import { useEffect, useState } from 'react';
 import { Refresh } from '@mui/icons-material';
 import { CircularProgress, Stack, Typography } from '@mui/material';
 
-import Bubble from '@components/common/Bubble';
-import { Card } from '@components/common/Card';
-import { Content } from '@components/common/Content';
-import { ErrorBox } from '@components/common/ErrorBox';
-import { Page } from '@components/common/Page';
-import { RefreshIcon, SuggestionsList } from '@components/list/List.styles';
-import { StyledListItem } from '@components/list/StyledListItem';
+import { Bubble, Card, Content, ErrorBox, Page } from '@components/Common';
+import { StyledListItem, RefreshIcon } from '@components/List';
 
-import { colors } from '@theme/colors';
-import { pxToRem } from '@theme/functions';
+import { colors, pxToRem } from '@theme';
 
-import { useAppSelector } from '@utils/hooks/storeHooks';
-import { useGithubSuggestions } from '@utils/hooks/useGithubSuggestions';
+import { useAppSelector } from '@utils';
+import { useGithubSuggestions } from './useGithubSuggestions';
+import { StyledList } from '@components/List';
 
-const Suggestions = () => {
+export const Suggestions = () => {
     const token = useAppSelector((state) => state.auth.token);
 
     const [since, setSince] = useState(1);
@@ -88,7 +83,7 @@ const Suggestions = () => {
                     ) : loading ? (
                         <Typography variant="body1">Getting your Suggestions...</Typography>
                     ) : (
-                        <SuggestionsList>
+                        <StyledList>
                             {response.map((option) => (
                                 <StyledListItem
                                     key={option.id}
@@ -108,12 +103,10 @@ const Suggestions = () => {
                             >
                                 Refresh to see new Suggestions...
                             </Typography>
-                        </SuggestionsList>
+                        </StyledList>
                     )}
                 </Card>
             </Content>
         </Page>
     );
 };
-
-export default Suggestions;

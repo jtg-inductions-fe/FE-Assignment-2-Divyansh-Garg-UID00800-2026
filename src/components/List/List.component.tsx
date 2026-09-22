@@ -1,20 +1,13 @@
 import { useNavigate } from 'react-router';
 
 import { Box, IconButton, Stack, Typography } from '@mui/material';
-
 import { ArrowOutward } from '@mui/icons-material';
 
-import { useAppDispatch, useAppSelector } from '@utils/hooks/storeHooks';
-import { useGithubSocial } from '@utils/hooks/useGithubSocial';
+import { useAppSelector, useGithubSocial } from '@utils';
+import { colors } from '@/theme';
 
-import { colors } from '@/theme/colors';
-
-import { addFollower, removeFollower } from '@redux/social/socialSlice';
-import type { SocialUser } from '@redux/social/socialTypes';
-
-import { FollowButton } from '@components/common/FollowBtn';
-import { StyledAvatar } from '@components/common/StyledAvatar';
-import { ListItemContent, SuggestionsListItem } from '@components/list/List.styles';
+import { FollowButton, StyledAvatar } from '@components/Common';
+import { ListItemContent, StyleListItem } from './List.styles';
 
 interface StyleList {
     id: number;
@@ -26,20 +19,13 @@ interface StyleList {
 
 export const StyledListItem = ({ id, username, imgPath, type, gitURL }: StyleList) => {
     const navigate = useNavigate();
-    const dispatch = useAppDispatch();
 
     const token = useAppSelector((state) => state.auth.token);
-    const isFetched = useAppSelector((state) => state.social.isFetched);
-    const following = useAppSelector((state) => state.social.following);
+    const { isFetched, following } = useAppSelector((state) => state.social);
 
-    const { loading, error, handleFollowUnfollow } = useGithubSocial();
+    const { followUnfollowLoading, followUnfollowError, handleFollowUnfollow } = useGithubSocial();
 
     const isFollowed = String(id) in following;
-
-    const user: SocialUser = {
-        id,
-        login: username,
-    };
 
     const handleNavigation = (username: string) => {
         navigate(`/profile/${username}`);
@@ -50,23 +36,13 @@ export const StyledListItem = ({ id, username, imgPath, type, gitURL }: StyleLis
             return;
         }
 
-        const result = await handleFollowUnfollow(username, isFollowed, token);
-
-        if (result === null) {
-            return;
-        }
-
-        if (result) {
-            dispatch(addFollower(user));
-        } else {
-            dispatch(removeFollower(user));
-        }
+        await handleFollowUnfollow(id, username, isFollowed, token);
     };
 
     return (
         <>
             {!isFollowed && (
-                <SuggestionsListItem onClick={() => handleNavigation(username)}>
+                <StyleListItem onClick={() => handleNavigation(username)}>
                     <StyledAvatar
                         alt={username}
                         src={imgPath}
@@ -94,20 +70,22 @@ export const StyledListItem = ({ id, username, imgPath, type, gitURL }: StyleLis
 
                             <Typography>{type || 'NA'}</Typography>
 
-                            {error && <Typography color="error">{error}</Typography>}
+                            {followUnfollowError && (
+                                <Typography color="error">{followUnfollowError}</Typography>
+                            )}
                         </Stack>
 
                         {isFetched && (
                             <Box onClick={(event) => event.stopPropagation()}>
                                 <FollowButton
                                     isFollowed={isFollowed}
-                                    loading={loading}
+                                    loading={followUnfollowLoading}
                                     onClick={() => void handleFollow()}
                                 />
                             </Box>
                         )}
                     </ListItemContent>
-                </SuggestionsListItem>
+                </StyleListItem>
             )}
         </>
     );

@@ -1,7 +1,7 @@
-import { colors } from '@theme/colors';
+import { colors } from '@theme';
 import { styled, List, ListItem, ListItemText, IconButton } from '@mui/material';
 
-export const SuggestionsList = styled(List)(({ theme }) => ({
+export const StyledList = styled(List)(({ theme }) => ({
     borderRadius: theme.variables.radius.xl,
     padding: theme.variables.spacing.md,
     maxHeight: `calc(100vh - ${theme.variables.layout.navbarHeight})`,
@@ -12,7 +12,7 @@ export const SuggestionsList = styled(List)(({ theme }) => ({
     scrollbarWidth: 'none',
 }));
 
-export const SuggestionsListItem = styled(ListItem)(({ theme }) => ({
+export const StyleListItem = styled(ListItem)(({ theme }) => ({
     ...theme.mixins.flexCenter,
     gap: theme.variables.spacing.md,
     padding: theme.variables.spacing.md,

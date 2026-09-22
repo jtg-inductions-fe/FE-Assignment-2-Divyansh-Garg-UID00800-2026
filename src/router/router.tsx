@@ -7,7 +7,7 @@ import { Login } from '@pages/Login';
 import { NotFound } from '@pages/NotFound';
 import { Search } from '@pages/Search';
 import { Profile } from '@pages/Profile';
-import Suggestions from '@pages/Suggestions/Suggestions';
+import { Suggestions } from '@pages/Suggestions';
 
 export const router = createBrowserRouter([
     {

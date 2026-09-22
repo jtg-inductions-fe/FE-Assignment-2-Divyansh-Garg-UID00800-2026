@@ -21,3 +21,5 @@ export { localStorageUtils } from './localstorage';
 export { STORAGE_KEYS } from './storageKeys';
 
 export { useAppSelector, useAppDispatch } from './storeHooks';
+
+export { useGithubSocial } from './useGithubSocial';

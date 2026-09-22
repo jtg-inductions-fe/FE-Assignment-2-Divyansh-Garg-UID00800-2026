@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
-import type { GithubUser } from '@utils/services/githubSearch';
-import { fetchGitHubSuggestions } from '@utils/services/githubSuggestions';
+import type { GithubUser } from '@utils/services';
+import { fetchGitHubSuggestions } from '@utils/services';
 
 export const useGithubSuggestions = () => {
     const [loading, setLoading] = useState(false);
