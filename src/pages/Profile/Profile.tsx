@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useParams } from 'react-router';
 
-import { ArrowOutward, Article, Email } from '@mui/icons-material';
+import { ArrowOutward, Article, CorporateFare, Email } from '@mui/icons-material';
 import { Box, IconButton, Typography } from '@mui/material';
 
 import {
@@ -159,6 +159,12 @@ export const Profile = () => {
                                             Following: {searchUserInfo?.following ?? 'NA'}
                                         </Typography>
                                     </Count>
+
+                                    <Count>
+                                        <Typography>
+                                            Repos: {searchUserInfo?.publicRepos ?? 'NA'}
+                                        </Typography>
+                                    </Count>
                                 </CountBox>
                             </CardHeader>
 
@@ -193,6 +199,16 @@ export const Profile = () => {
                                             {searchUserInfo?.blog ?? 'Blog is not available.'}
                                         </Label>
                                     </CaptionBox>
+
+                                    <CaptionBox>
+                                        <ProfileCardHeaderTop>
+                                            <CorporateFare fontSize="small" />
+                                            <Typography>Company</Typography>
+                                        </ProfileCardHeaderTop>
+                                        <Label variant="h6">
+                                            {searchUserInfo?.company ?? 'Company is not available.'}
+                                        </Label>
+                                    </CaptionBox>
                                 </ProfileMainTop>
 
                                 {followUnfollowError && (
@@ -214,16 +230,6 @@ export const Profile = () => {
                             {isOwnProfile && searchUserInfo && (
                                 <Grid>
                                     <GridEle>
-                                        <Label variant="h6">Name:</Label>
-                                        <Value>{searchUserInfo.name ?? 'Not available'}</Value>
-                                    </GridEle>
-
-                                    <GridEle>
-                                        <Label variant="h6">Company:</Label>
-                                        <Value>{searchUserInfo.company ?? 'Not available'}</Value>
-                                    </GridEle>
-
-                                    <GridEle>
                                         <Label variant="h6">Location:</Label>
                                         <Value>{searchUserInfo.location ?? 'Not available'}</Value>
                                     </GridEle>
@@ -241,16 +247,6 @@ export const Profile = () => {
                                     <GridEle>
                                         <Label variant="h6">Account Type:</Label>
                                         <Value>{searchUserInfo.type}</Value>
-                                    </GridEle>
-
-                                    <GridEle>
-                                        <Label variant="h6">Public Repositories:</Label>
-                                        <Value>{searchUserInfo.publicRepos}</Value>
-                                    </GridEle>
-
-                                    <GridEle>
-                                        <Label variant="h6">Public Gists:</Label>
-                                        <Value>{searchUserInfo.publicGists}</Value>
                                     </GridEle>
 
                                     <GridEle>
