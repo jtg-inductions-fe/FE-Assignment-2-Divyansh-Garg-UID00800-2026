@@ -1,5 +1,5 @@
-import { updateGitHubFollow } from './services';
-import { useAppDispatch, useAppSelector } from './storeHooks';
+import { updateGitHubFollow } from '@utils/services';
+import { useAppDispatch, useAppSelector } from '@utils';
 import {
     addFollowingSuccess,
     followUnfollowFailure,

@@ -15,7 +15,7 @@ import { StyledList } from '@components/List';
 export const Suggestions = () => {
     const token = useAppSelector((state) => state.auth.token);
 
-    const [since, setSince] = useState(1);
+    const [since, setSince] = useState(() => Math.ceil(Math.random() * 100));
 
     const { loading, error, response, handleSuggestionsSearch } = useGithubSuggestions();
 

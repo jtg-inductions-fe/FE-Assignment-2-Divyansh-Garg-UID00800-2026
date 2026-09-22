@@ -10,10 +10,7 @@ export const fetchGitHubProfile = async (
     const trimmedToken = token?.trim();
 
     const response = await fetch(getProfileUrl(username), {
-        headers: {
-            ...(trimmedToken && { Authorization: `Bearer ${trimmedToken}` }),
-            Accept: 'application/vnd.github+json',
-        },
+        headers: getHeaders(trimmedToken),
         signal,
     });
 

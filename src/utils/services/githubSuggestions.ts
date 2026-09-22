@@ -4,9 +4,11 @@ import { getSuggestionsUrl, getHeaders } from '@utils';
 export const fetchGitHubSuggestions = async (
     token: string,
     since: number,
+    signal?: AbortSignal,
 ): Promise<GithubUser[]> => {
     const response = await fetch(getSuggestionsUrl(since), {
         headers: getHeaders(token),
+        signal,
     });
 
     if (!response.ok) {

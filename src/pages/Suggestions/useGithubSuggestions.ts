@@ -1,12 +1,15 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 
 import type { GithubUser } from '@utils/services';
 import { fetchGitHubSuggestions } from '@utils/services';
 
 export const useGithubSuggestions = () => {
+    // we do not have any redux state for search, that's why these states are made using useState
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
     const [response, setResponse] = useState<GithubUser[]>([]);
+
+    const controllerRef = useRef<AbortController | null>(null);
 
     const handleSuggestionsSearch = async (token: string, since: number) => {
         const trimmedToken = token.trim();
@@ -17,18 +20,29 @@ export const useGithubSuggestions = () => {
             return null;
         }
 
+        if (controllerRef) {
+            controllerRef.current?.abort();
+        }
+
+        const controller = new AbortController();
+        controllerRef.current = controller;
+
         setLoading(true);
         setError('');
         setResponse([]);
 
         try {
-            const data = await fetchGitHubSuggestions(trimmedToken, since);
+            const data = await fetchGitHubSuggestions(trimmedToken, since, controller.signal);
 
             setResponse(data);
 
             return data;
         } catch (error) {
             setResponse([]);
+
+            if (error instanceof Error && error.name === 'AbortError') {
+                return null;
+            }
 
             setError(
                 error instanceof Error
@@ -38,7 +52,9 @@ export const useGithubSuggestions = () => {
 
             return null;
         } finally {
-            setLoading(false);
+            if (!controller.signal.aborted) {
+                setLoading(false);
+            }
         }
     };
 

@@ -23,10 +23,7 @@ export const searchGitHubUsers = async (
     const trimmedToken = token?.trim();
 
     const response = await fetch(getSearchUsersUrl(username), {
-        headers: {
-            ...(trimmedToken && { Authorization: `Bearer ${trimmedToken}` }),
-            Accept: 'application/vnd.github+json',
-        },
+        headers: getHeaders(trimmedToken),
         signal,
     });
 

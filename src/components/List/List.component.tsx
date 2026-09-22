@@ -1,14 +1,15 @@
 import { useNavigate } from 'react-router';
 
 import { Box, IconButton, Stack, Typography } from '@mui/material';
-import { ArrowOutward } from '@mui/icons-material';
+import { ArrowOutward, Close } from '@mui/icons-material';
 
 import { useAppSelector } from '@utils';
 import { useGithubSocial } from '@pages/Common';
-import { colors } from '@/theme';
+import { colors } from '@theme';
 
 import { FollowButton, StyledAvatar } from '@components/Common';
-import { ListItemContent, StyleListItem } from './List.styles';
+import { ListItemContent, StyleListItem, Tag } from './List.styles';
+import { useState } from 'react';
 
 interface StyleList {
     id: number;
@@ -23,6 +24,8 @@ export const StyledListItem = ({ id, username, imgPath, type, gitURL }: StyleLis
 
     const token = useAppSelector((state) => state.auth.token);
     const { isFetched, following } = useAppSelector((state) => state.social);
+
+    const [hideDisplay, setHideDisplay] = useState<string>('flex');
 
     const { followUnfollowLoading, followUnfollowError, handleFollowUnfollow } = useGithubSocial();
 
@@ -40,18 +43,32 @@ export const StyledListItem = ({ id, username, imgPath, type, gitURL }: StyleLis
         await handleFollowUnfollow(id, username, isFollowed, token);
     };
 
+    const hideVisibility = () => {
+        setHideDisplay('none');
+    };
+
     return (
         <>
             {!isFollowed && (
-                <StyleListItem onClick={() => handleNavigation(username)}>
-                    <StyledAvatar
-                        alt={username}
-                        src={imgPath}
-                        sx={{
-                            width: '64px',
-                            height: '64px',
-                        }}
-                    />
+                <StyleListItem
+                    onClick={() => handleNavigation(username)}
+                    sx={{
+                        display: hideDisplay,
+                    }}
+                >
+                    <Tag onClick={(event) => event.stopPropagation()}>
+                        <IconButton onClick={hideVisibility}>
+                            <Close />
+                        </IconButton>
+                        <StyledAvatar
+                            alt={username}
+                            src={imgPath}
+                            sx={{
+                                width: '64px',
+                                height: '64px',
+                            }}
+                        />
+                    </Tag>
 
                     <ListItemContent disableTypography>
                         <Stack>
@@ -81,7 +98,7 @@ export const StyledListItem = ({ id, username, imgPath, type, gitURL }: StyleLis
                                 <FollowButton
                                     isFollowed={isFollowed}
                                     loading={followUnfollowLoading}
-                                    onClick={() => void handleFollow()}
+                                    onClick={handleFollow}
                                 />
                             </Box>
                         )}

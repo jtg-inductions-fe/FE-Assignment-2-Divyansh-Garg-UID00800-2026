@@ -1,5 +1,5 @@
 import { colors } from '@theme';
-import { styled, List, ListItem, ListItemText, IconButton } from '@mui/material';
+import { styled, List, ListItem, ListItemText, IconButton, Box } from '@mui/material';
 
 export const StyledList = styled(List)(({ theme }) => ({
     borderRadius: theme.variables.radius.xl,
@@ -28,6 +28,20 @@ export const StyleListItem = styled(ListItem)(({ theme }) => ({
 
     [theme.breakpoints.down('sm')]: {
         flexDirection: 'column',
+    },
+}));
+
+export const Tag = styled(Box)(({ theme }) => ({
+    ...theme.mixins.flexCenter,
+    gap: '5px',
+
+    [theme.breakpoints.down('sm')]: {
+        ...theme.mixins.flexBetween,
+        width: '100%',
+
+        '& .MuiButtonBase-root': {
+            order: 2,
+        },
     },
 }));
 
