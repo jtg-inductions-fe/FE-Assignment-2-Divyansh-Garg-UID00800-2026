@@ -1,5 +1,5 @@
 import { Box, Stack, styled } from '@mui/material';
-import { colors } from '@theme/colors';
+import { colors } from '@theme';
 
 export const Grid = styled(Stack)(({ theme }) => ({
     display: 'grid',

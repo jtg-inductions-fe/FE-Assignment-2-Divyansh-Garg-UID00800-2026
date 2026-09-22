@@ -1,6 +1,6 @@
 import { Box, Stack, styled, Typography } from '@mui/material';
 
-import { colors } from '@theme/colors';
+import { colors } from '@theme';
 
 export const ProfileCard = styled(Box)(({ theme }) => ({
     borderRadius: theme.variables.radius.xl,

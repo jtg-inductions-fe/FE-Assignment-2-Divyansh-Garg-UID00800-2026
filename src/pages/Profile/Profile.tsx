@@ -4,15 +4,23 @@ import { useParams } from 'react-router';
 import { ArrowOutward } from '@mui/icons-material';
 import { Box, IconButton, Typography } from '@mui/material';
 
-import Bubble from '@components/common/Bubble';
-import { Card, CardHeader, CardMain, Label, Value } from '@components/common/Card';
-import { Content } from '@components/common/Content';
-import { ErrorBox } from '@components/common/ErrorBox';
-import { FollowButton } from '@components/common/FollowBtn';
-import { Grid, GridEle } from '@components/common/Grid';
-import { Count, CountBox } from '@components/common/Count';
-import { Page } from '@components/common/Page';
-import { StyledAvatar } from '@components/common/StyledAvatar';
+import {
+    Bubble,
+    Card,
+    CardHeader,
+    CardMain,
+    Label,
+    Value,
+    Content,
+    ErrorBox,
+    FollowButton,
+    Grid,
+    GridEle,
+    Count,
+    CountBox,
+    Page,
+    StyledAvatar,
+} from '@components/Common';
 
 import {
     ProfileCard,
@@ -20,37 +28,30 @@ import {
     ProfileCardTopHeaderInner,
     ProfileMainTop,
     ProfileUsername,
-} from '@pages/Profile/Profile.styles';
+} from './Profile.styles';
 
-import { addFollower, removeFollower } from '@redux/social/socialSlice';
-import { useAppDispatch, useAppSelector } from '@utils/hooks/storeHooks';
+import { useAppSelector } from '@utils';
+import { colors, pxToRem } from '@theme';
 
-import { colors } from '@theme/colors';
-import { pxToRem } from '@theme/functions';
+import { useGithubProfile } from './useGithubProfile';
+import { useGithubSocial } from '@utils/useGithubSocial';
 
-import { useGithubProfile } from '@utils/hooks/useGithubProfile';
-import { useGithubSocial } from '@utils/hooks/useGithubSocial';
-
-const Profile = () => {
+export const Profile = () => {
     const { username } = useParams<{ username: string }>();
 
-    const dispatch = useAppDispatch();
-
-    const authUser = useAppSelector((state) => state.auth.user);
-    const token = useAppSelector((state) => state.auth.token);
-    const isAuthenticated = useAppSelector((state) => state.auth.isAuthenticated);
-    const following = useAppSelector((state) => state.social.following);
-    const isFetched = useAppSelector((state) => state.social.isFetched);
+    const { user, token, isAuthenticated } = useAppSelector((state) => state.auth);
+    const { isFetched, following, followUnfollowLoading, followUnfollowError } = useAppSelector(
+        (state) => state.social,
+    );
 
     const { loading, error, response, handleProfileSearch } = useGithubProfile();
-
-    const { loading: followLoading, error: followError, handleFollowUnfollow } = useGithubSocial();
+    const { handleFollowUnfollow } = useGithubSocial();
 
     const isOwnProfile =
         isAuthenticated &&
-        !!authUser &&
+        !!user &&
         !!username &&
-        authUser.login.toLowerCase() === username.toLowerCase();
+        user.login.toLowerCase() === username.toLowerCase();
 
     const searchUserInfo = response;
 
@@ -69,17 +70,7 @@ const Profile = () => {
             return;
         }
 
-        const result = await handleFollowUnfollow(searchUserInfo.login, isFollowed, token);
-
-        if (result === null) {
-            return;
-        }
-
-        if (result) {
-            dispatch(addFollower(searchUserInfo));
-        } else {
-            dispatch(removeFollower(searchUserInfo));
-        }
+        await handleFollowUnfollow(searchUserInfo.id, searchUserInfo.login, isFollowed, token);
     };
 
     return (
@@ -181,7 +172,9 @@ const Profile = () => {
                                     </Typography>
                                 </ProfileMainTop>
 
-                                {followError && <ErrorBox color="error">{followError}</ErrorBox>}
+                                {followUnfollowError && (
+                                    <ErrorBox color="error">{followUnfollowError}</ErrorBox>
+                                )}
 
                                 {isAuthenticated &&
                                     !isOwnProfile &&
@@ -189,7 +182,7 @@ const Profile = () => {
                                     searchUserInfo && (
                                         <FollowButton
                                             isFollowed={isFollowed}
-                                            loading={followLoading}
+                                            loading={followUnfollowLoading}
                                             onClick={handleFollow}
                                         />
                                     )}
@@ -263,5 +256,3 @@ const Profile = () => {
         </Page>
     );
 };
-
-export default Profile;

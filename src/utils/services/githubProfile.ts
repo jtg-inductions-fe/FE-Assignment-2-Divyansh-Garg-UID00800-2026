@@ -1,7 +1,6 @@
-import type { AuthUser } from '@redux/auth/authTypes';
+import type { AuthUser } from '@redux/auth';
 
-import { snakeToCamelCase } from '@utils/helperFunctions';
-import { getProfileUrl } from '@utils/apiUrls';
+import { snakeToCamelCase, getProfileUrl } from '@utils';
 
 export const fetchGitHubProfile = async (username: string): Promise<AuthUser> => {
     const response = await fetch(getProfileUrl(username), {

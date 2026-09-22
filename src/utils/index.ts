@@ -6,6 +6,8 @@ export {
     getFollowingsUrl,
     getLoginUrl,
     getSearchUsersUrl,
+    getProfileUrl,
+    getFollowingUserUrl
 } from './apiUrls';
 
 export { hasValidToken } from './auth';
