@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react';
 
-import type { AuthUser } from '@redux/auth/authTypes';
+import type { AuthUser } from '@redux/auth';
 
 import { fetchGitHubProfile } from '@utils/services/githubProfile';
 import { useAppSelector } from './storeHooks';
