@@ -32,6 +32,14 @@ export const ProfileCardTopHeaderInner = styled(Stack)(({ theme }) => ({
     },
 }));
 
+export const CaptionBox = styled(Box)(({ theme }) => ({
+    ...theme.mixins.flexBetween,
+    padding: theme.variables.spacing.md,
+    background: colors.gray[100],
+    borderRadius: theme.variables.radius.pill,
+    width: '100%',
+}));
+
 export const ProfileMainTop = styled(Stack)(({ theme }) => ({
     gap: theme.variables.spacing.sm,
 

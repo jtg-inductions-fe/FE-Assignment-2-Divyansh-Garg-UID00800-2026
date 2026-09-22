@@ -41,13 +41,9 @@ export const CardMain = styled(Box)(({ theme }) => ({
     gap: theme.variables.spacing.xl,
     padding: theme.variables.spacing.xl,
 
+    flexDirection: 'column',
+    alignItems: 'stretch',
     backgroundColor: colors.white,
-
-    [theme.breakpoints.down('md')]: {
-        flexDirection: 'column',
-
-        alignItems: 'stretch',
-    },
 }));
 
 export const CardHeader = styled(Box)(({ theme }) => ({
@@ -69,12 +65,13 @@ export const CardHeader = styled(Box)(({ theme }) => ({
     },
 }));
 
-export const Label = styled(Typography)(({ theme }) => ({
-    marginRight: theme.variables.spacing.sm,
-
+export const Label = styled(Typography)(() => ({
     color: colors.secondary[800],
     display: 'inline',
     wordBreak: 'break-word',
+    textAlign: 'right',
+    fontWeight: '100',
+    marginRight: '5px',
 }));
 
 export const Value = styled(Typography)(() => ({

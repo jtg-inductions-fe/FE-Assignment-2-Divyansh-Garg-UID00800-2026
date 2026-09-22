@@ -1,8 +1,8 @@
 import { useEffect } from 'react';
 import { useParams } from 'react-router';
 
-import { ArrowOutward } from '@mui/icons-material';
-import { Box, IconButton, Typography } from '@mui/material';
+import { ArrowOutward, Article, Email, FormatItalic } from '@mui/icons-material';
+import { Box, IconButton, Stack, Typography } from '@mui/material';
 
 import {
     Bubble,
@@ -23,6 +23,7 @@ import {
 } from '@components/Common';
 
 import {
+    CaptionBox,
     ProfileCard,
     ProfileCardHeaderTop,
     ProfileCardTopHeaderInner,
@@ -31,7 +32,7 @@ import {
 } from './Profile.styles';
 
 import { useAppSelector } from '@utils';
-import { colors, pxToRem } from '@theme';
+import { colors, pxToRem, theme } from '@theme';
 
 import { useGithubProfile } from './useGithubProfile';
 import { useGithubSocial } from '@utils/useGithubSocial';
@@ -125,7 +126,7 @@ export const Profile = () => {
                                     <ProfileCardTopHeaderInner>
                                         <Box>
                                             <ProfileUsername variant="h6">
-                                                {searchUserInfo?.login}
+                                                {searchUserInfo?.name ?? 'NA'}
                                             </ProfileUsername>
 
                                             {searchUserInfo?.htmlUrl && (
@@ -135,13 +136,13 @@ export const Profile = () => {
                                                     rel="noopener noreferrer"
                                                     aria-label="Open GitHub profile"
                                                 >
-                                                    <ArrowOutward htmlColor={colors.primary[500]} />
+                                                    <ArrowOutward htmlColor={colors.primary[600]} />
                                                 </IconButton>
                                             )}
                                         </Box>
 
                                         <ProfileUsername variant="h6">
-                                            {searchUserInfo?.name ?? 'NA'}
+                                            {searchUserInfo?.login}
                                         </ProfileUsername>
                                     </ProfileCardTopHeaderInner>
                                 </ProfileCardHeaderTop>
@@ -163,13 +164,35 @@ export const Profile = () => {
 
                             <CardMain>
                                 <ProfileMainTop>
-                                    <Label variant="h6">
-                                        {searchUserInfo?.email ?? 'Email is not available.'}
-                                    </Label>
+                                    <CaptionBox>
+                                        <ProfileCardHeaderTop>
+                                            <Email fontSize="small" />
+                                            <Typography>Email</Typography>
+                                        </ProfileCardHeaderTop>
+                                        <Label
+                                            variant="h6"
+                                            sx={{
+                                                fontStyle: 'italic',
+                                            }}
+                                        >
+                                            {searchUserInfo?.email ?? 'Email is not available.'}
+                                        </Label>
+                                    </CaptionBox>
 
-                                    <Typography variant="h6">
-                                        {searchUserInfo?.bio ?? 'Bio is not available.'}
-                                    </Typography>
+                                    <CaptionBox>
+                                        <ProfileCardHeaderTop>
+                                            <Article fontSize="small" />
+                                            <Typography>Blog</Typography>
+                                        </ProfileCardHeaderTop>
+                                        <Label
+                                            variant="h6"
+                                            sx={{
+                                                fontStyle: 'italic',
+                                            }}
+                                        >
+                                            {searchUserInfo?.blog ?? 'Blog is not available.'}
+                                        </Label>
+                                    </CaptionBox>
                                 </ProfileMainTop>
 
                                 {followUnfollowError && (
