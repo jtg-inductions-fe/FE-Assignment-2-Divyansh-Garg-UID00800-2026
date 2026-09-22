@@ -108,7 +108,6 @@ export const Search = () => {
                             open={open}
                             onOpen={() => setOpen(true)}
                             onClose={() => setOpen(false)}
-                            value={null}
                             inputValue={searchUsername}
                             disablePortal
                             slotProps={{
