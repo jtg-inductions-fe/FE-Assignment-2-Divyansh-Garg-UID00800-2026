@@ -1,5 +1,3 @@
-import type { Dispatch, SetStateAction } from 'react';
-
 import { ArrowOutward, Close } from '@mui/icons-material';
 import {
     Box,
@@ -17,110 +15,111 @@ import { StyledAvatar } from '@components/Common';
 import { MenuItemContent, StyledMenuItem, Tag } from './MenuItem.styles';
 import { FollowButton } from '@components/Common/FollowButton';
 
-interface DisplayProps {
-    displayType: string;
-    setDisplayType?: Dispatch<SetStateAction<string>>;
+interface DismissProps {
+    dismissed: boolean;
+    onDismiss: () => void;
 }
 
-interface MenuItemProps {
+interface FollowButtonProps extends ButtonProps {
+    isFollowed: boolean;
+    isFetched: boolean;
+}
+
+interface UserProps {
     username: string;
     type?: string | null;
     gitURL?: string;
-    isFetched?: boolean;
-    itemError?: string | null;
+}
+
+interface MenuItemProps {
+    userProps: UserProps;
+    errorMessage?: string | null;
     onClick: (username: string) => void;
-    isFollowed?: boolean;
+    avatarProps?: AvatarProps;
+    followButtonProps?: FollowButtonProps;
+    dismissProps?: DismissProps;
     sx?: SxProps;
-    avatarProps: AvatarProps;
-    followButtonProps?: ButtonProps;
-    displayProps?: DisplayProps;
 }
 
 export const MenuItem = ({
-    username,
-    type,
-    gitURL,
-    isFetched,
-    itemError,
+    userProps,
+    errorMessage,
     onClick,
-    isFollowed,
-    sx,
-    displayProps,
     avatarProps,
     followButtonProps,
+    dismissProps,
+    sx,
 }: MenuItemProps) => {
     const theme = useTheme();
+    const colors = theme.colors;
+
+    if (followButtonProps?.isFollowed) {
+        return null;
+    }
+
+    if (dismissProps?.dismissed) {
+        return null;
+    }
 
     return (
-        <>
-            {!isFollowed && (
-                <StyledMenuItem
-                    onClick={() => onClick(username)}
-                    sx={{
-                        display: displayProps?.displayType,
-                        ...sx,
-                    }}
-                >
-                    <Tag onClick={(event) => event.stopPropagation()}>
-                        {displayProps?.displayType && (
-                            <IconButton onClick={() => displayProps.setDisplayType?.('none')}>
-                                <Close />
-                            </IconButton>
-                        )}
+        <StyledMenuItem onClick={() => onClick(userProps.username)} sx={sx}>
+            <Tag onClick={(event) => event.stopPropagation()}>
+                {dismissProps && (
+                    <IconButton onClick={dismissProps.onDismiss}>
+                        <Close />
+                    </IconButton>
+                )}
 
-                        <StyledAvatar
-                            {...avatarProps}
-                            sx={{
-                                width: '64px',
-                                height: '64px',
-                            }}
-                        />
-                    </Tag>
-
-                    <MenuItemContent
-                        disableTypography
+                {avatarProps && (
+                    <StyledAvatar
+                        {...avatarProps}
                         sx={{
-                            width: '100%',
+                            width: '64px',
+                            height: '64px',
                         }}
-                    >
-                        <Stack>
-                            <Box>
-                                <Typography variant="h6">
-                                    {username}
-                                    {!!gitURL && (
-                                        <IconButton
-                                            href={gitURL}
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            onClick={(event) => event.stopPropagation()}
-                                        >
-                                            <ArrowOutward htmlColor={theme.colors.primary[800]} />
-                                        </IconButton>
-                                    )}
-                                </Typography>
-                            </Box>
+                    />
+                )}
+            </Tag>
 
-                            {type && <Typography>{type}</Typography>}
+            <MenuItemContent
+                disableTypography
+                sx={{
+                    width: '100%',
+                }}
+            >
+                <Stack>
+                    <Box>
+                        <Typography variant="h6">
+                            {userProps.username}
+                            {userProps.gitURL && (
+                                <IconButton
+                                    href={userProps.gitURL}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    onClick={(event) => event.stopPropagation()}
+                                >
+                                    <ArrowOutward htmlColor={colors.primary[800]} />
+                                </IconButton>
+                            )}
+                        </Typography>
+                    </Box>
 
-                            {itemError && <Typography color="error">{itemError}</Typography>}
-                        </Stack>
+                    {userProps.type && <Typography>{userProps.type}</Typography>}
 
-                        {followButtonProps && isFetched && (
-                            <Box onClick={(event) => event.stopPropagation()}>
-                                <FollowButton {...followButtonProps}>
-                                    {followButtonProps.disabled ? (
-                                        <CircularProgress size={31} />
-                                    ) : isFollowed ? (
-                                        'Unfollow'
-                                    ) : (
-                                        'Follow'
-                                    )}
-                                </FollowButton>
-                            </Box>
-                        )}
-                    </MenuItemContent>
-                </StyledMenuItem>
-            )}
-        </>
+                    {errorMessage && <Typography color="error">{errorMessage}</Typography>}
+                </Stack>
+
+                {followButtonProps?.isFetched && (
+                    <Box onClick={(event) => event.stopPropagation()}>
+                        <FollowButton
+                            disabled={Boolean(followButtonProps.loading)}
+                            onClick={followButtonProps.onClick}
+                        >
+                            {followButtonProps.loading ? <CircularProgress size={31} /> : 'Follow'}
+                        </FollowButton>
+                    </Box>
+                )}
+            </MenuItemContent>
+        </StyledMenuItem>
     );
 };

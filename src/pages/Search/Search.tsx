@@ -159,13 +159,14 @@ export const Search = () => {
                             renderOption={(_, option) => (
                                 <MenuItem
                                     key={option.id}
-                                    username={option.login}
+                                    userProps={{
+                                        username: option.login,
+                                    }}
                                     avatarProps={{
                                         src: option.avatar_url,
                                         alt: option.login.trim(),
                                     }}
                                     onClick={() => handleNavigation(option.login)}
-
                                     sx={{
                                         [theme.breakpoints.down('sm')]: {
                                             flexDirection: 'row',

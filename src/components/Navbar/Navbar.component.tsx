@@ -71,6 +71,7 @@ export const Navbar = () => {
                         <NavLinks aria-label="Main navigation">
                             {items.map((item) => (
                                 <StyledNavButton
+                                    key={item.path}
                                     component={NavLink}
                                     to={item.path}
                                     startIcon={<item.icon />}

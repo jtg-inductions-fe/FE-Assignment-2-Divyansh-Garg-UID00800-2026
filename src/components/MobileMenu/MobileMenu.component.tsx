@@ -61,6 +61,7 @@ export const MobileMenu = ({ onLogoutClick }: MobileMenuProps) => {
                     <MobileNavigationList>
                         {items.map((item) => (
                             <StyledNavButton
+                                key={item.path}
                                 component={NavLink}
                                 to={item.path}
                                 startIcon={<item.icon />}

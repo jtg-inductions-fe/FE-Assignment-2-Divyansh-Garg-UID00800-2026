@@ -28,7 +28,8 @@ export const Suggestions = () => {
 
     const token = useAppSelector((state) => state.auth.token);
     const [since, setSince] = useState(() => Math.ceil(Math.random() * 100));
-    const [displayType, setDisplayType] = useState<string>('flex');
+
+    const [dismissedIds, setDismissedIds] = useState(new Set());
 
     const { loading, error, response, handleSuggestionsSearch } = useGithubSuggestions();
     const { handleFollowUnfollow } = useGithubSocial();
@@ -50,6 +51,7 @@ export const Suggestions = () => {
             return;
         }
 
+        setDismissedIds(new Set());
         setSince(response[response.length - 1].id);
     };
 
@@ -98,37 +100,41 @@ export const Suggestions = () => {
                             {response.map((option) => (
                                 <MenuItem
                                     key={option.id}
-
-                                    type={option.type}
-                                    gitURL={option.html_url}
-                                    isFetched={isFetched}
-                                    username={option.login.trim()}
-
-                                    itemError={
+                                    userProps={{
+                                        username: option.login.trim(),
+                                        type: option.type,
+                                        gitURL: option.html_url,
+                                    }}
+                                    errorMessage={
                                         followUnfollowError?.id === option.id
                                             ? followUnfollowError.message
                                             : null
                                     }
                                     onClick={handleNavigation}
-
-                                    isFollowed={String(option.id) in following}
-
-                                    displayProps={{
-                                        displayType: displayType,
-                                        setDisplayType: () => setDisplayType('none'),
-                                    }}
                                     avatarProps={{
                                         src: option.avatar_url,
                                         alt: option.login,
                                     }}
                                     followButtonProps={{
-                                        disabled: followUnfollowLoadingId === option.id,
+                                        isFollowed: String(option.id) in following,
+                                        isFetched,
+                                        loading: followUnfollowLoadingId === option.id,
                                         onClick: () => {
                                             handleFollowUnfollow(
                                                 option.id,
                                                 option.login.trim(),
                                                 String(option.id) in following,
                                             );
+                                        },
+                                    }}
+                                    dismissProps={{
+                                        dismissed: dismissedIds.has(option.id),
+                                        onDismiss: () => {
+                                            setDismissedIds((oldSet) => {
+                                                const newSet = new Set(oldSet);
+                                                newSet.add(option.id);
+                                                return newSet;
+                                            });
                                         },
                                     }}
                                 />

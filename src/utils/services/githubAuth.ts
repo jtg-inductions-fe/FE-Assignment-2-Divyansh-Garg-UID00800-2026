@@ -6,7 +6,7 @@ export const authenticateWithGitHub = async (token: string): Promise<AuthData> =
     const trimmedToken = token.trim();
 
     const response = await fetch(getLoginUrl(), {
-        headers: getHeaders(token),
+        headers: getHeaders(trimmedToken),
     });
 
     if (!response.ok) {
