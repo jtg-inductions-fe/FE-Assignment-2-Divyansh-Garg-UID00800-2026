@@ -34,9 +34,12 @@ export const useGithubSuggestions = () => {
         try {
             const data = await fetchGitHubSuggestions(trimmedToken, since, controller.signal);
 
-            setResponse(data);
+            if (!controller.signal.aborted) {
+                setResponse(data);
+                return data;
+            }
 
-            return data;
+            return null;
         } catch (error) {
             setResponse([]);
 
@@ -49,7 +52,6 @@ export const useGithubSuggestions = () => {
                     ? error.message
                     : 'Something went wrong while connecting to GitHub.',
             );
-
             return null;
         } finally {
             if (!controller.signal.aborted) {

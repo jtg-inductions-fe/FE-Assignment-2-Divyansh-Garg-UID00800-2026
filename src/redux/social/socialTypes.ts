@@ -3,11 +3,16 @@ export interface SocialUser {
     login: string;
 }
 
+export interface ErrorMessage {
+    id: number;
+    message: string;
+}
+
 export interface SocialState {
     isFetched: boolean;
     following: Record<number, SocialUser>;
     fetchFollowingsLoading: boolean;
     fetchFollowingsError: string | null;
-    followUnfollowLoading: boolean;
-    followUnfollowError: string | null;
+    followUnfollowLoadingId: number | null;
+    followUnfollowError: ErrorMessage | null;
 }

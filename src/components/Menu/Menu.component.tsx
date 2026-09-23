@@ -45,7 +45,7 @@ export const MobileMenu = ({ onLogoutClick }: MobileMenuProps) => {
                 <Menu />
             </MobileMenuTrigger>
 
-            <MobileDrawer anchor="right" open={isOpen} onClose={handleClose}>
+            <MobileDrawer anchor="left" open={isOpen} onClose={handleClose}>
                 <MobileDrawerContent>
                     <MobileMenuHeader>
                         <GitHub />

@@ -37,6 +37,10 @@ export const HomeLinkWrapper = styled(Box)(({ theme }) => ({
 
 export const Brand = styled(Typography)(({ theme }) => ({
     fontWeight: theme.variables.fontWeight.bold,
+
+    [theme.breakpoints.down('sm')]: {
+        display: 'none',
+    },
 }));
 
 export const NavLinks = styled(Box)(({ theme }) => ({

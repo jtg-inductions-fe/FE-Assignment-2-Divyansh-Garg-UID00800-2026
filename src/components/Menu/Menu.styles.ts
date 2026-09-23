@@ -9,6 +9,7 @@ export const MobileMenuTrigger = styled(Button)(({ theme }) => ({
 
     [theme.breakpoints.down('md')]: {
         display: 'flex',
+        order: -1,
     },
 
     '& .MuiSvgIcon-root': {

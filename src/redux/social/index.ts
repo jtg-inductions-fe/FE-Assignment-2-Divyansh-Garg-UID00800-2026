@@ -11,4 +11,4 @@ export {
     removeSocialState,
 } from './socialSlice';
 
-export { type SocialUser, type SocialState } from './socialTypes';
+export { type SocialUser, type SocialState, type ErrorMessage } from './socialTypes';

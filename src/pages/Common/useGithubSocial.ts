@@ -1,5 +1,6 @@
 import { updateGitHubFollow } from '@utils/services';
 import { useAppDispatch, useAppSelector } from '@utils';
+
 import {
     addFollowingSuccess,
     followUnfollowFailure,
@@ -10,7 +11,9 @@ import {
 export const useGithubSocial = () => {
     const dispatch = useAppDispatch();
 
-    const { followUnfollowLoading, followUnfollowError } = useAppSelector((state) => state.social);
+    const { followUnfollowLoadingId, followUnfollowError } = useAppSelector(
+        (state) => state.social,
+    );
 
     const handleFollowUnfollow = async (
         id: number,
@@ -22,24 +25,34 @@ export const useGithubSocial = () => {
         const trimmedToken = token.trim();
 
         if (!trimmedUsername) {
-            dispatch(followUnfollowFailure('The Following User is not available.'));
+            dispatch(
+                followUnfollowFailure({
+                    id,
+                    message: 'The Following User is not available.',
+                }),
+            );
 
             return null;
         }
 
         if (!trimmedToken) {
-            dispatch(followUnfollowFailure('Please Login First to follow.'));
+            dispatch(
+                followUnfollowFailure({
+                    id,
+                    message: 'Please Login First to follow.',
+                }),
+            );
 
             return null;
         }
 
-        dispatch(followUnfollowPending());
+        dispatch(followUnfollowPending(id));
 
         try {
             await updateGitHubFollow(trimmedUsername, trimmedToken, isFollowed);
 
             const socialUser = {
-                id: id,
+                id,
                 login: username,
             };
 
@@ -48,19 +61,25 @@ export const useGithubSocial = () => {
             } else {
                 dispatch(addFollowingSuccess(socialUser));
             }
+
+            return socialUser;
         } catch (error) {
             dispatch(
-                followUnfollowFailure(
-                    error instanceof Error
-                        ? error.message
-                        : 'Something went wrong while connecting to GitHub.',
-                ),
+                followUnfollowFailure({
+                    id,
+                    message:
+                        error instanceof Error
+                            ? error.message
+                            : 'Something went wrong while connecting to GitHub.',
+                }),
             );
+
+            return null;
         }
     };
 
     return {
-        followUnfollowLoading,
+        followUnfollowLoadingId,
         followUnfollowError,
         handleFollowUnfollow,
     };

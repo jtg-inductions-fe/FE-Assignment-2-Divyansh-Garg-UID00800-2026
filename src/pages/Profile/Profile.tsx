@@ -42,7 +42,7 @@ export const Profile = () => {
     const { username } = useParams<{ username: string }>();
 
     const { user, token, isAuthenticated } = useAppSelector((state) => state.auth);
-    const { isFetched, following, followUnfollowLoading, followUnfollowError } = useAppSelector(
+    const { isFetched, following, followUnfollowLoadingId, followUnfollowError } = useAppSelector(
         (state) => state.social,
     );
 
@@ -58,6 +58,11 @@ export const Profile = () => {
     const searchUserInfo = response;
 
     const isFollowed = Boolean(searchUserInfo && String(searchUserInfo.id) in following);
+
+    const isFollowLoading = searchUserInfo?.id === followUnfollowLoadingId;
+
+    const profileFollowError =
+        searchUserInfo?.id === followUnfollowError?.id ? followUnfollowError?.message : null;
 
     useEffect(() => {
         if (!username) {
@@ -241,8 +246,8 @@ export const Profile = () => {
                                     </CaptionBox>
                                 </ProfileMainTop>
 
-                                {followUnfollowError && (
-                                    <ErrorBox color="error">{followUnfollowError}</ErrorBox>
+                                {profileFollowError && (
+                                    <ErrorBox color="error">{profileFollowError}</ErrorBox>
                                 )}
 
                                 {isAuthenticated &&
@@ -251,7 +256,7 @@ export const Profile = () => {
                                     searchUserInfo && (
                                         <FollowButton
                                             isFollowed={isFollowed}
-                                            loading={followUnfollowLoading}
+                                            loading={isFollowLoading}
                                             onClick={handleFollow}
                                         />
                                     )}

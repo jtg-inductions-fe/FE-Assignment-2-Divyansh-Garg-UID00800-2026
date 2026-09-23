@@ -39,9 +39,12 @@ export const useGithubProfile = () => {
         try {
             const data = await fetchGitHubProfile(trimmedUsername, token, controller.signal);
 
-            setResponse(data);
+            if (!controller.signal.aborted) {
+                setResponse(data);
+                return data;
+            }
 
-            return data;
+            return null;
         } catch (error) {
             if (error instanceof Error && error.name === 'AbortError') {
                 return null;
@@ -52,10 +55,11 @@ export const useGithubProfile = () => {
                     ? error.message
                     : 'Something went wrong while connecting to GitHub.',
             );
-
             return null;
         } finally {
-            setLoading(false);
+            if (!controller.signal.aborted) {
+                setLoading(false);
+            }
         }
     };
 

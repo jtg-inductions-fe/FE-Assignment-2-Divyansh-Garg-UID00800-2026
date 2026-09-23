@@ -1,7 +1,8 @@
+import { useState } from 'react';
 import { useNavigate } from 'react-router';
 
-import { Box, IconButton, Stack, Typography } from '@mui/material';
 import { ArrowOutward, Close } from '@mui/icons-material';
+import { Box, IconButton, Stack, Typography } from '@mui/material';
 
 import { useAppSelector } from '@utils';
 import { useGithubSocial } from '@pages/Common';
@@ -9,7 +10,6 @@ import { colors } from '@theme';
 
 import { FollowButton, StyledAvatar } from '@components/Common';
 import { ListItemContent, StyleListItem, Tag } from './List.styles';
-import { useState } from 'react';
 
 interface StyleList {
     id: number;
@@ -23,13 +23,20 @@ export const StyledListItem = ({ id, username, imgPath, type, gitURL }: StyleLis
     const navigate = useNavigate();
 
     const token = useAppSelector((state) => state.auth.token);
-    const { isFetched, following } = useAppSelector((state) => state.social);
+
+    const { isFetched, following, followUnfollowLoadingId, followUnfollowError } = useAppSelector(
+        (state) => state.social,
+    );
 
     const [hideDisplay, setHideDisplay] = useState<string>('flex');
 
-    const { followUnfollowLoading, followUnfollowError, handleFollowUnfollow } = useGithubSocial();
+    const { handleFollowUnfollow } = useGithubSocial();
 
     const isFollowed = String(id) in following;
+
+    const isFollowLoading = followUnfollowLoadingId === id;
+
+    const itemError = followUnfollowError?.id === id ? followUnfollowError.message : null;
 
     const handleNavigation = (username: string) => {
         navigate(`/profile/${username}`);
@@ -88,16 +95,14 @@ export const StyledListItem = ({ id, username, imgPath, type, gitURL }: StyleLis
 
                             <Typography>{type || 'NA'}</Typography>
 
-                            {followUnfollowError && (
-                                <Typography color="error">{followUnfollowError}</Typography>
-                            )}
+                            {itemError && <Typography color="error">{itemError}</Typography>}
                         </Stack>
 
                         {isFetched && (
                             <Box onClick={(event) => event.stopPropagation()}>
                                 <FollowButton
                                     isFollowed={isFollowed}
-                                    loading={followUnfollowLoading}
+                                    loading={isFollowLoading}
                                     onClick={handleFollow}
                                 />
                             </Box>
