@@ -17,8 +17,4 @@ export {
     logoutNavigationItem,
 } from './navbar';
 
-export { NavButton } from './NavButton';
-
-export { AppBarHeader } from './NavHeader';
-
 export { useNavigation } from './useNavigation';

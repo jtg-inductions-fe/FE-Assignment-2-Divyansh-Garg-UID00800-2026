@@ -1,13 +1,29 @@
 import { useState, type ChangeEvent } from 'react';
 import { useNavigate } from 'react-router';
+
 import { GitHub, Info, Visibility, VisibilityOff } from '@mui/icons-material';
-import { Button, CircularProgress, IconButton, Stack, TextField, Typography } from '@mui/material';
+import {
+    Button,
+    CircularProgress,
+    IconButton,
+    Stack,
+    TextField,
+    Typography,
+    useTheme,
+} from '@mui/material';
+
 import { Bubble, CardLink, CardLogo, Content, ErrorBox, Page } from '@components/Common';
+
 import { LoginHeader, LoginMainSection, LoginWrapper, useGitHubAuth } from '@pages/Login';
-import { colors, pxToRem } from '@theme';
+
 import { BASE_URL, PAT_GENERATION_URL } from '@utils';
 
 export const Login = () => {
+    const theme = useTheme();
+    const colors = theme.colors;
+    const functions = theme.functions;
+    const variables = theme.variables;
+
     const navigate = useNavigate();
 
     const patUrl = `${BASE_URL}/${PAT_GENERATION_URL}`;
@@ -38,22 +54,22 @@ export const Login = () => {
             <Bubble
                 sx={{
                     backgroundColor: colors.secondary[200],
-                    top: pxToRem(-120),
-                    right: pxToRem(-120),
+                    top: functions.pxToRem(-120),
+                    right: functions.pxToRem(-120),
                 }}
             />
 
             <Bubble
                 sx={{
                     backgroundColor: colors.secondary[200],
-                    bottom: pxToRem(-120),
-                    left: pxToRem(-120),
+                    bottom: functions.pxToRem(-120),
+                    left: functions.pxToRem(-120),
                 }}
             />
 
             <Content
                 sx={{
-                    maxHeight: pxToRem(700),
+                    maxHeight: functions.pxToRem(700),
                 }}
             >
                 <LoginWrapper>
@@ -109,7 +125,7 @@ export const Login = () => {
                         <Typography
                             variant="body2"
                             sx={{
-                                marginBottom: pxToRem(24),
+                                marginBottom: functions.pxToRem(24),
                             }}
                         >
                             {"Don't have PAT? "}
@@ -125,11 +141,15 @@ export const Login = () => {
                             disabled={loading}
                             onClick={handleSubmit}
                             startIcon={
-                                loading ? <CircularProgress size={pxToRem(16)} /> : <GitHub />
+                                loading ? (
+                                    <CircularProgress size={functions.pxToRem(16)} />
+                                ) : (
+                                    <GitHub />
+                                )
                             }
-                            sx={(theme) => ({
-                                borderRadius: theme.variables.radius.pill,
-                            })}
+                            sx={{
+                                borderRadius: variables.radius.pill,
+                            }}
                         >
                             {loading ? 'Connecting...' : 'Connect GitHub'}
                         </Button>
@@ -138,7 +158,7 @@ export const Login = () => {
                     <Stack
                         sx={{
                             flexDirection: 'row',
-                            gap: pxToRem(5),
+                            gap: functions.pxToRem(5),
                         }}
                     >
                         <Info htmlColor={colors.secondary[900]} />

@@ -1,30 +1,48 @@
 import { useEffect, useState } from 'react';
 
 import { Refresh } from '@mui/icons-material';
-import { CircularProgress, Stack, Typography } from '@mui/material';
+import { CircularProgress, Typography, useTheme } from '@mui/material';
 
-import { Bubble, Card, Content, ErrorBox, Page } from '@components/Common';
-import { StyledListItem, RefreshIcon } from '@components/List';
-
-import { colors, pxToRem } from '@theme';
+import {
+    Bubble,
+    Card,
+    CardRelativeHeader,
+    Content,
+    ErrorBox,
+    Page,
+    StyledList,
+} from '@components/Common';
+import { RefreshIcon, MenuItem } from '@components/MenuItem';
 
 import { useAppSelector } from '@utils';
 import { useGithubSuggestions } from './useGithubSuggestions';
-import { StyledList } from '@components/List';
+import { useGithubSocial } from '@pages/Common';
+import { useNavigate } from 'react-router';
 
 export const Suggestions = () => {
-    const token = useAppSelector((state) => state.auth.token);
+    const navigate = useNavigate();
 
+    const theme = useTheme();
+    const colors = theme.colors;
+    const functions = theme.functions;
+
+    const token = useAppSelector((state) => state.auth.token);
     const [since, setSince] = useState(() => Math.ceil(Math.random() * 100));
+    const [displayType, setDisplayType] = useState<string>('flex');
 
     const { loading, error, response, handleSuggestionsSearch } = useGithubSuggestions();
+    const { handleFollowUnfollow } = useGithubSocial();
+
+    const { isFetched, following, followUnfollowLoadingId, followUnfollowError } = useAppSelector(
+        (state) => state.social,
+    );
 
     useEffect(() => {
         if (!token) {
             return;
         }
 
-        void handleSuggestionsSearch(token, since);
+        void handleSuggestionsSearch(since);
     }, [token, since]);
 
     const handleRefresh = () => {
@@ -35,48 +53,41 @@ export const Suggestions = () => {
         setSince(response[response.length - 1].id);
     };
 
+    const handleNavigation = (username: string) => {
+        navigate(`/profile/${username}`);
+    };
+
     return (
         <Page>
             <Bubble
                 sx={{
                     backgroundColor: colors.primary[200],
-                    top: pxToRem(-120),
-                    right: pxToRem(-120),
+                    top: functions.pxToRem(-120),
+                    right: functions.pxToRem(-120),
                 }}
             />
 
             <Bubble
                 sx={{
                     backgroundColor: colors.primary[200],
-                    bottom: pxToRem(-120),
-                    left: pxToRem(-120),
+                    bottom: functions.pxToRem(-120),
+                    left: functions.pxToRem(-120),
                 }}
             />
 
-            <Content
-                sx={{
-                    width: {
-                        lg: '80%',
-                    },
-                }}
-            >
+            <Content>
                 <Card>
-                    <Stack
-                        sx={{
-                            position: 'relative',
-                            width: '100%',
-                        }}
-                    >
+                    <CardRelativeHeader>
                         <Typography variant="h3">People you may know</Typography>
 
                         <RefreshIcon disableRipple disabled={loading} onClick={handleRefresh}>
                             {loading ? (
-                                <CircularProgress size={pxToRem(24)} />
+                                <CircularProgress size={functions.pxToRem(24)} />
                             ) : (
                                 <Refresh htmlColor={colors.primary[800]} />
                             )}
                         </RefreshIcon>
-                    </Stack>
+                    </CardRelativeHeader>
 
                     {error ? (
                         <ErrorBox severity="error">{error}</ErrorBox>
@@ -85,13 +96,41 @@ export const Suggestions = () => {
                     ) : (
                         <StyledList>
                             {response.map((option) => (
-                                <StyledListItem
+                                <MenuItem
                                     key={option.id}
-                                    id={option.id}
-                                    username={option.login.trim()}
-                                    imgPath={option.avatar_url}
+
                                     type={option.type}
                                     gitURL={option.html_url}
+                                    isFetched={isFetched}
+                                    username={option.login.trim()}
+
+                                    itemError={
+                                        followUnfollowError?.id === option.id
+                                            ? followUnfollowError.message
+                                            : null
+                                    }
+                                    onClick={handleNavigation}
+
+                                    isFollowed={String(option.id) in following}
+
+                                    displayProps={{
+                                        displayType: displayType,
+                                        setDisplayType: () => setDisplayType('none'),
+                                    }}
+                                    avatarProps={{
+                                        src: option.avatar_url,
+                                        alt: option.login,
+                                    }}
+                                    followButtonProps={{
+                                        disabled: followUnfollowLoadingId === option.id,
+                                        onClick: () => {
+                                            handleFollowUnfollow(
+                                                option.id,
+                                                option.login.trim(),
+                                                String(option.id) in following,
+                                            );
+                                        },
+                                    }}
                                 />
                             ))}
 

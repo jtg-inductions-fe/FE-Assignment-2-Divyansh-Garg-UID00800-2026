@@ -1,5 +1,4 @@
 import { Box, Stack, styled } from '@mui/material';
-import { colors } from '@theme';
 
 export const Grid = styled(Stack)(({ theme }) => ({
     display: 'grid',
@@ -10,8 +9,8 @@ export const Grid = styled(Stack)(({ theme }) => ({
 
     background: `linear-gradient(
         135deg,
-        ${colors.primary[50]} 0%,
-        ${colors.white} 70%
+        ${theme.colors.primary[50]} 0%,
+        ${theme.colors.white} 70%
     )`,
 
     [theme.breakpoints.down('md')]: {
@@ -19,11 +18,11 @@ export const Grid = styled(Stack)(({ theme }) => ({
     },
 }));
 
-export const GridEle = styled(Box)(({ theme }) => ({
+export const GridElement = styled(Box)(({ theme }) => ({
     ...theme.mixins.flexCenter,
     padding: theme.variables.spacing.md,
     borderRadius: theme.variables.radius.pill,
-    backgroundColor: colors.gray[50],
+    backgroundColor: theme.colors.gray[50],
 
     [theme.breakpoints.down('md')]: {
         padding: theme.variables.spacing.sm,

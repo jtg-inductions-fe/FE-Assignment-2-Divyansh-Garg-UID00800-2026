@@ -1,5 +1,4 @@
 import { Box, Stack, styled } from '@mui/material';
-import { colors } from '@theme';
 
 export const CountContainer = styled(Box)(({ theme }) => ({
     ...theme.mixins.flexCenter,
@@ -19,12 +18,12 @@ export const CountBox = styled(Box)(({ theme }) => ({
     borderRadius: theme.variables.radius.pill,
     flex: 1,
 
-    backgroundColor: colors.secondary[50],
-    border: `2px solid ${colors.primary[100]}`,
+    backgroundColor: theme.colors.secondary[50],
+    border: `2px solid ${theme.colors.primary[100]}`,
 
     '&:hover': {
-        border: `2px solid ${colors.secondary[500]}`,
-        background: colors.white,
+        border: `2px solid ${theme.colors.secondary[500]}`,
+        background: theme.colors.white,
     },
 }));
 
@@ -38,7 +37,7 @@ export const Count = styled(Stack)(({ theme }) => ({
     textWrap: 'nowrap',
 
     '&:hover': {
-        backgroundColor: colors.white,
+        backgroundColor: theme.colors.white,
     },
 
     [theme.breakpoints.down('sm')]: {

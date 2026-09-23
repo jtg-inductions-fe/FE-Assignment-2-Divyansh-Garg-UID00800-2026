@@ -15,14 +15,11 @@ export const useGithubSocial = () => {
         (state) => state.social,
     );
 
-    const handleFollowUnfollow = async (
-        id: number,
-        username: string,
-        isFollowed: boolean,
-        token: string,
-    ) => {
+    const token = useAppSelector((state) => state.auth.token);
+
+    const handleFollowUnfollow = async (id: number, username: string, isFollowed: boolean) => {
         const trimmedUsername = username.trim();
-        const trimmedToken = token.trim();
+        const trimmedToken = token?.trim();
 
         if (!trimmedUsername) {
             dispatch(

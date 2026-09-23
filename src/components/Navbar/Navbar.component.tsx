@@ -4,20 +4,30 @@ import { NavLink, useNavigate } from 'react-router';
 import { GitHub } from '@mui/icons-material';
 
 import { Modal } from '@components/Modal';
-import { MobileMenu } from '@components/Menu';
+import { MobileMenu } from '@components/MobileMenu';
 
-import { NavButton } from './NavButton';
 import { useNavigation } from './useNavigation';
-import { Brand, HomeLinkWrapper, NavigationBar, NavLinks } from './Navbar.styles';
-import { AppBarHeader } from './NavHeader';
+import {
+    Brand,
+    HomeLinkWrapper,
+    NavigationBar,
+    NavLinks,
+    StyledAppBar,
+    StyledLogoutButton,
+    StyledNavButton,
+} from './Navbar.styles';
 
 import { useAppDispatch } from '@utils';
 
 import { logoutUser } from '@redux/auth';
 import { removeSocialState } from '@redux/social';
 import { closeSidebar } from '@redux/sidebar';
+import { useMediaQuery, useTheme } from '@mui/material';
 
 export const Navbar = () => {
+    const theme = useTheme();
+    const isSmallScreen = useMediaQuery(theme.breakpoints.down('md'));
+
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
 
@@ -38,41 +48,56 @@ export const Navbar = () => {
     };
 
     return (
-        <AppBarHeader>
+        <StyledAppBar position="sticky" elevation={0}>
             <NavigationBar>
-                <HomeLinkWrapper component={NavLink} to="/" aria-label="GitSearch home">
-                    <GitHub />
+                {isSmallScreen ? (
+                    <>
+                        <MobileMenu onLogoutClick={handleLogoutClick} />
 
-                    <Brand variant="h3">GitSearch</Brand>
-                </HomeLinkWrapper>
+                        <HomeLinkWrapper component={NavLink} to="/" aria-label="GitSearch home">
+                            <GitHub />
 
-                <NavLinks aria-label="Main navigation">
-                    {items.map((item) => (
-                        <NavButton
-                            key={item.path}
-                            to={item.path}
-                            icon={item.icon}
-                            label={item.label}
-                        />
-                    ))}
+                            <Brand variant="h3">GitSearch</Brand>
+                        </HomeLinkWrapper>
+                    </>
+                ) : (
+                    <>
+                        <HomeLinkWrapper component={NavLink} to="/" aria-label="GitSearch home">
+                            <GitHub />
 
-                    {isAuthenticated ? (
-                        <NavButton
-                            label={logoutItem.label}
-                            icon={logoutItem.icon}
-                            isLogout
-                            onClick={handleLogoutClick}
-                        />
-                    ) : (
-                        <NavButton
-                            label={loginItem.label}
-                            icon={loginItem.icon}
-                            to={loginItem.path}
-                        />
-                    )}
-                </NavLinks>
+                            <Brand variant="h3">GitSearch</Brand>
+                        </HomeLinkWrapper>
 
-                <MobileMenu onLogoutClick={handleLogoutClick} />
+                        <NavLinks aria-label="Main navigation">
+                            {items.map((item) => (
+                                <StyledNavButton
+                                    component={NavLink}
+                                    to={item.path}
+                                    startIcon={<item.icon />}
+                                >
+                                    {item.label}
+                                </StyledNavButton>
+                            ))}
+
+                            {isAuthenticated ? (
+                                <StyledLogoutButton
+                                    startIcon={<logoutItem.icon />}
+                                    onClick={handleLogoutClick}
+                                >
+                                    {logoutItem.label}
+                                </StyledLogoutButton>
+                            ) : (
+                                <StyledNavButton
+                                    component={NavLink}
+                                    to={loginItem.path}
+                                    startIcon={<loginItem.icon />}
+                                >
+                                    {loginItem.label}
+                                </StyledNavButton>
+                            )}
+                        </NavLinks>
+                    </>
+                )}
             </NavigationBar>
 
             <Modal
@@ -84,6 +109,6 @@ export const Navbar = () => {
                 onClose={() => setLogoutAnchor(null)}
                 onConfirm={handleLogout}
             />
-        </AppBarHeader>
+        </StyledAppBar>
     );
 };

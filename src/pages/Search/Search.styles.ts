@@ -1,7 +1,5 @@
 import { Box, ListItem, styled } from '@mui/material';
 
-import { colors } from '@theme';
-
 export const SearchWrap = styled(Box)(({ theme }) => ({
     width: '100%',
     '& .MuiOutlinedInput-root': {
@@ -11,21 +9,21 @@ export const SearchWrap = styled(Box)(({ theme }) => ({
     '& .MuiPaper-root': {
         borderRadius: '45px',
         padding: theme.variables.spacing.md,
-        backgroundColor: colors.primary[50],
+        backgroundColor: theme.colors.primary[50],
         marginTop: theme.variables.spacing.md,
     },
     '& .MuiAutocomplete-listbox': {
         padding: theme.variables.spacing.sm,
         scrollbarWidth: 'none',
+
+        '& .MuiListItemText-root': {
+            justifyContent: 'right',
+        },
     },
     '& .MuiAutocomplete-option': {
-        ...theme.mixins.flexBetween,
-        borderRadius: theme.variables.radius.pill,
-        padding: theme.variables.spacing.sm,
-        backgroundColor: colors.primary[100],
-        marginTop: theme.variables.spacing.sm,
-
-        width: '100%',
+        [theme.breakpoints.down('sm')]: {
+            flexDirection: 'column',
+        },
     },
     '& .MuiTypography-root': {
         ...theme.mixins.flexBetween,

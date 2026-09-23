@@ -1,8 +1,8 @@
+import { type MouseEvent } from 'react';
 import { Close, GitHub, Menu } from '@mui/icons-material';
 import { Divider } from '@mui/material';
-import { type MouseEvent } from 'react';
 
-import { NavButton, useNavigation } from '@components/Navbar';
+import { StyledLogoutButton, StyledNavButton, useNavigation } from '@components/Navbar';
 
 import {
     MobileCloseButton,
@@ -11,9 +11,10 @@ import {
     MobileMenuHeader,
     MobileMenuTrigger,
     MobileNavigationList,
-} from './Menu.styles';
+} from './MobileMenu.styles';
 import { useAppDispatch, useAppSelector } from '@utils';
 import { closeSidebar, openSidebar } from '@redux/sidebar';
+import { NavLink } from 'react-router';
 
 interface MobileMenuProps {
     onLogoutClick: (event: MouseEvent<HTMLElement>) => void;
@@ -59,29 +60,32 @@ export const MobileMenu = ({ onLogoutClick }: MobileMenuProps) => {
 
                     <MobileNavigationList>
                         {items.map((item) => (
-                            <NavButton
-                                key={item.path}
+                            <StyledNavButton
+                                component={NavLink}
                                 to={item.path}
-                                icon={item.icon}
-                                label={item.label}
+                                startIcon={<item.icon />}
                                 onClick={handleClose}
-                            />
+                            >
+                                {item.label}
+                            </StyledNavButton>
                         ))}
 
                         {isAuthenticated ? (
-                            <NavButton
-                                label={logoutItem.label}
-                                icon={logoutItem.icon}
-                                isLogout
+                            <StyledLogoutButton
+                                startIcon={<logoutItem.icon />}
                                 onClick={onLogoutClick}
-                            />
+                            >
+                                {logoutItem.label}
+                            </StyledLogoutButton>
                         ) : (
-                            <NavButton
-                                label={loginItem.label}
-                                icon={loginItem.icon}
+                            <StyledNavButton
+                                component={NavLink}
                                 to={loginItem.path}
+                                startIcon={<loginItem.icon />}
                                 onClick={handleClose}
-                            />
+                            >
+                                {loginItem.label}
+                            </StyledNavButton>
                         )}
                     </MobileNavigationList>
                 </MobileDrawerContent>

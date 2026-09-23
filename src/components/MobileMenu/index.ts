@@ -1,4 +1,4 @@
-export { MobileMenu } from './Menu.component';
+export { MobileMenu } from './MobileMenu.component';
 
 export {
     MobileMenuTrigger,
@@ -7,4 +7,4 @@ export {
     MobileMenuHeader,
     MobileCloseButton,
     MobileNavigationList,
-} from './Menu.styles';
+} from './MobileMenu.styles';

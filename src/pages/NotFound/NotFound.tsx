@@ -1,11 +1,9 @@
 import { Link, useNavigate } from 'react-router';
 
 import { ArrowBack, Home } from '@mui/icons-material';
-import { Button } from '@mui/material';
+import { Button, useTheme } from '@mui/material';
 
 import { Bubble } from '@components/Common';
-
-import { pxToRem } from '@theme';
 
 import {
     BtnBox,
@@ -20,21 +18,25 @@ import {
 const notFoundImg = 'src/assets/images/github-404.png';
 
 export const NotFound = () => {
+    const theme = useTheme();
+    const functions = theme.functions;
+    const variables = theme.variables;
+
     const navigate = useNavigate();
 
     return (
         <NotFoundWrapper>
             <Bubble
                 sx={{
-                    top: pxToRem(-120),
-                    right: pxToRem(-120),
+                    top: functions.pxToRem(-120),
+                    right: functions.pxToRem(-120),
                 }}
             />
 
             <Bubble
                 sx={{
-                    bottom: pxToRem(-120),
-                    left: pxToRem(-120),
+                    bottom: functions.pxToRem(-120),
+                    left: functions.pxToRem(-120),
                 }}
             />
 
@@ -64,9 +66,9 @@ export const NotFound = () => {
                         variant="contained"
                         size="large"
                         startIcon={<Home />}
-                        sx={(theme) => ({
-                            borderRadius: theme.variables.radius.pill,
-                        })}
+                        sx={{
+                            borderRadius: variables.radius.pill,
+                        }}
                     >
                         Back to Home
                     </Button>
@@ -76,9 +78,9 @@ export const NotFound = () => {
                         variant="outlined"
                         size="large"
                         startIcon={<ArrowBack />}
-                        sx={(theme) => ({
-                            borderRadius: theme.variables.radius.pill,
-                        })}
+                        sx={{
+                            borderRadius: variables.radius.pill,
+                        }}
                     >
                         Go Back
                     </Button>

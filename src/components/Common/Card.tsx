@@ -1,4 +1,3 @@
-import { colors } from '@theme';
 import { Link, Stack, styled, Typography } from '@mui/material';
 import { Box } from '@mui/system';
 
@@ -11,7 +10,7 @@ export const Card = styled(Stack)(({ theme }) => ({
 
     width: '100%',
     textAlign: 'center',
-    backgroundColor: colors.gray[50],
+    backgroundColor: theme.colors.gray[50],
     overflow: 'scroll',
     scrollbarWidth: 'none',
 }));
@@ -33,7 +32,7 @@ export const CardLink = styled(Link)(({ theme }) => ({
     fontWeight: theme.variables.fontWeight.extraBold,
 
     fontSize: '14px',
-    color: colors.primary[900],
+    color: theme.colors.primary[900],
 })) as typeof Link;
 
 export const CardMain = styled(Box)(({ theme }) => ({
@@ -43,7 +42,7 @@ export const CardMain = styled(Box)(({ theme }) => ({
 
     flexDirection: 'column',
     alignItems: 'stretch',
-    backgroundColor: colors.white,
+    backgroundColor: theme.colors.white,
 }));
 
 export const CardHeader = styled(Box)(({ theme }) => ({
@@ -53,15 +52,20 @@ export const CardHeader = styled(Box)(({ theme }) => ({
 
     background: `linear-gradient(
         135deg,
-        ${colors.primary[50]} 0%,
-        ${colors.white} 70%
+        ${theme.colors.primary[50]} 0%,
+        ${theme.colors.white} 70%
     )`,
 
-    borderBottom: `1px solid ${colors.primary[100]}`,
+    borderBottom: `1px solid ${theme.colors.primary[100]}`,
 }));
 
-export const Label = styled(Typography)(() => ({
-    color: colors.secondary[800],
+export const CardRelativeHeader = styled(Stack)(() => ({
+    position: 'relative',
+    width: '100%',
+}));
+
+export const Label = styled(Typography)(({ theme }) => ({
+    color: theme.colors.secondary[800],
     display: 'inline',
     wordBreak: 'break-word',
     textAlign: 'right',
@@ -69,15 +73,15 @@ export const Label = styled(Typography)(() => ({
     marginRight: '5px',
 }));
 
-export const Value = styled(Typography)(() => ({
-    color: colors.secondary[700],
+export const Value = styled(Typography)(({ theme }) => ({
+    color: theme.colors.secondary[700],
 }));
 
 export const CardPill = styled(Typography)(({ theme }) => ({
-    background: colors.primary[100],
+    background: theme.colors.primary[100],
     paddingLeft: theme.variables.spacing.sm,
     paddingRight: theme.variables.spacing.sm,
     height: 'fit-content',
     borderRadius: theme.variables.radius.pill,
-    border: `2px solid ${colors.primary[900]}`,
+    border: `2px solid ${theme.colors.primary[900]}`,
 }));

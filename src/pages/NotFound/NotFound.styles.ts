@@ -1,4 +1,3 @@
-import { colors, pxToRem } from '@theme';
 import { Box, Stack, styled, Typography } from '@mui/material';
 
 export const NotFoundWrapper = styled(Box)(({ theme }) => ({
@@ -8,7 +7,7 @@ export const NotFoundWrapper = styled(Box)(({ theme }) => ({
     height: `calc(100vh - ${theme.variables.layout.navbarHeight})`,
     position: 'relative',
     overflow: 'hidden',
-    backgroundColor: colors.primary[600],
+    backgroundColor: theme.colors.primary[600],
 }));
 
 export const NotFoundCard = styled(Stack)(({ theme }) => ({
@@ -25,32 +24,32 @@ export const NotFoundCard = styled(Stack)(({ theme }) => ({
     textAlign: 'center',
     zIndex: 1,
     width: '90%',
-    padding: pxToRem(32),
+    padding: theme.functions.pxToRem(32),
 }));
 
 export const NotFoundImg = styled(Box)(({ theme }) => ({
     borderRadius: theme.variables.radius.xl,
 
     width: '100%',
-    maxWidth: pxToRem(640),
+    maxWidth: theme.functions.pxToRem(640),
     height: 'auto',
 })) as typeof Box;
 
 export const NotFoundHeading = styled(Typography)(({ theme }) => ({
     fontWeight: theme.variables.fontWeight.extraBold,
-    fontSize: pxToRem(80),
+    fontSize: theme.functions.pxToRem(80),
     lineHeight: 1,
 }));
 
 export const NotFoundSubHeading = styled(Typography)(({ theme }) => ({
-    mt: pxToRem(4),
+    mt: theme.functions.pxToRem(4),
     fontWeight: theme.variables.fontWeight.bold,
 }));
 
-export const NotFoundDescription = styled(Typography)(() => ({
-    maxWidth: pxToRem(576),
+export const NotFoundDescription = styled(Typography)(({ theme }) => ({
+    maxWidth: theme.functions.pxToRem(576),
 }));
 
-export const BtnBox = styled(Stack)(() => ({
-    gap: pxToRem(16),
+export const BtnBox = styled(Stack)(({ theme }) => ({
+    gap: theme.functions.pxToRem(16),
 }));

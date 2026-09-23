@@ -2,6 +2,7 @@ import { useRef, useState } from 'react';
 
 import type { GithubUser } from '@utils/services';
 import { fetchGitHubSuggestions } from '@utils/services';
+import { useAppSelector } from '@utils';
 
 export const useGithubSuggestions = () => {
     // we do not have any redux state for search, that's why these states are made using useState
@@ -9,10 +10,12 @@ export const useGithubSuggestions = () => {
     const [error, setError] = useState('');
     const [response, setResponse] = useState<GithubUser[]>([]);
 
+    const token = useAppSelector((state) => state.auth.token);
+
     const controllerRef = useRef<AbortController | null>(null);
 
-    const handleSuggestionsSearch = async (token: string, since: number) => {
-        const trimmedToken = token.trim();
+    const handleSuggestionsSearch = async (since: number) => {
+        const trimmedToken = token?.trim();
 
         if (!trimmedToken) {
             setError('Please Login again to access Suggestions.');

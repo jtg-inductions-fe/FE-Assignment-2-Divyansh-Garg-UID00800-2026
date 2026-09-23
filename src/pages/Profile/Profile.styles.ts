@@ -1,7 +1,5 @@
 import { Box, Stack, styled, Typography } from '@mui/material';
 
-import { colors } from '@theme';
-
 export const ProfileCard = styled(Box)(({ theme }) => ({
     borderRadius: theme.variables.radius.xl,
     boxShadow: theme.variables.shadows.card,
@@ -9,13 +7,13 @@ export const ProfileCard = styled(Box)(({ theme }) => ({
     width: '100%',
     overflow: 'scroll',
     scrollbarWidth: 'none',
-    backgroundColor: colors.white,
-    border: `1px solid ${colors.primary[100]}`,
+    backgroundColor: theme.colors.white,
+    border: `1px solid ${theme.colors.primary[100]}`,
 }));
 
-export const ProfileUsername = styled(Typography)(() => ({
+export const ProfileUsername = styled(Typography)(({ theme }) => ({
     display: 'inline',
-    color: colors.primary[800],
+    color: theme.colors.primary[800],
 }));
 
 export const ProfileCardHeaderTop = styled(Box)(({ theme }) => ({
@@ -40,7 +38,7 @@ export const ProfileCardTopHeaderInner = styled(Stack)(({ theme }) => ({
 export const CaptionBox = styled(Box)(({ theme }) => ({
     ...theme.mixins.flexBetween,
     padding: theme.variables.spacing.md,
-    background: colors.gray[100],
+    background: theme.colors.gray[100],
     borderRadius: theme.variables.radius.pill,
     width: '100%',
 

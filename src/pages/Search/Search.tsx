@@ -2,17 +2,27 @@ import { Fragment, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
 
 import { Close, Search as SearchIcon } from '@mui/icons-material';
-import { Autocomplete, CircularProgress, IconButton, TextField, Typography } from '@mui/material';
+import {
+    Autocomplete,
+    CircularProgress,
+    IconButton,
+    TextField,
+    Typography,
+    useTheme,
+} from '@mui/material';
 
-import { colors, pxToRem } from '@theme';
+import { Page, Content, Card, Bubble, ErrorBox } from '@components/Common';
 
-import { Page, Content, Card, StyledAvatar, Bubble, ErrorBox } from '@components/Common';
-
-import { SearchResult, SearchWrap } from './Search.styles';
+import { SearchWrap } from './Search.styles';
 
 import { useGitHubSearch } from './useGithubSearch';
+import { MenuItem } from '@components/MenuItem';
 
 export const Search = () => {
+    const theme = useTheme();
+    const colors = theme.colors;
+    const functions = theme.functions;
+
     const navigate = useNavigate();
     const { username } = useParams<string>();
 
@@ -78,16 +88,16 @@ export const Search = () => {
             <Bubble
                 sx={{
                     backgroundColor: colors.primary[200],
-                    top: pxToRem(-120),
-                    right: pxToRem(-120),
+                    top: functions.pxToRem(-120),
+                    right: functions.pxToRem(-120),
                 }}
             />
 
             <Bubble
                 sx={{
                     backgroundColor: colors.primary[200],
-                    bottom: pxToRem(-120),
-                    left: pxToRem(-120),
+                    bottom: functions.pxToRem(-120),
+                    left: functions.pxToRem(-120),
                 }}
             />
 
@@ -146,19 +156,22 @@ export const Search = () => {
                             getOptionLabel={(option) => option.login}
                             options={options}
                             loading={loading}
-                            renderOption={(props, option) => (
-                                <SearchResult
-                                    {...props}
+                            renderOption={(_, option) => (
+                                <MenuItem
                                     key={option.id}
+                                    username={option.login}
+                                    avatarProps={{
+                                        src: option.avatar_url,
+                                        alt: option.login.trim(),
+                                    }}
                                     onClick={() => handleNavigation(option.login)}
-                                >
-                                    <StyledAvatar
-                                        src={option.avatar_url}
-                                        alt={`${option.login} avatar`}
-                                    />
 
-                                    <Typography variant="h4">{option.login}</Typography>
-                                </SearchResult>
+                                    sx={{
+                                        [theme.breakpoints.down('sm')]: {
+                                            flexDirection: 'row',
+                                        },
+                                    }}
+                                />
                             )}
                             renderInput={(params) => (
                                 <TextField
@@ -178,7 +191,9 @@ export const Search = () => {
                                             endAdornment: (
                                                 <Fragment>
                                                     {loading && (
-                                                        <CircularProgress size={pxToRem(20)} />
+                                                        <CircularProgress
+                                                            size={functions.pxToRem(20)}
+                                                        />
                                                     )}
 
                                                     {!loading && searchUsername.trim() && (

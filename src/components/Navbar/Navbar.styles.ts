@@ -48,10 +48,6 @@ export const NavLinks = styled(Box)(({ theme }) => ({
     gap: theme.variables.spacing.xs,
 
     marginLeft: 'auto',
-
-    [theme.breakpoints.down('md')]: {
-        display: 'none',
-    },
 }));
 
 export const StyledNavButton = styled(Button)(({ theme }) => ({

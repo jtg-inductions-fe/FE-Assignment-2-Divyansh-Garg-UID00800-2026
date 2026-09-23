@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { useParams } from 'react-router';
 
 import { ArrowOutward, Article, CorporateFare, Email, Place } from '@mui/icons-material';
-import { Box, IconButton, Typography } from '@mui/material';
+import { Box, CircularProgress, IconButton, Typography, useTheme } from '@mui/material';
 
 import {
     Bubble,
@@ -13,14 +13,14 @@ import {
     Value,
     Content,
     ErrorBox,
-    FollowButton,
     Grid,
-    GridEle,
+    GridElement,
     CountBox,
     Page,
     StyledAvatar,
     CountContainer,
     CardPill,
+    FollowButton,
 } from '@components/Common';
 
 import {
@@ -34,11 +34,15 @@ import {
 
 import { useAppSelector } from '@utils';
 import { useGithubSocial } from '@pages/Common';
-import { colors, pxToRem } from '@theme';
 
 import { useGithubProfile } from './useGithubProfile';
 
 export const Profile = () => {
+    const theme = useTheme();
+    const colors = theme.colors;
+    const functions = theme.functions;
+    const variables = theme.variables;
+
     const { username } = useParams<{ username: string }>();
 
     const { user, token, isAuthenticated } = useAppSelector((state) => state.auth);
@@ -77,7 +81,7 @@ export const Profile = () => {
             return;
         }
 
-        await handleFollowUnfollow(searchUserInfo.id, searchUserInfo.login, isFollowed, token);
+        await handleFollowUnfollow(searchUserInfo.id, searchUserInfo.login, isFollowed);
     };
 
     return (
@@ -85,26 +89,20 @@ export const Profile = () => {
             <Bubble
                 sx={{
                     backgroundColor: colors.primary[200],
-                    top: pxToRem(-120),
-                    right: pxToRem(-120),
+                    top: functions.pxToRem(-120),
+                    right: functions.pxToRem(-120),
                 }}
             />
 
             <Bubble
                 sx={{
                     backgroundColor: colors.primary[200],
-                    bottom: pxToRem(-120),
-                    left: pxToRem(-120),
+                    bottom: functions.pxToRem(-120),
+                    left: functions.pxToRem(-120),
                 }}
             />
 
-            <Content
-                sx={{
-                    width: {
-                        lg: '80%',
-                    },
-                }}
-            >
+            <Content>
                 <Card>
                     <Typography variant="h3">{isOwnProfile ? 'My Profile' : 'Profile'}</Typography>
 
@@ -255,32 +253,52 @@ export const Profile = () => {
                                     isFetched &&
                                     searchUserInfo && (
                                         <FollowButton
-                                            isFollowed={isFollowed}
-                                            loading={isFollowLoading}
+                                            disabled={isFollowLoading}
                                             onClick={handleFollow}
-                                        />
+                                            sx={
+                                                isFollowed
+                                                    ? {
+                                                          color: colors.white,
+                                                          backgroundColor: colors.secondary[900],
+                                                          fontSize: variables.fontSize.sm,
+                                                          '&:hover': {
+                                                              backgroundColor:
+                                                                  colors.secondary[500],
+                                                          },
+                                                      }
+                                                    : {}
+                                            }
+                                        >
+                                            {isFollowLoading ? (
+                                                <CircularProgress size={31} />
+                                            ) : isFollowed ? (
+                                                'Unfollow'
+                                            ) : (
+                                                'Follow'
+                                            )}
+                                        </FollowButton>
                                     )}
                             </CardMain>
 
                             {isOwnProfile && searchUserInfo && (
                                 <Grid>
-                                    <GridEle>
+                                    <GridElement>
                                         <Label>Account Created:</Label>
                                         <Value>
                                             {searchUserInfo.createdAt
                                                 ? new Date(searchUserInfo.createdAt).toDateString()
                                                 : 'Not available'}
                                         </Value>
-                                    </GridEle>
+                                    </GridElement>
 
-                                    <GridEle>
+                                    <GridElement>
                                         <Label>Last Updated:</Label>
                                         <Value>
                                             {searchUserInfo.updatedAt
                                                 ? new Date(searchUserInfo.updatedAt).toDateString()
                                                 : 'Not available'}
                                         </Value>
-                                    </GridEle>
+                                    </GridElement>
                                 </Grid>
                             )}
                         </ProfileCard>

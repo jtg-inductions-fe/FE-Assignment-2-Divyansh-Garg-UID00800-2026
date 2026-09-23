@@ -1,4 +1,3 @@
-import { colors } from '@theme';
 import { Box, styled } from '@mui/material';
 
 export const Page = styled(Box)(({ theme }) => ({
@@ -7,6 +6,6 @@ export const Page = styled(Box)(({ theme }) => ({
     width: '100%',
     height: `calc(100vh - ${theme.variables.layout.navbarHeight})`,
     position: 'relative',
-    backgroundColor: colors.secondary[50],
+    backgroundColor: theme.colors.secondary[50],
     overflow: 'hidden',
 }));

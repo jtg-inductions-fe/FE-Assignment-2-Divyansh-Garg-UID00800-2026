@@ -8,6 +8,7 @@ export const Content = styled(Box)(({ theme }) => ({
 
     zIndex: 1,
     width: '100%',
+    maxWidth: theme.variables.layout.contentMaxWidth,
     overflow: 'scroll',
     scrollbarWidth: 'none',
     justifyContent: 'flex-start',

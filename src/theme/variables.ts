@@ -1,4 +1,6 @@
-import { pxToRem } from './functions';
+import { functions } from './functions';
+
+const pxToRem = functions.pxToRem;
 
 export const variables = {
     layout: {

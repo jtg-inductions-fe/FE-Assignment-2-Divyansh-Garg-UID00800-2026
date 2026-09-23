@@ -5,6 +5,7 @@ import { colors } from './colors';
 import { typography } from './typography';
 import { variables } from './variables';
 import { mixins } from './mixins';
+import { functions } from './functions';
 
 export const theme = createTheme({
     cssVariables: true,
@@ -70,4 +71,8 @@ export const theme = createTheme({
     variables,
 
     mixins,
+
+    colors,
+
+    functions,
 });
