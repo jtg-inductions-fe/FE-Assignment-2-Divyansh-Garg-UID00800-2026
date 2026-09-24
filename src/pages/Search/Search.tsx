@@ -47,7 +47,7 @@ export const Search = () => {
         return () => {
             window.clearTimeout(timer);
         };
-    }, [searchUsername]);
+    }, [searchUsername, handleSearch]);
 
     useEffect(() => {
         const trimmedUsername = searchUsername.trim();

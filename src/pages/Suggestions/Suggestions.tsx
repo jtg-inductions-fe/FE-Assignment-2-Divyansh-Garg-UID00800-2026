@@ -44,10 +44,15 @@ export const Suggestions = () => {
         }
 
         void handleSuggestionsSearch(since);
-    }, [token, since]);
+    }, [token, since, handleSuggestionsSearch]);
 
     const handleRefresh = () => {
-        if (loading || response.length === 0) {
+        if (loading || !token) {
+            return;
+        }
+
+        if (response.length === 0) {
+            void handleSuggestionsSearch(since);
             return;
         }
 

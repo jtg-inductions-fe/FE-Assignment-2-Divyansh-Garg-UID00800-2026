@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { useParams } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
 
 import { ArrowOutward, Article, CorporateFare, Email, Place } from '@mui/icons-material';
 import { Box, CircularProgress, IconButton, Typography, useTheme } from '@mui/material';
@@ -43,6 +43,8 @@ export const Profile = () => {
     const functions = theme.functions;
     const variables = theme.variables;
 
+    const navigate = useNavigate();
+
     const { username } = useParams<{ username: string }>();
 
     const { user, token, isAuthenticated } = useAppSelector((state) => state.auth);
@@ -73,8 +75,12 @@ export const Profile = () => {
             return;
         }
 
-        void handleProfileSearch(username);
-    }, [username]);
+        void handleProfileSearch(username).catch((error) => {
+            if (error instanceof Error && error.message === 'User Not Found') {
+                navigate('/404', { replace: true });
+            }
+        });
+    }, [username, handleProfileSearch, navigate]);
 
     const handleFollow = async () => {
         if (!searchUserInfo || !token) {
@@ -107,7 +113,7 @@ export const Profile = () => {
                     <Typography variant="h3">{isOwnProfile ? 'My Profile' : 'Profile'}</Typography>
 
                     {error ? (
-                        <ErrorBox color="error">{error}</ErrorBox>
+                        <ErrorBox severity="error">{error}</ErrorBox>
                     ) : loading ? (
                         <Typography variant="body1">Loading profile...</Typography>
                     ) : (
@@ -245,7 +251,7 @@ export const Profile = () => {
                                 </ProfileMainTop>
 
                                 {profileFollowError && (
-                                    <ErrorBox color="error">{profileFollowError}</ErrorBox>
+                                    <ErrorBox severity="error">{profileFollowError}</ErrorBox>
                                 )}
 
                                 {isAuthenticated &&

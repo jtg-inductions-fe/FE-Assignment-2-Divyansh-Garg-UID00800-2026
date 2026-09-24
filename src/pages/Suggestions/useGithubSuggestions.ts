@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useCallback, useRef, useState } from 'react';
 
 import type { GithubUser } from '@utils/services';
 import { fetchGitHubSuggestions } from '@utils/services';
@@ -14,54 +14,57 @@ export const useGithubSuggestions = () => {
 
     const controllerRef = useRef<AbortController | null>(null);
 
-    const handleSuggestionsSearch = async (since: number) => {
-        const trimmedToken = token?.trim();
+    const handleSuggestionsSearch = useCallback(
+        async (since: number) => {
+            const trimmedToken = token?.trim();
 
-        if (!trimmedToken) {
-            setError('Please Login again to access Suggestions.');
-            setResponse([]);
-            return null;
-        }
-
-        if (controllerRef) {
-            controllerRef.current?.abort();
-        }
-
-        const controller = new AbortController();
-        controllerRef.current = controller;
-
-        setLoading(true);
-        setError('');
-        setResponse([]);
-
-        try {
-            const data = await fetchGitHubSuggestions(trimmedToken, since, controller.signal);
-
-            if (!controller.signal.aborted) {
-                setResponse(data);
-                return data;
-            }
-
-            return null;
-        } catch (error) {
-            setResponse([]);
-
-            if (error instanceof Error && error.name === 'AbortError') {
+            if (!trimmedToken) {
+                setError('Please Login again to access Suggestions.');
+                setResponse([]);
                 return null;
             }
 
-            setError(
-                error instanceof Error
-                    ? error.message
-                    : 'Something went wrong while connecting to GitHub.',
-            );
-            return null;
-        } finally {
-            if (!controller.signal.aborted) {
-                setLoading(false);
+            if (controllerRef) {
+                controllerRef.current?.abort();
             }
-        }
-    };
+
+            const controller = new AbortController();
+            controllerRef.current = controller;
+
+            setLoading(true);
+            setError('');
+            setResponse([]);
+
+            try {
+                const data = await fetchGitHubSuggestions(trimmedToken, since, controller.signal);
+
+                if (!controller.signal.aborted) {
+                    setResponse(data);
+                    return data;
+                }
+
+                return null;
+            } catch (error) {
+                setResponse([]);
+
+                if (error instanceof Error && error.name === 'AbortError') {
+                    return null;
+                }
+
+                setError(
+                    error instanceof Error
+                        ? error.message
+                        : 'Something went wrong while connecting to GitHub.',
+                );
+                return null;
+            } finally {
+                if (!controller.signal.aborted) {
+                    setLoading(false);
+                }
+            }
+        },
+        [token],
+    );
 
     return {
         loading,

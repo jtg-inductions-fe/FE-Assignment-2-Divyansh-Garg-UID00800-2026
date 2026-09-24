@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useCallback, useRef, useState } from 'react';
 
 import type { AuthUser } from '@redux/auth';
 
@@ -15,53 +15,60 @@ export const useGithubProfile = () => {
 
     const controllerRef = useRef<AbortController | null>(null);
 
-    const handleProfileSearch = async (username: string) => {
-        const trimmedUsername = username.trim();
+    const handleProfileSearch = useCallback(
+        async (username: string) => {
+            const trimmedUsername = username.trim();
 
-        if (!trimmedUsername) {
-            setError('Please enter a GitHub username.');
-            setResponse(null);
+            if (!trimmedUsername) {
+                setError('Please enter a GitHub username.');
+                setResponse(null);
 
-            return null;
-        }
-
-        if (controllerRef.current) {
-            controllerRef.current.abort();
-        }
-
-        const controller = new AbortController();
-        controllerRef.current = controller;
-
-        setLoading(true);
-        setError('');
-        setResponse(null);
-
-        try {
-            const data = await fetchGitHubProfile(trimmedUsername, token, controller.signal);
-
-            if (!controller.signal.aborted) {
-                setResponse(data);
-                return data;
-            }
-
-            return null;
-        } catch (error) {
-            if (error instanceof Error && error.name === 'AbortError') {
                 return null;
             }
 
-            setError(
-                error instanceof Error
-                    ? error.message
-                    : 'Something went wrong while connecting to GitHub.',
-            );
-            return null;
-        } finally {
-            if (!controller.signal.aborted) {
-                setLoading(false);
+            if (controllerRef.current) {
+                controllerRef.current.abort();
             }
-        }
-    };
+
+            const controller = new AbortController();
+            controllerRef.current = controller;
+
+            setLoading(true);
+            setError('');
+            setResponse(null);
+
+            try {
+                const data = await fetchGitHubProfile(trimmedUsername, token, controller.signal);
+
+                if (!controller.signal.aborted) {
+                    setResponse(data);
+                    return data;
+                }
+
+                return null;
+            } catch (error) {
+                if (error instanceof Error && error.name === 'AbortError') {
+                    return null;
+                }
+
+                if (error instanceof Error && error.message === 'User Not Found') {
+                    throw error;
+                }
+
+                setError(
+                    error instanceof Error
+                        ? error.message
+                        : 'Something went wrong while connecting to GitHub.',
+                );
+                return null;
+            } finally {
+                if (!controller.signal.aborted) {
+                    setLoading(false);
+                }
+            }
+        },
+        [token],
+    );
 
     return {
         loading,
