@@ -1,24 +1,16 @@
 import { useEffect, useState } from 'react';
 
-import { Refresh } from '@mui/icons-material';
 import { CircularProgress, Typography, useTheme } from '@mui/material';
 
-import {
-    Bubble,
-    Card,
-    CardRelativeHeader,
-    Content,
-    ErrorBox,
-    Page,
-    StyledList,
-} from '@components/Common';
-import { RefreshIcon, MenuItem } from '@components/MenuItem';
+import { Bubble, Card, CardHeader, Content, ErrorBox, Page, StyledList } from '@components/Common';
+import { MenuItem } from '@components/MenuItem';
 
 import { useAppDispatch, useAppSelector } from '@utils';
 import { useGithubSuggestions } from './useGithubSuggestions';
 import { useGithubSocial } from '@pages/Common';
 import { useNavigate } from 'react-router';
 import { removeSuggestionsItem } from '@redux/suggestions';
+import { StyledButton } from '@components/Navbar';
 
 export const Suggestions = () => {
     const navigate = useNavigate();
@@ -93,27 +85,22 @@ export const Suggestions = () => {
 
             <Content>
                 <Card>
-                    <CardRelativeHeader>
+                    <CardHeader>
                         <Typography variant="h3">People you may know</Typography>
 
-                        <RefreshIcon
-                            disableRipple
+                        <StyledButton
                             title="Fetch New Suggestions"
                             disabled={fetchSuggestionsLoading}
                             onClick={handleRefresh}
                         >
-                            {fetchSuggestionsLoading ? (
-                                <CircularProgress size={functions.pxToRem(24)} />
-                            ) : (
-                                <Refresh htmlColor={colors.primary[800]} />
-                            )}
-                        </RefreshIcon>
-                    </CardRelativeHeader>
+                            Refresh
+                        </StyledButton>
+                    </CardHeader>
 
                     {fetchSuggestionsError ? (
                         <ErrorBox severity="error">{fetchSuggestionsError}</ErrorBox>
                     ) : fetchSuggestionsLoading || !suggestions ? (
-                        <Typography variant="body1">Getting your Suggestions...</Typography>
+                        <CircularProgress size={functions.pxToRem(50)} />
                     ) : (
                         <StyledList>
                             {Object.values(suggestions).map((option) => (
@@ -154,15 +141,6 @@ export const Suggestions = () => {
                                     }}
                                 />
                             ))}
-
-                            <Typography
-                                variant="h6"
-                                sx={{
-                                    marginTop: '10px',
-                                }}
-                            >
-                                Refresh to see new Suggestions...
-                            </Typography>
                         </StyledList>
                     )}
                 </Card>

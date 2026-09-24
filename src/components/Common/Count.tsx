@@ -4,6 +4,7 @@ export const CountContainer = styled(Box)(({ theme }) => ({
     ...theme.mixins.flexCenter,
     paddingLeft: '32px',
     paddingRight: '32px',
+    paddingTop: '32px',
     gap: '10px',
 
     [theme.breakpoints.down('sm')]: {
@@ -20,11 +21,6 @@ export const CountBox = styled(Box)(({ theme }) => ({
 
     backgroundColor: theme.colors.secondary[50],
     border: `2px solid ${theme.colors.primary[100]}`,
-
-    '&:hover': {
-        border: `2px solid ${theme.colors.secondary[500]}`,
-        background: theme.colors.white,
-    },
 }));
 
 export const Count = styled(Stack)(({ theme }) => ({

@@ -50,7 +50,7 @@ export const NavLinks = styled(Box)(({ theme }) => ({
     marginLeft: 'auto',
 }));
 
-export const StyledNavButton = styled(Button)(({ theme }) => ({
+export const StyledButton = styled(Button)(({ theme }) => ({
     color: theme.palette.text.secondary,
     borderRadius: theme.variables.radius.pill,
     paddingLeft: theme.variables.spacing.md,
@@ -75,12 +75,10 @@ export const StyledNavButton = styled(Button)(({ theme }) => ({
         paddingLeft: theme.variables.spacing.md,
         paddingRight: theme.variables.spacing.md,
         fontSize: theme.variables.fontSize.md,
-
-        width: '50%',
     },
 })) as typeof Button;
 
-export const StyledLogoutButton = styled(StyledNavButton)(({ theme }) => ({
+export const StyledLogoutButton = styled(StyledButton)(({ theme }) => ({
     color: theme.palette.error.main,
 
     '&:hover': {

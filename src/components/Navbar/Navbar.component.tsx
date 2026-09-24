@@ -14,7 +14,7 @@ import {
     NavLinks,
     StyledAppBar,
     StyledLogoutButton,
-    StyledNavButton,
+    StyledButton,
 } from './Navbar.styles';
 
 import { useAppDispatch } from '@utils';
@@ -82,7 +82,7 @@ export const Navbar = () => {
 
                         <NavLinks aria-label="Main navigation">
                             {items.map((item) => (
-                                <StyledNavButton
+                                <StyledButton
                                     title={`Navigate to ${item.label} Page`}
                                     key={item.path}
                                     component={NavLink}
@@ -90,7 +90,7 @@ export const Navbar = () => {
                                     startIcon={<item.icon />}
                                 >
                                     {item.label}
-                                </StyledNavButton>
+                                </StyledButton>
                             ))}
 
                             {isAuthenticated ? (
@@ -102,14 +102,14 @@ export const Navbar = () => {
                                     {logoutItem.label}
                                 </StyledLogoutButton>
                             ) : (
-                                <StyledNavButton
+                                <StyledButton
                                     title="Navigate to Login Page"
                                     component={NavLink}
                                     to={loginItem.path}
                                     startIcon={<loginItem.icon />}
                                 >
                                     {loginItem.label}
-                                </StyledNavButton>
+                                </StyledButton>
                             )}
                         </NavLinks>
                     </>

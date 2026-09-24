@@ -50,9 +50,10 @@ export const CardMain = styled(Box)(({ theme }) => ({
 }));
 
 export const CardHeader = styled(Box)(({ theme }) => ({
+    ...theme.mixins.flexBetween,
     gap: theme.variables.spacing.xl,
     padding: theme.variables.spacing.xl,
-    ...theme.mixins.flexBetween,
+    width: '100%',
 
     background: `linear-gradient(
         135deg,
@@ -61,6 +62,7 @@ export const CardHeader = styled(Box)(({ theme }) => ({
     )`,
 
     borderBottom: `1px solid ${theme.colors.primary[100]}`,
+    borderRadius: theme.variables.radius.xl,
 }));
 
 export const CardRelativeHeader = styled(Stack)(() => ({
@@ -82,10 +84,18 @@ export const Value = styled(Typography)(({ theme }) => ({
 }));
 
 export const CardPill = styled(Typography)(({ theme }) => ({
+    ...theme.mixins.flexCenter,
     background: theme.colors.primary[100],
-    paddingLeft: theme.variables.spacing.sm,
-    paddingRight: theme.variables.spacing.sm,
-    height: 'fit-content',
+    padding: theme.variables.spacing.sm,
     borderRadius: theme.variables.radius.pill,
     border: `2px solid ${theme.colors.primary[900]}`,
+    gap: theme.variables.spacing.xs,
+    height: 'fit-content',
+
+    [theme.breakpoints.down('sm')]: {
+        flexDirection: 'column',
+        paddingLeft: theme.variables.spacing.md,
+        paddingRight: theme.variables.spacing.md,
+        gap: 0,
+    },
 }));

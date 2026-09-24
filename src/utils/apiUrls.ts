@@ -1,5 +1,5 @@
 export const BASE_URL = 'https://api.github.com';
-export const PAT_GENERATION_URL = 'settings/personal-access-tokens';
+export const PAT_GENERATION_URL = 'https://github.com/settings/personal-access-tokens';
 export const AUTH_URL = 'user';
 export const FOLLOWING_URL = 'user/following';
 export const SEARCH_URL = 'search/users';

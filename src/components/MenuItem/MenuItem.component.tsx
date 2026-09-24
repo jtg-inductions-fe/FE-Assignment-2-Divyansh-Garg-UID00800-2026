@@ -14,6 +14,7 @@ import {
 import { StyledAvatar } from '@components/Common';
 import { MenuItemContent, StyledMenuItem, Tag } from './MenuItem.styles';
 import { FollowButton } from '@components/Common/FollowButton';
+import { StyledIcon } from '@pages/Profile';
 
 interface DismissProps {
     onDismiss: () => void;
@@ -84,15 +85,18 @@ export const MenuItem = ({
                         <Typography variant="h6">
                             {userProps.username}
                             {userProps.gitURL && (
-                                <IconButton
+                                <StyledIcon
                                     title="Open Users GitHub Profile"
                                     href={userProps.gitURL}
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     onClick={(event) => event.stopPropagation()}
+                                    sx={{
+                                        marginLeft: '5px',
+                                    }}
                                 >
                                     <ArrowOutward htmlColor={colors.primary[800]} />
-                                </IconButton>
+                                </StyledIcon>
                             )}
                         </Typography>
                     </Box>

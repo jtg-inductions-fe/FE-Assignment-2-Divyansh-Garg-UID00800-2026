@@ -21,6 +21,7 @@ import { MenuItem } from '@components/MenuItem';
 export const Search = () => {
     const theme = useTheme();
     const colors = theme.colors;
+    const variables = theme.variables;
     const functions = theme.functions;
 
     const navigate = useNavigate();
@@ -29,9 +30,13 @@ export const Search = () => {
     const { loading, error, response, handleSearch } = useGitHubSearch();
 
     const [searchUsername, setSearchUsername] = useState(username ?? '');
-    const [open, setOpen] = useState(false);
+    const [_open, setOpen] = useState(false);
 
     const options = response?.items ?? [];
+
+    const hasResponse = response !== undefined && response !== null;
+
+    const shouldOpen = Boolean(searchUsername.trim()) && (loading || hasResponse);
 
     useEffect(() => {
         const trimmedUsername = searchUsername.trim();
@@ -106,7 +111,7 @@ export const Search = () => {
                     <Typography variant="h3">Search GitHub Account</Typography>
 
                     <Typography variant="h4">
-                        Enter GitHub Username of person you wanna watch.
+                        Enter GitHub Username of person you want to watch.
                     </Typography>
 
                     {error && <ErrorBox severity="error">{error}</ErrorBox>}
@@ -115,11 +120,13 @@ export const Search = () => {
                         <Autocomplete
                             popupIcon={null}
                             openOnFocus={false}
-                            open={open}
-                            onOpen={() => setOpen(true)}
+                            open={shouldOpen}
                             onClose={() => setOpen(false)}
                             inputValue={searchUsername}
                             disablePortal
+                            noOptionsText={!loading && hasResponse ? 'No GitHub User Found' : ''}
+                            loading={loading}
+                            loadingText={<CircularProgress size={functions.pxToRem(50)} />}
                             slotProps={{
                                 popper: {
                                     placement: 'bottom',
@@ -143,19 +150,10 @@ export const Search = () => {
                                 }
 
                                 setSearchUsername(value);
-                                setOpen(Boolean(value.trim()));
-                            }}
-                            onChange={(_event, value) => {
-                                if (!value) {
-                                    return;
-                                }
-
-                                handleNavigation(value.login);
                             }}
                             isOptionEqualToValue={(option, value) => option.id === value.id}
                             getOptionLabel={(option) => option.login}
                             options={options}
-                            loading={loading}
                             renderOption={(_, option) => (
                                 <MenuItem
                                     key={option.id}
@@ -171,13 +169,14 @@ export const Search = () => {
                                         [theme.breakpoints.down('sm')]: {
                                             flexDirection: 'row',
                                         },
+                                        borderRadius: variables.radius.xl,
                                     }}
                                 />
                             )}
                             renderInput={(params) => (
                                 <TextField
                                     {...params}
-                                    placeholder="Search GitHub username..."
+                                    placeholder="Search GitHub Username"
                                     onKeyDown={(event) => {
                                         if (event.key === 'Enter') {
                                             event.preventDefault();
@@ -188,16 +187,17 @@ export const Search = () => {
                                         ...params.slotProps,
                                         input: {
                                             ...params.slotProps?.input,
-                                            startAdornment: <SearchIcon />,
+                                            startAdornment: (
+                                                <SearchIcon
+                                                    sx={{
+                                                        marginLeft: '7.5px',
+                                                        padding: 0,
+                                                    }}
+                                                />
+                                            ),
                                             endAdornment: (
                                                 <Fragment>
-                                                    {loading && (
-                                                        <CircularProgress
-                                                            size={functions.pxToRem(20)}
-                                                        />
-                                                    )}
-
-                                                    {!loading && searchUsername.trim() && (
+                                                    {searchUsername.trim() && (
                                                         <IconButton
                                                             title="Clear Search"
                                                             onClick={handleClear}
@@ -207,8 +207,6 @@ export const Search = () => {
                                                             <Close />
                                                         </IconButton>
                                                     )}
-
-                                                    {params.slotProps?.input?.endAdornment}
                                                 </Fragment>
                                             ),
                                         },

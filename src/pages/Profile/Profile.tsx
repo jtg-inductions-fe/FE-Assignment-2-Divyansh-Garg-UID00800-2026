@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router';
 
 import { ArrowOutward, Article, CorporateFare, Email, Place } from '@mui/icons-material';
-import { Box, CircularProgress, IconButton, Typography, useTheme } from '@mui/material';
+import { Box, CircularProgress, Typography, useTheme } from '@mui/material';
 
 import {
     Bubble,
@@ -30,6 +30,7 @@ import {
     ProfileCardTopHeaderInner,
     ProfileMainTop,
     ProfileUsername,
+    StyledIcon,
 } from './Profile.styles';
 
 import { useAppSelector } from '@utils';
@@ -115,7 +116,7 @@ export const Profile = () => {
                     {error ? (
                         <ErrorBox severity="error">{error}</ErrorBox>
                     ) : loading || !response ? (
-                        <Typography variant="body1">Loading profile...</Typography>
+                        <CircularProgress size={functions.pxToRem(50)} />
                     ) : (
                         <ProfileCard>
                             <CardHeader>
@@ -146,7 +147,7 @@ export const Profile = () => {
                                             </ProfileUsername>
 
                                             {searchUserInfo?.htmlUrl && (
-                                                <IconButton
+                                                <StyledIcon
                                                     title="Open User GitHub Profile"
                                                     href={searchUserInfo.htmlUrl}
                                                     target="_blank"
@@ -154,40 +155,28 @@ export const Profile = () => {
                                                     aria-label="Open GitHub profile"
                                                 >
                                                     <ArrowOutward htmlColor={colors.primary[600]} />
-                                                </IconButton>
+                                                </StyledIcon>
                                             )}
                                         </Box>
 
-                                        <ProfileUsername variant="body1">
-                                            {searchUserInfo?.login}
+                                        <ProfileUsername
+                                            variant="body1"
+                                            sx={{
+                                                fontStyle: 'italic',
+                                            }}
+                                        >
+                                            @{searchUserInfo?.login}
                                         </ProfileUsername>
                                     </ProfileCardTopHeaderInner>
                                 </ProfileCardHeaderTop>
 
                                 <CardPill variant="body1">
-                                    {searchUserInfo?.type.toUpperCase() ?? 'USER'}
+                                    <Typography>
+                                        {searchUserInfo?.type.toUpperCase() ?? 'USER'}
+                                    </Typography>
+                                    <Typography>#{searchUserInfo?.id ?? ''}</Typography>
                                 </CardPill>
                             </CardHeader>
-
-                            <CardMain>
-                                <CaptionBox>
-                                    <ProfileCardHeaderTop>
-                                        <Place fontSize="small" />
-                                        <Typography>
-                                            {searchUserInfo?.location ??
-                                                'Location is not available.'}
-                                        </Typography>
-                                    </ProfileCardHeaderTop>
-                                    <Label
-                                        variant="h6"
-                                        sx={{
-                                            fontStyle: 'italic',
-                                        }}
-                                    >
-                                        #{searchUserInfo?.id}
-                                    </Label>
-                                </CaptionBox>
-                            </CardMain>
 
                             <CountContainer
                                 sx={{
@@ -265,6 +254,17 @@ export const Profile = () => {
                                         </ProfileCardHeaderTop>
                                         <Label variant="h6">
                                             {searchUserInfo?.company ?? 'Company is not available.'}
+                                        </Label>
+                                    </CaptionBox>
+
+                                    <CaptionBox>
+                                        <ProfileCardHeaderTop>
+                                            <Place fontSize="small" />
+                                            <Typography>Location</Typography>
+                                        </ProfileCardHeaderTop>
+                                        <Label variant="h6">
+                                            {searchUserInfo?.location ??
+                                                'Location is not available.'}
                                         </Label>
                                     </CaptionBox>
                                 </ProfileMainTop>

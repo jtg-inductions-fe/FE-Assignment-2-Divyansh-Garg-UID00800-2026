@@ -16,7 +16,7 @@ import { Bubble, CardLink, CardLogo, Content, ErrorBox, Page } from '@components
 
 import { LoginHeader, LoginMainSection, LoginWrapper, useGitHubAuth } from '@pages/Login';
 
-import { BASE_URL, PAT_GENERATION_URL } from '@utils';
+import { PAT_GENERATION_URL } from '@utils';
 
 export const Login = () => {
     const theme = useTheme();
@@ -25,8 +25,6 @@ export const Login = () => {
     const variables = theme.variables;
 
     const navigate = useNavigate();
-
-    const patUrl = `${BASE_URL}/${PAT_GENERATION_URL}`;
 
     const [token, setToken] = useState('');
     const [showToken, setShowToken] = useState(false);
@@ -132,7 +130,7 @@ export const Login = () => {
                             {"Don't have PAT? "}
                             <CardLink
                                 title="Redirect to GitHub Personal Access Token Generation Page"
-                                href={patUrl}
+                                href={PAT_GENERATION_URL}
                                 target="_blank"
                             >
                                 Generate it.

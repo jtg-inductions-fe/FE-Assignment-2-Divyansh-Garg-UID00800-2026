@@ -6,7 +6,7 @@ export {
     HomeLinkWrapper,
     Brand,
     NavLinks,
-    StyledNavButton,
+    StyledButton,
     StyledLogoutButton,
 } from './Navbar.styles';
 

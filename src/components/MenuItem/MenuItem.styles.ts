@@ -4,7 +4,7 @@ export const StyledMenuItem = styled(ListItem)(({ theme }) => ({
     ...theme.mixins.flexCenter,
     gap: theme.variables.spacing.md,
     padding: theme.variables.spacing.md,
-    borderBottom: `1px solid ${theme.colors.primary[200]}`,
+    borderBottom: `1px solid ${theme.colors.primary[100]}`,
     cursor: 'pointer',
 
     justifyContent: 'space-between',
@@ -12,6 +12,7 @@ export const StyledMenuItem = styled(ListItem)(({ theme }) => ({
 
     '&:hover': {
         backgroundColor: theme.colors.white,
+        borderRadius: theme.variables.radius.xl,
     },
 
     [theme.breakpoints.down('sm')]: {

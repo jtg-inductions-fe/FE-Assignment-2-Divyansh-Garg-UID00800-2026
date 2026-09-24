@@ -5,6 +5,7 @@ export {
     ProfileCardTopHeaderInner,
     ProfileMainTop,
     CaptionBox,
+    StyledIcon,
 } from './Profile.styles';
 
 export { Profile } from './Profile';

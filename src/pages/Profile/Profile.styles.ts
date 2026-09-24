@@ -1,19 +1,15 @@
-import { Box, Stack, styled, Typography } from '@mui/material';
+import { Box, IconButton, Stack, styled, Typography } from '@mui/material';
 
-export const ProfileCard = styled(Box)(({ theme }) => ({
-    borderRadius: theme.variables.radius.xl,
-    boxShadow: theme.variables.shadows.card,
-
+export const ProfileCard = styled(Box)(() => ({
     width: '100%',
     overflow: 'scroll',
     scrollbarWidth: 'none',
-    backgroundColor: theme.colors.white,
-    border: `1px solid ${theme.colors.primary[100]}`,
 }));
 
 export const ProfileUsername = styled(Typography)(({ theme }) => ({
+    color: theme.colors.primary[900],
+    marginRight: '5px',
     display: 'inline',
-    color: theme.colors.primary[800],
 }));
 
 export const ProfileCardHeaderTop = styled(Box)(({ theme }) => ({
@@ -54,3 +50,9 @@ export const ProfileMainTop = styled(Stack)(({ theme }) => ({
     alignItems: 'flex-start',
     flex: 1,
 }));
+
+export const StyledIcon = styled(IconButton)(({ theme }) => ({
+    marginBottom: '5px',
+    border: `1px solid ${theme.colors.primary[100]}`,
+    padding: '2px',
+})) as typeof IconButton;

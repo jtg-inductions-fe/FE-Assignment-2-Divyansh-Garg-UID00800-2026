@@ -2,7 +2,7 @@ import { type MouseEvent } from 'react';
 import { Close, GitHub, Menu } from '@mui/icons-material';
 import { Divider } from '@mui/material';
 
-import { StyledLogoutButton, StyledNavButton, useNavigation } from '@components/Navbar';
+import { StyledLogoutButton, StyledButton, useNavigation } from '@components/Navbar';
 
 import {
     MobileCloseButton,
@@ -65,7 +65,7 @@ export const MobileMenu = ({ onLogoutClick }: MobileMenuProps) => {
 
                     <MobileNavigationList>
                         {items.map((item) => (
-                            <StyledNavButton
+                            <StyledButton
                                 title={`Navigate to ${item.label} Page`}
                                 key={item.path}
                                 component={NavLink}
@@ -74,7 +74,7 @@ export const MobileMenu = ({ onLogoutClick }: MobileMenuProps) => {
                                 onClick={handleClose}
                             >
                                 {item.label}
-                            </StyledNavButton>
+                            </StyledButton>
                         ))}
 
                         {isAuthenticated ? (
@@ -86,7 +86,7 @@ export const MobileMenu = ({ onLogoutClick }: MobileMenuProps) => {
                                 {logoutItem.label}
                             </StyledLogoutButton>
                         ) : (
-                            <StyledNavButton
+                            <StyledButton
                                 title="Navigate to Login Page"
                                 component={NavLink}
                                 to={loginItem.path}
@@ -94,7 +94,7 @@ export const MobileMenu = ({ onLogoutClick }: MobileMenuProps) => {
                                 onClick={handleClose}
                             >
                                 {loginItem.label}
-                            </StyledNavButton>
+                            </StyledButton>
                         )}
                     </MobileNavigationList>
                 </MobileDrawerContent>
