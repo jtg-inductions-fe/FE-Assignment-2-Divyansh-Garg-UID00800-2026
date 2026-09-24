@@ -62,7 +62,7 @@ export const useGithubSuggestions = () => {
                 return null;
             }
         },
-        [token],
+        [token, dispatch],
     );
 
     return {

@@ -38,10 +38,26 @@ const suggestionsSlice = createSlice({
             state.fetchSuggestionsLoading = false;
             state.fetchSuggestionsError = action.payload;
         },
+
+        removeSuggestionsItem: (state, action: PayloadAction<number>) => {
+            delete state.suggestions[action.payload];
+        },
+
+        removeSuggestionsState: (state) => {
+            state.isSuggestionsFetched = false;
+            state.suggestions = {};
+            state.fetchSuggestionsLoading = false;
+            state.fetchSuggestionsError = null;
+        },
     },
 });
 
-export const { fetchSuggestionsPending, fetchSuggestionsSuccess, fetchSuggestionsFailed } =
-    suggestionsSlice.actions;
+export const {
+    fetchSuggestionsPending,
+    fetchSuggestionsSuccess,
+    fetchSuggestionsFailed,
+    removeSuggestionsItem,
+    removeSuggestionsState,
+} = suggestionsSlice.actions;
 
 export default suggestionsSlice.reducer;

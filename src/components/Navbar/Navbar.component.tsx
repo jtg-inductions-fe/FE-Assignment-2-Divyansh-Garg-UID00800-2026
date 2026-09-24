@@ -23,6 +23,7 @@ import { logoutUser } from '@redux/auth';
 import { removeSocialState } from '@redux/social';
 import { closeSidebar } from '@redux/sidebar';
 import { useMediaQuery, useTheme } from '@mui/material';
+import { removeSuggestionsState } from '@redux/suggestions';
 
 export const Navbar = () => {
     const theme = useTheme();
@@ -43,6 +44,7 @@ export const Navbar = () => {
         dispatch(logoutUser());
         dispatch(removeSocialState());
         dispatch(closeSidebar());
+        dispatch(removeSuggestionsState());
         setLogoutAnchor(null);
         navigate('/login');
     };

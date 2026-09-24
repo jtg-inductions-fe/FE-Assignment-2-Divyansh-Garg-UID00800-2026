@@ -14,13 +14,15 @@ import {
 } from '@components/Common';
 import { RefreshIcon, MenuItem } from '@components/MenuItem';
 
-import { useAppSelector } from '@utils';
+import { useAppDispatch, useAppSelector } from '@utils';
 import { useGithubSuggestions } from './useGithubSuggestions';
 import { useGithubSocial } from '@pages/Common';
 import { useNavigate } from 'react-router';
+import { removeSuggestionsItem } from '@redux/suggestions';
 
 export const Suggestions = () => {
     const navigate = useNavigate();
+    const dispatch = useAppDispatch();
 
     const theme = useTheme();
     const colors = theme.colors;
@@ -30,8 +32,7 @@ export const Suggestions = () => {
     const isSuggestionsFetched = useAppSelector((state) => state.suggestions.isSuggestionsFetched);
 
     const [since, setSince] = useState(() => Math.ceil(Math.random() * 100));
-
-    const [dismissedIds, setDismissedIds] = useState(new Set());
+    const [isRefreshRequest, setIsRefreshRequest] = useState(false);
 
     const { fetchSuggestionsLoading, fetchSuggestionsError, suggestions, handleSuggestionsSearch } =
         useGithubSuggestions();
@@ -47,12 +48,12 @@ export const Suggestions = () => {
     } = useAppSelector((state) => state.social);
 
     useEffect(() => {
-        if (!token || isSuggestionsFetched) {
+        if ((!token || isSuggestionsFetched) && !isRefreshRequest) {
             return;
         }
 
         void handleSuggestionsSearch(since);
-    }, [token, handleSuggestionsSearch]);
+    }, [token, handleSuggestionsSearch, isSuggestionsFetched, since, isRefreshRequest]);
 
     const handleRefresh = () => {
         if (fetchSuggestionsLoading || !token) {
@@ -64,10 +65,8 @@ export const Suggestions = () => {
             return;
         }
 
-        setDismissedIds(new Set());
         setSince(() => Math.ceil(Math.random() * 100));
-
-        void handleSuggestionsSearch(since);
+        setIsRefreshRequest(true);
     };
 
     const handleNavigation = (username: string) => {
@@ -149,13 +148,8 @@ export const Suggestions = () => {
                                         },
                                     }}
                                     dismissProps={{
-                                        dismissed: dismissedIds.has(option.id),
                                         onDismiss: () => {
-                                            setDismissedIds((oldSet) => {
-                                                const newSet = new Set(oldSet);
-                                                newSet.add(option.id);
-                                                return newSet;
-                                            });
+                                            dispatch(removeSuggestionsItem(option.id));
                                         },
                                     }}
                                 />

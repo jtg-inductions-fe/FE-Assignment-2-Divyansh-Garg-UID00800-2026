@@ -16,7 +16,6 @@ import { MenuItemContent, StyledMenuItem, Tag } from './MenuItem.styles';
 import { FollowButton } from '@components/Common/FollowButton';
 
 interface DismissProps {
-    dismissed: boolean;
     onDismiss: () => void;
 }
 
