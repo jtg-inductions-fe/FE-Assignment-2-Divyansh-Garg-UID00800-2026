@@ -27,37 +27,47 @@ export const Suggestions = () => {
     const functions = theme.functions;
 
     const token = useAppSelector((state) => state.auth.token);
+    const isSuggestionsFetched = useAppSelector((state) => state.suggestions.isSuggestionsFetched);
+
     const [since, setSince] = useState(() => Math.ceil(Math.random() * 100));
 
     const [dismissedIds, setDismissedIds] = useState(new Set());
 
-    const { loading, error, response, handleSuggestionsSearch } = useGithubSuggestions();
+    const { fetchSuggestionsLoading, fetchSuggestionsError, suggestions, handleSuggestionsSearch } =
+        useGithubSuggestions();
+
     const { handleFollowUnfollow } = useGithubSocial();
 
-    const { isFetched, following, followUnfollowLoadingId, followUnfollowError } = useAppSelector(
-        (state) => state.social,
-    );
+    const {
+        isFetched,
+        following,
+        followUnfollowLoading,
+        followUnfollowLoadingId,
+        followUnfollowError,
+    } = useAppSelector((state) => state.social);
 
     useEffect(() => {
-        if (!token) {
+        if (!token || isSuggestionsFetched) {
             return;
         }
 
         void handleSuggestionsSearch(since);
-    }, [token, since, handleSuggestionsSearch]);
+    }, [token, handleSuggestionsSearch]);
 
     const handleRefresh = () => {
-        if (loading || !token) {
+        if (fetchSuggestionsLoading || !token) {
             return;
         }
 
-        if (response.length === 0) {
+        if (Object.keys(suggestions).length === 0) {
             void handleSuggestionsSearch(since);
             return;
         }
 
         setDismissedIds(new Set());
-        setSince(response[response.length - 1].id);
+        setSince(() => Math.ceil(Math.random() * 100));
+
+        void handleSuggestionsSearch(since);
     };
 
     const handleNavigation = (username: string) => {
@@ -87,8 +97,13 @@ export const Suggestions = () => {
                     <CardRelativeHeader>
                         <Typography variant="h3">People you may know</Typography>
 
-                        <RefreshIcon disableRipple disabled={loading} onClick={handleRefresh}>
-                            {loading ? (
+                        <RefreshIcon
+                            disableRipple
+                            title="Fetch New Suggestions"
+                            disabled={fetchSuggestionsLoading}
+                            onClick={handleRefresh}
+                        >
+                            {fetchSuggestionsLoading ? (
                                 <CircularProgress size={functions.pxToRem(24)} />
                             ) : (
                                 <Refresh htmlColor={colors.primary[800]} />
@@ -96,13 +111,13 @@ export const Suggestions = () => {
                         </RefreshIcon>
                     </CardRelativeHeader>
 
-                    {error ? (
-                        <ErrorBox severity="error">{error}</ErrorBox>
-                    ) : loading ? (
+                    {fetchSuggestionsError ? (
+                        <ErrorBox severity="error">{fetchSuggestionsError}</ErrorBox>
+                    ) : fetchSuggestionsLoading || !suggestions ? (
                         <Typography variant="body1">Getting your Suggestions...</Typography>
                     ) : (
                         <StyledList>
-                            {response.map((option) => (
+                            {Object.values(suggestions).map((option) => (
                                 <MenuItem
                                     key={option.id}
                                     userProps={{
@@ -112,7 +127,7 @@ export const Suggestions = () => {
                                     }}
                                     errorMessage={
                                         followUnfollowError?.id === option.id
-                                            ? followUnfollowError.message
+                                            ? followUnfollowError?.message
                                             : null
                                     }
                                     onClick={handleNavigation}
@@ -124,6 +139,7 @@ export const Suggestions = () => {
                                         isFollowed: String(option.id) in following,
                                         isFetched,
                                         loading: followUnfollowLoadingId === option.id,
+                                        disabled: followUnfollowLoading,
                                         onClick: () => {
                                             handleFollowUnfollow(
                                                 option.id,

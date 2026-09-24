@@ -114,12 +114,18 @@ export const Profile = () => {
 
                     {error ? (
                         <ErrorBox severity="error">{error}</ErrorBox>
-                    ) : loading ? (
+                    ) : loading || !response ? (
                         <Typography variant="body1">Loading profile...</Typography>
                     ) : (
                         <ProfileCard>
                             <CardHeader>
-                                <ProfileCardHeaderTop>
+                                <ProfileCardHeaderTop
+                                    sx={{
+                                        [theme.breakpoints.down('sm')]: {
+                                            flexDirection: 'column',
+                                        },
+                                    }}
+                                >
                                     {searchUserInfo?.avatarUrl ? (
                                         <StyledAvatar
                                             sx={{
@@ -141,6 +147,7 @@ export const Profile = () => {
 
                                             {searchUserInfo?.htmlUrl && (
                                                 <IconButton
+                                                    title="Open User GitHub Profile"
                                                     href={searchUserInfo.htmlUrl}
                                                     target="_blank"
                                                     rel="noopener noreferrer"
@@ -182,7 +189,13 @@ export const Profile = () => {
                                 </CaptionBox>
                             </CardMain>
 
-                            <CountContainer>
+                            <CountContainer
+                                sx={{
+                                    [theme.breakpoints.down('sm')]: {
+                                        padding: '10px',
+                                    },
+                                }}
+                            >
                                 <CountBox>
                                     <Typography>Followers</Typography>
                                     <Typography variant="h4">
@@ -204,7 +217,13 @@ export const Profile = () => {
                             </CountContainer>
 
                             <CardMain>
-                                <ProfileMainTop>
+                                <ProfileMainTop
+                                    sx={{
+                                        [theme.breakpoints.down('sm')]: {
+                                            padding: 0,
+                                        },
+                                    }}
+                                >
                                     <CaptionBox>
                                         <ProfileCardHeaderTop>
                                             <Email fontSize="small" />
@@ -259,6 +278,11 @@ export const Profile = () => {
                                     isFetched &&
                                     searchUserInfo && (
                                         <FollowButton
+                                            title={
+                                                isFollowed
+                                                    ? `UnFollow ${searchUserInfo.login}`
+                                                    : `Follow ${searchUserInfo.login}`
+                                            }
                                             disabled={isFollowLoading}
                                             onClick={handleFollow}
                                             sx={

@@ -11,6 +11,7 @@ const initialState: SocialState = {
     following: storedState?.following ?? {},
     fetchFollowingsLoading: false,
     fetchFollowingsError: null,
+    followUnfollowLoading: false,
     followUnfollowLoadingId: null,
     followUnfollowError: null,
 };
@@ -48,6 +49,7 @@ const socialSlice = createSlice({
         },
 
         followUnfollowPending: (state, action: PayloadAction<number>) => {
+            state.followUnfollowLoading = true;
             state.followUnfollowLoadingId = action.payload;
             state.followUnfollowError = null;
         },
@@ -56,6 +58,7 @@ const socialSlice = createSlice({
             const user = action.payload;
 
             state.following[user.id] = user;
+            state.followUnfollowLoading = false;
             state.followUnfollowLoadingId = null;
             state.followUnfollowError = null;
 
@@ -69,6 +72,7 @@ const socialSlice = createSlice({
             const userId = action.payload.id;
 
             delete state.following[userId];
+            state.followUnfollowLoading = false;
             state.followUnfollowLoadingId = null;
             state.followUnfollowError = null;
 
@@ -79,6 +83,7 @@ const socialSlice = createSlice({
         },
 
         followUnfollowFailure: (state, action: PayloadAction<ErrorMessage>) => {
+            state.followUnfollowLoading = false;
             state.followUnfollowLoadingId = null;
             state.followUnfollowError = {
                 id: action.payload.id,
@@ -89,6 +94,7 @@ const socialSlice = createSlice({
         removeSocialState: (state) => {
             state.isFetched = false;
             state.following = {};
+            state.followUnfollowLoading = false;
             state.followUnfollowLoadingId = null;
             state.followUnfollowError = null;
 

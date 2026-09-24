@@ -13,7 +13,7 @@ export {
 
 export { hasValidToken } from './auth';
 
-export { reqRegexClassic, reqRegexFineGrained } from './constants';
+export { reqRegexClassic, reqRegexFineGrained, isStrictModeDisabled } from './constants';
 
 export { checkRegexFunction, snakeToCamelCase } from './helperFunctions';
 

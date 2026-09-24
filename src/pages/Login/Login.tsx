@@ -107,6 +107,7 @@ export const Login = () => {
                                 input: {
                                     endAdornment: (
                                         <IconButton
+                                            title={showToken ? 'Hide token' : 'Show token'}
                                             disabled={loading}
                                             onClick={toggleVisibility}
                                             aria-label={showToken ? 'Hide token' : 'Show token'}
@@ -129,7 +130,11 @@ export const Login = () => {
                             }}
                         >
                             {"Don't have PAT? "}
-                            <CardLink href={patUrl} target="_blank">
+                            <CardLink
+                                title="Redirect to GitHub Personal Access Token Generation Page"
+                                href={patUrl}
+                                target="_blank"
+                            >
                                 Generate it.
                             </CardLink>
                         </Typography>
@@ -140,6 +145,7 @@ export const Login = () => {
                             size="large"
                             disabled={loading}
                             onClick={handleSubmit}
+                            title="Authenticate User using Personal Access Token"
                             startIcon={
                                 loading ? (
                                     <CircularProgress size={functions.pxToRem(16)} />

@@ -21,7 +21,6 @@ export const ProfileCardHeaderTop = styled(Box)(({ theme }) => ({
     gap: theme.variables.spacing.md,
 
     [theme.breakpoints.down('sm')]: {
-        flexDirection: 'column',
         alignContent: 'baseline',
     },
 }));
@@ -44,6 +43,7 @@ export const CaptionBox = styled(Box)(({ theme }) => ({
 
     [theme.breakpoints.down('sm')]: {
         ...theme.mixins.flexCenterCol,
+        padding: theme.variables.spacing.sm,
         gap: '5px',
     },
 }));

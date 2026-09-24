@@ -61,6 +61,7 @@ export const NotFound = () => {
                     }}
                 >
                     <Button
+                        title="Navigate to Home Page"
                         component={Link}
                         to="/"
                         variant="contained"
@@ -74,6 +75,7 @@ export const NotFound = () => {
                     </Button>
 
                     <Button
+                        title="Navigate to Previous Page"
                         onClick={() => navigate(-1)}
                         variant="outlined"
                         size="large"

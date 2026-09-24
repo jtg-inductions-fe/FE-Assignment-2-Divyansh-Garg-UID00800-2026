@@ -16,4 +16,8 @@ export const Content = styled(Box)(({ theme }) => ({
     [theme.breakpoints.up('lg')]: {
         width: '80%',
     },
+
+    [theme.breakpoints.down('sm')]: {
+        padding: '10px',
+    },
 }));

@@ -38,6 +38,7 @@ export const MobileMenu = ({ onLogoutClick }: MobileMenuProps) => {
     return (
         <>
             <MobileMenuTrigger
+                title="Open Mobile Navigation Menu List"
                 onClick={handleOpen}
                 aria-haspopup="dialog"
                 aria-expanded={isOpen}
@@ -51,7 +52,11 @@ export const MobileMenu = ({ onLogoutClick }: MobileMenuProps) => {
                     <MobileMenuHeader>
                         <GitHub />
 
-                        <MobileCloseButton onClick={handleClose} aria-label="Close navigation menu">
+                        <MobileCloseButton
+                            title="Close Navigation Menu List"
+                            onClick={handleClose}
+                            aria-label="Close navigation menu list"
+                        >
                             <Close />
                         </MobileCloseButton>
                     </MobileMenuHeader>
@@ -61,6 +66,7 @@ export const MobileMenu = ({ onLogoutClick }: MobileMenuProps) => {
                     <MobileNavigationList>
                         {items.map((item) => (
                             <StyledNavButton
+                                title={`Navigate to ${item.label} Page`}
                                 key={item.path}
                                 component={NavLink}
                                 to={item.path}
@@ -73,6 +79,7 @@ export const MobileMenu = ({ onLogoutClick }: MobileMenuProps) => {
 
                         {isAuthenticated ? (
                             <StyledLogoutButton
+                                title="Toggle Logout Confirmation Modal"
                                 startIcon={<logoutItem.icon />}
                                 onClick={onLogoutClick}
                             >
@@ -80,6 +87,7 @@ export const MobileMenu = ({ onLogoutClick }: MobileMenuProps) => {
                             </StyledLogoutButton>
                         ) : (
                             <StyledNavButton
+                                title="Navigate to Login Page"
                                 component={NavLink}
                                 to={loginItem.path}
                                 startIcon={<loginItem.icon />}

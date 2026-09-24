@@ -1,15 +1,20 @@
-import { useCallback, useRef, useState } from 'react';
+import { useCallback, useRef } from 'react';
 
 import type { GithubUser } from '@utils/services';
 import { fetchGitHubSuggestions } from '@utils/services';
-import { useAppSelector } from '@utils';
+import { useAppDispatch, useAppSelector } from '@utils';
+import {
+    fetchSuggestionsFailed,
+    fetchSuggestionsPending,
+    fetchSuggestionsSuccess,
+} from '@redux/suggestions';
 
 export const useGithubSuggestions = () => {
-    // we do not have any redux state for search, that's why these states are made using useState
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState('');
-    const [response, setResponse] = useState<GithubUser[]>([]);
+    const dispatch = useAppDispatch();
 
+    const { fetchSuggestionsLoading, fetchSuggestionsError, suggestions } = useAppSelector(
+        (state) => state.suggestions,
+    );
     const token = useAppSelector((state) => state.auth.token);
 
     const controllerRef = useRef<AbortController | null>(null);
@@ -19,8 +24,7 @@ export const useGithubSuggestions = () => {
             const trimmedToken = token?.trim();
 
             if (!trimmedToken) {
-                setError('Please Login again to access Suggestions.');
-                setResponse([]);
+                dispatch(fetchSuggestionsFailed('Please Login again to access Suggestions.'));
                 return null;
             }
 
@@ -31,45 +35,40 @@ export const useGithubSuggestions = () => {
             const controller = new AbortController();
             controllerRef.current = controller;
 
-            setLoading(true);
-            setError('');
-            setResponse([]);
+            dispatch(fetchSuggestionsPending());
 
             try {
                 const data = await fetchGitHubSuggestions(trimmedToken, since, controller.signal);
 
                 if (!controller.signal.aborted) {
-                    setResponse(data);
+                    dispatch(fetchSuggestionsSuccess(data as GithubUser[]));
                     return data;
                 }
 
                 return null;
             } catch (error) {
-                setResponse([]);
-
                 if (error instanceof Error && error.name === 'AbortError') {
                     return null;
                 }
 
-                setError(
-                    error instanceof Error
-                        ? error.message
-                        : 'Something went wrong while connecting to GitHub.',
+                dispatch(
+                    fetchSuggestionsFailed(
+                        error instanceof Error
+                            ? error.message
+                            : 'Something went wrong while connecting to GitHub.',
+                    ),
                 );
+
                 return null;
-            } finally {
-                if (!controller.signal.aborted) {
-                    setLoading(false);
-                }
             }
         },
         [token],
     );
 
     return {
-        loading,
-        error,
-        response,
+        fetchSuggestionsLoading,
+        fetchSuggestionsError,
+        suggestions,
         handleSuggestionsSearch,
     };
 };

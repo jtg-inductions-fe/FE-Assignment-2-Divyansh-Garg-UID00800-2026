@@ -12,8 +12,15 @@ export const FollowButton = styled(Button)(({ theme }) => ({
     flexShrink: 0,
     minWidth: theme.functions.pxToRem(120),
     minHeight: theme.functions.pxToRem(44),
+    ':disabled': {
+        background: 'gray',
+    },
 
     '&:hover': {
         backgroundColor: theme.colors.primary[500],
+    },
+
+    [theme.breakpoints.down('sm')]: {
+        padding: theme.variables.spacing.xs,
     },
 }));

@@ -48,11 +48,21 @@ export const Modal = ({
                 <Divider />
 
                 <PopoverActions>
-                    <PopoverActionButton variant="outlined" color="inherit" onClick={onClose}>
+                    <PopoverActionButton
+                        title="Close Logout Modal"
+                        variant="outlined"
+                        color="inherit"
+                        onClick={onClose}
+                    >
                         {BtnOneLabel}
                     </PopoverActionButton>
 
-                    <PopoverActionButton variant="contained" color="error" onClick={onConfirm}>
+                    <PopoverActionButton
+                        title="Logout the User"
+                        variant="contained"
+                        color="error"
+                        onClick={onConfirm}
+                    >
                         {BtnTwoLabel}
                     </PopoverActionButton>
                 </PopoverActions>

@@ -13,6 +13,7 @@ export interface SocialState {
     following: Record<number, SocialUser>;
     fetchFollowingsLoading: boolean;
     fetchFollowingsError: string | null;
+    followUnfollowLoading: boolean;
     followUnfollowLoadingId: number | null;
     followUnfollowError: ErrorMessage | null;
 }

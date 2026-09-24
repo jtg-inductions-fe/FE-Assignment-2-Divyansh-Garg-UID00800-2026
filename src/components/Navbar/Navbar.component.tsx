@@ -54,7 +54,12 @@ export const Navbar = () => {
                     <>
                         <MobileMenu onLogoutClick={handleLogoutClick} />
 
-                        <HomeLinkWrapper component={NavLink} to="/" aria-label="GitSearch home">
+                        <HomeLinkWrapper
+                            title="Navigate to Home Page"
+                            component={NavLink}
+                            to="/"
+                            aria-label="GitSearch home"
+                        >
                             <GitHub />
 
                             <Brand variant="h3">GitSearch</Brand>
@@ -62,7 +67,12 @@ export const Navbar = () => {
                     </>
                 ) : (
                     <>
-                        <HomeLinkWrapper component={NavLink} to="/" aria-label="GitSearch home">
+                        <HomeLinkWrapper
+                            title="Navigate to Home Page"
+                            component={NavLink}
+                            to="/"
+                            aria-label="GitSearch home"
+                        >
                             <GitHub />
 
                             <Brand variant="h3">GitSearch</Brand>
@@ -71,6 +81,7 @@ export const Navbar = () => {
                         <NavLinks aria-label="Main navigation">
                             {items.map((item) => (
                                 <StyledNavButton
+                                    title={`Navigate to ${item.label} Page`}
                                     key={item.path}
                                     component={NavLink}
                                     to={item.path}
@@ -82,6 +93,7 @@ export const Navbar = () => {
 
                             {isAuthenticated ? (
                                 <StyledLogoutButton
+                                    title="Toggle Logout Confirmation Modal"
                                     startIcon={<logoutItem.icon />}
                                     onClick={handleLogoutClick}
                                 >
@@ -89,6 +101,7 @@ export const Navbar = () => {
                                 </StyledLogoutButton>
                             ) : (
                                 <StyledNavButton
+                                    title="Navigate to Login Page"
                                     component={NavLink}
                                     to={loginItem.path}
                                     startIcon={<loginItem.icon />}

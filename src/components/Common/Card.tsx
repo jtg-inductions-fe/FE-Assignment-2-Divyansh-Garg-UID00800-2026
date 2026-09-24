@@ -7,12 +7,16 @@ export const Card = styled(Stack)(({ theme }) => ({
     gap: theme.variables.spacing.md,
     borderRadius: theme.variables.radius.xl,
     boxShadow: theme.variables.shadows.card,
+    backgroundColor: theme.colors.gray[50],
 
     width: '100%',
     textAlign: 'center',
-    backgroundColor: theme.colors.gray[50],
     overflow: 'scroll',
     scrollbarWidth: 'none',
+
+    [theme.breakpoints.down('sm')]: {
+        padding: '10px',
+    },
 }));
 
 export const CardLogo = styled(Box)(({ theme }) => ({

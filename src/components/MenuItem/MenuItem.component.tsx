@@ -52,20 +52,13 @@ export const MenuItem = ({
 }: MenuItemProps) => {
     const theme = useTheme();
     const colors = theme.colors;
-
-    if (followButtonProps?.isFollowed) {
-        return null;
-    }
-
-    if (dismissProps?.dismissed) {
-        return null;
-    }
+    const variables = theme.variables;
 
     return (
         <StyledMenuItem onClick={() => onClick(userProps.username)} sx={sx}>
             <Tag onClick={(event) => event.stopPropagation()}>
                 {dismissProps && (
-                    <IconButton onClick={dismissProps.onDismiss}>
+                    <IconButton title="Remove Suggestion" onClick={dismissProps.onDismiss}>
                         <Close />
                     </IconButton>
                 )}
@@ -93,6 +86,7 @@ export const MenuItem = ({
                             {userProps.username}
                             {userProps.gitURL && (
                                 <IconButton
+                                    title="Open Users GitHub Profile"
                                     href={userProps.gitURL}
                                     target="_blank"
                                     rel="noopener noreferrer"
@@ -112,10 +106,33 @@ export const MenuItem = ({
                 {followButtonProps?.isFetched && (
                     <Box onClick={(event) => event.stopPropagation()}>
                         <FollowButton
-                            disabled={Boolean(followButtonProps.loading)}
+                            title={
+                                followButtonProps.isFollowed
+                                    ? `Unfollow ${userProps.username}`
+                                    : `Follow ${userProps.username}`
+                            }
+                            disabled={followButtonProps.disabled}
                             onClick={followButtonProps.onClick}
+                            sx={
+                                followButtonProps.isFollowed
+                                    ? {
+                                          color: colors.white,
+                                          backgroundColor: colors.secondary[900],
+                                          fontSize: variables.fontSize.sm,
+                                          '&:hover': {
+                                              backgroundColor: colors.secondary[500],
+                                          },
+                                      }
+                                    : {}
+                            }
                         >
-                            {followButtonProps.loading ? <CircularProgress size={31} /> : 'Follow'}
+                            {followButtonProps.loading ? (
+                                <CircularProgress size={31} />
+                            ) : followButtonProps.isFollowed ? (
+                                'Unfollow'
+                            ) : (
+                                'Follow'
+                            )}
                         </FollowButton>
                     </Box>
                 )}

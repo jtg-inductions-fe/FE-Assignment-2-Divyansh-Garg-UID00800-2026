@@ -199,6 +199,7 @@ export const Search = () => {
 
                                                     {!loading && searchUsername.trim() && (
                                                         <IconButton
+                                                            title="Clear Search"
                                                             onClick={handleClear}
                                                             aria-label="Clear search"
                                                             edge="end"
