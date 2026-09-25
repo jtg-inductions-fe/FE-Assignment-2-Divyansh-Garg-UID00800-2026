@@ -2,26 +2,41 @@ import { Fragment, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
 
 import { Close, Search as SearchIcon } from '@mui/icons-material';
-import { Autocomplete, CircularProgress, IconButton, TextField, Typography } from '@mui/material';
+import {
+    Autocomplete,
+    CircularProgress,
+    IconButton,
+    TextField,
+    Typography,
+    useTheme,
+} from '@mui/material';
 
-import { colors, pxToRem } from '@theme';
+import { Page, Content, Card, Bubble, ErrorBox } from '@components/Common';
 
-import { Page, Content, Card, StyledAvatar, Bubble, ErrorBox } from '@components/Common';
-
-import { SearchResult, SearchWrap } from './Search.styles';
+import { SearchWrap } from './Search.styles';
 
 import { useGitHubSearch } from './useGithubSearch';
+import { MenuItem } from '@components/MenuItem';
 
 export const Search = () => {
+    const theme = useTheme();
+    const colors = theme.colors;
+    const variables = theme.variables;
+    const functions = theme.functions;
+
     const navigate = useNavigate();
     const { username } = useParams<string>();
 
     const { loading, error, response, handleSearch } = useGitHubSearch();
 
     const [searchUsername, setSearchUsername] = useState(username ?? '');
-    const [open, setOpen] = useState(false);
+    const [_open, setOpen] = useState(false);
 
     const options = response?.items ?? [];
+
+    const hasResponse = response !== undefined && response !== null;
+
+    const shouldOpen = Boolean(searchUsername.trim()) && (loading || hasResponse);
 
     useEffect(() => {
         const trimmedUsername = searchUsername.trim();
@@ -37,7 +52,7 @@ export const Search = () => {
         return () => {
             window.clearTimeout(timer);
         };
-    }, [searchUsername]);
+    }, [searchUsername, handleSearch]);
 
     useEffect(() => {
         const trimmedUsername = searchUsername.trim();
@@ -78,16 +93,16 @@ export const Search = () => {
             <Bubble
                 sx={{
                     backgroundColor: colors.primary[200],
-                    top: pxToRem(-120),
-                    right: pxToRem(-120),
+                    top: functions.pxToRem(-120),
+                    right: functions.pxToRem(-120),
                 }}
             />
 
             <Bubble
                 sx={{
                     backgroundColor: colors.primary[200],
-                    bottom: pxToRem(-120),
-                    left: pxToRem(-120),
+                    bottom: functions.pxToRem(-120),
+                    left: functions.pxToRem(-120),
                 }}
             />
 
@@ -96,7 +111,7 @@ export const Search = () => {
                     <Typography variant="h3">Search GitHub Account</Typography>
 
                     <Typography variant="h4">
-                        Enter GitHub Username of person you wanna watch.
+                        Enter GitHub Username of person you want to watch.
                     </Typography>
 
                     {error && <ErrorBox severity="error">{error}</ErrorBox>}
@@ -105,11 +120,13 @@ export const Search = () => {
                         <Autocomplete
                             popupIcon={null}
                             openOnFocus={false}
-                            open={open}
-                            onOpen={() => setOpen(true)}
+                            open={shouldOpen}
                             onClose={() => setOpen(false)}
                             inputValue={searchUsername}
                             disablePortal
+                            noOptionsText={!loading && hasResponse ? 'No GitHub User Found' : ''}
+                            loading={loading}
+                            loadingText={<CircularProgress size={functions.pxToRem(50)} />}
                             slotProps={{
                                 popper: {
                                     placement: 'bottom',
@@ -133,37 +150,33 @@ export const Search = () => {
                                 }
 
                                 setSearchUsername(value);
-                                setOpen(Boolean(value.trim()));
-                            }}
-                            onChange={(_event, value) => {
-                                if (!value) {
-                                    return;
-                                }
-
-                                handleNavigation(value.login);
                             }}
                             isOptionEqualToValue={(option, value) => option.id === value.id}
                             getOptionLabel={(option) => option.login}
                             options={options}
-                            loading={loading}
-                            renderOption={(props, option) => (
-                                <SearchResult
-                                    {...props}
+                            renderOption={(_, option) => (
+                                <MenuItem
                                     key={option.id}
+                                    userProps={{
+                                        username: option.login,
+                                    }}
+                                    avatarProps={{
+                                        src: option.avatar_url,
+                                        alt: option.login.trim(),
+                                    }}
                                     onClick={() => handleNavigation(option.login)}
-                                >
-                                    <StyledAvatar
-                                        src={option.avatar_url}
-                                        alt={`${option.login} avatar`}
-                                    />
-
-                                    <Typography variant="h4">{option.login}</Typography>
-                                </SearchResult>
+                                    sx={{
+                                        [theme.breakpoints.down('sm')]: {
+                                            flexDirection: 'row',
+                                        },
+                                        borderRadius: variables.radius.xl,
+                                    }}
+                                />
                             )}
                             renderInput={(params) => (
                                 <TextField
                                     {...params}
-                                    placeholder="Search GitHub username..."
+                                    placeholder="Search GitHub Username"
                                     onKeyDown={(event) => {
                                         if (event.key === 'Enter') {
                                             event.preventDefault();
@@ -174,15 +187,19 @@ export const Search = () => {
                                         ...params.slotProps,
                                         input: {
                                             ...params.slotProps?.input,
-                                            startAdornment: <SearchIcon />,
+                                            startAdornment: (
+                                                <SearchIcon
+                                                    sx={{
+                                                        marginLeft: '7.5px',
+                                                        padding: 0,
+                                                    }}
+                                                />
+                                            ),
                                             endAdornment: (
                                                 <Fragment>
-                                                    {loading && (
-                                                        <CircularProgress size={pxToRem(20)} />
-                                                    )}
-
-                                                    {!loading && searchUsername.trim() && (
+                                                    {searchUsername.trim() && (
                                                         <IconButton
+                                                            title="Clear Search"
                                                             onClick={handleClear}
                                                             aria-label="Clear search"
                                                             edge="end"
@@ -190,8 +207,6 @@ export const Search = () => {
                                                             <Close />
                                                         </IconButton>
                                                     )}
-
-                                                    {params.slotProps?.input?.endAdornment}
                                                 </Fragment>
                                             ),
                                         },

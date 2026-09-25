@@ -1,5 +1,4 @@
 import { Button, Popover, Stack, styled } from '@mui/material';
-import { colors } from '@theme';
 
 export const StyledPopover = styled(Popover)(() => ({
     marginTop: '15px',
@@ -12,7 +11,7 @@ export const PopoverContent = styled(Stack)(({ theme }) => ({
     gap: theme.variables.spacing.md,
     padding: theme.variables.spacing.xl,
 
-    backgroundColor: colors.primary[50],
+    backgroundColor: theme.colors.primary[50],
 }));
 
 export const PopoverActions = styled(Stack)(({ theme }) => ({

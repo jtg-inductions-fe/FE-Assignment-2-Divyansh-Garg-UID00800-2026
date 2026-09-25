@@ -1,4 +1,4 @@
-export { SearchWrap, SearchResult } from './Search.styles';
+export { SearchWrap } from './Search.styles';
 
 export { Search } from './Search';
 

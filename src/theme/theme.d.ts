@@ -71,6 +71,76 @@ declare module '@mui/material/styles' {
                 fast: string;
             };
         };
+
+        colors: {
+            primary: {
+                50: string;
+                100: string;
+                200: string;
+                300: string;
+                400: string;
+                500: string;
+                600: string;
+                700: string;
+                800: string;
+                900: string;
+            };
+
+            secondary: {
+                50: string;
+                100: string;
+                200: string;
+                300: string;
+                400: string;
+                500: string;
+                600: string;
+                700: string;
+                800: string;
+                900: string;
+            };
+
+            gray: {
+                50: string;
+                100: string;
+                200: string;
+                300: string;
+                600: string;
+                900: string;
+            };
+
+            success: {
+                100: string;
+                600: string;
+                800: string;
+            };
+
+            warning: {
+                100: string;
+                600: string;
+                800: string;
+            };
+
+            error: {
+                100: string;
+                200: string;
+                500: string;
+                600: string;
+                800: string;
+            };
+
+            info: {
+                100: string;
+                600: string;
+                800: string;
+            };
+
+            white: string;
+            black: string;
+        };
+
+        functions: {
+            pxToRem: (number) => string;
+        };
     }
 
     interface ThemeOptions {
@@ -141,6 +211,76 @@ declare module '@mui/material/styles' {
                 normal?: string;
                 fast?: string;
             };
+        };
+
+        colors?: {
+            primary?: {
+                50?: string;
+                100?: string;
+                200?: string;
+                300?: string;
+                400?: string;
+                500?: string;
+                600?: string;
+                700?: string;
+                800?: string;
+                900?: string;
+            };
+
+            secondary?: {
+                50?: string;
+                100?: string;
+                200?: string;
+                300?: string;
+                400?: string;
+                500?: string;
+                600?: string;
+                700?: string;
+                800?: string;
+                900?: string;
+            };
+
+            gray?: {
+                50?: string;
+                100?: string;
+                200?: string;
+                300?: string;
+                600?: string;
+                900?: string;
+            };
+
+            success?: {
+                100?: string;
+                600?: string;
+                800?: string;
+            };
+
+            warning?: {
+                100?: string;
+                600?: string;
+                800?: string;
+            };
+
+            error?: {
+                100?: string;
+                200?: string;
+                500?: string;
+                600?: string;
+                800?: string;
+            };
+
+            info?: {
+                100?: string;
+                600?: string;
+                800?: string;
+            };
+
+            white?: string;
+            black?: string;
+        };
+
+        functions?: {
+            pxToRem?: (number) => string;
         };
     }
 

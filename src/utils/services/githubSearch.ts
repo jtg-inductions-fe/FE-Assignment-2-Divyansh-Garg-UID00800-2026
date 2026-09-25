@@ -1,5 +1,4 @@
-import { snakeToCamelCase } from '@utils';
-import { getSearchUsersUrl } from '@utils';
+import { snakeToCamelCase, getSearchUsersUrl, getHeaders } from '@utils';
 
 export interface GithubUser {
     login: string;
@@ -7,6 +6,7 @@ export interface GithubUser {
     avatar_url: string;
     type: string;
     email: string;
+    html_url: string;
 }
 
 export interface GithubSearchResponse {
@@ -23,10 +23,7 @@ export const searchGitHubUsers = async (
     const trimmedToken = token?.trim();
 
     const response = await fetch(getSearchUsersUrl(username), {
-        headers: {
-            ...(trimmedToken && { Authorization: `Bearer ${trimmedToken}` }),
-            Accept: 'application/vnd.github+json',
-        },
+        headers: getHeaders(trimmedToken),
         signal,
     });
 

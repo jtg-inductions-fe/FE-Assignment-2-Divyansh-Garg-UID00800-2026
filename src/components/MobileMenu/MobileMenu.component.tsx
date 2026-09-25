@@ -1,8 +1,8 @@
+import { type MouseEvent } from 'react';
 import { Close, GitHub, Menu } from '@mui/icons-material';
 import { Divider } from '@mui/material';
-import { type MouseEvent } from 'react';
 
-import { NavButton, useNavigation } from '@components/Navbar';
+import { StyledLogoutButton, StyledButton, useNavigation } from '@components/Navbar';
 
 import {
     MobileCloseButton,
@@ -11,9 +11,10 @@ import {
     MobileMenuHeader,
     MobileMenuTrigger,
     MobileNavigationList,
-} from './Menu.styles';
+} from './MobileMenu.styles';
 import { useAppDispatch, useAppSelector } from '@utils';
 import { closeSidebar, openSidebar } from '@redux/sidebar';
+import { NavLink } from 'react-router';
 
 interface MobileMenuProps {
     onLogoutClick: (event: MouseEvent<HTMLElement>) => void;
@@ -37,6 +38,7 @@ export const MobileMenu = ({ onLogoutClick }: MobileMenuProps) => {
     return (
         <>
             <MobileMenuTrigger
+                title="Open Mobile Navigation Menu List"
                 onClick={handleOpen}
                 aria-haspopup="dialog"
                 aria-expanded={isOpen}
@@ -45,12 +47,16 @@ export const MobileMenu = ({ onLogoutClick }: MobileMenuProps) => {
                 <Menu />
             </MobileMenuTrigger>
 
-            <MobileDrawer anchor="right" open={isOpen} onClose={handleClose}>
+            <MobileDrawer anchor="left" open={isOpen} onClose={handleClose}>
                 <MobileDrawerContent>
                     <MobileMenuHeader>
                         <GitHub />
 
-                        <MobileCloseButton onClick={handleClose} aria-label="Close navigation menu">
+                        <MobileCloseButton
+                            title="Close Navigation Menu List"
+                            onClick={handleClose}
+                            aria-label="Close navigation menu list"
+                        >
                             <Close />
                         </MobileCloseButton>
                     </MobileMenuHeader>
@@ -59,29 +65,36 @@ export const MobileMenu = ({ onLogoutClick }: MobileMenuProps) => {
 
                     <MobileNavigationList>
                         {items.map((item) => (
-                            <NavButton
+                            <StyledButton
+                                title={`Navigate to ${item.label} Page`}
                                 key={item.path}
+                                component={NavLink}
                                 to={item.path}
-                                icon={item.icon}
-                                label={item.label}
+                                startIcon={<item.icon />}
                                 onClick={handleClose}
-                            />
+                            >
+                                {item.label}
+                            </StyledButton>
                         ))}
 
                         {isAuthenticated ? (
-                            <NavButton
-                                label={logoutItem.label}
-                                icon={logoutItem.icon}
-                                isLogout
+                            <StyledLogoutButton
+                                title="Toggle Logout Confirmation Modal"
+                                startIcon={<logoutItem.icon />}
                                 onClick={onLogoutClick}
-                            />
+                            >
+                                {logoutItem.label}
+                            </StyledLogoutButton>
                         ) : (
-                            <NavButton
-                                label={loginItem.label}
-                                icon={loginItem.icon}
+                            <StyledButton
+                                title="Navigate to Login Page"
+                                component={NavLink}
                                 to={loginItem.path}
+                                startIcon={<loginItem.icon />}
                                 onClick={handleClose}
-                            />
+                            >
+                                {loginItem.label}
+                            </StyledButton>
                         )}
                     </MobileNavigationList>
                 </MobileDrawerContent>

@@ -6,7 +6,7 @@ export {
     HomeLinkWrapper,
     Brand,
     NavLinks,
-    StyledNavButton,
+    StyledButton,
     StyledLogoutButton,
 } from './Navbar.styles';
 
@@ -16,9 +16,5 @@ export {
     loginNavigationItem,
     logoutNavigationItem,
 } from './navbar';
-
-export { NavButton } from './NavButton';
-
-export { AppBarHeader } from './NavHeader';
 
 export { useNavigation } from './useNavigation';

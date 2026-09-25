@@ -1,5 +1,6 @@
 import js from '@eslint/js';
 import eslintPluginPrettier from 'eslint-plugin-prettier/recommended';
+import eslintConfigPrettier from 'eslint-config-prettier';
 import globals from 'globals';
 import tseslint from 'typescript-eslint';
 import reactHooks from 'eslint-plugin-react-hooks';
@@ -10,7 +11,6 @@ export default [
     },
     js.configs.recommended,
     ...tseslint.configs.recommended,
-    eslintPluginPrettier,
     {
         files: ['**/*.{js,jsx,ts,tsx}'],
 
@@ -25,7 +25,6 @@ export default [
         },
 
         rules: {
-            indent: ['error', 4],
             'no-unused-vars': 'off',
             '@typescript-eslint/no-unused-vars': [
                 'warn',
@@ -41,4 +40,6 @@ export default [
             ...reactHooks.configs['recommended-latest'].rules,
         },
     },
+    eslintPluginPrettier,
+    eslintConfigPrettier,
 ];

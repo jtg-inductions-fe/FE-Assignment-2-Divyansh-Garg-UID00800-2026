@@ -6,6 +6,8 @@ import { MainLayout } from '@layouts';
 import { Login } from '@pages/Login';
 import { NotFound } from '@pages/NotFound';
 import { Search } from '@pages/Search';
+import { Profile } from '@pages/Profile';
+import { Suggestions } from '@pages/Suggestions';
 
 export const router = createBrowserRouter([
     {
@@ -20,6 +22,14 @@ export const router = createBrowserRouter([
                 element: <Search />,
             },
             {
+                path: '/profile',
+                element: <Search />,
+            },
+            {
+                path: '/profile/:username',
+                element: <Profile />,
+            },
+            {
                 element: <AuthGuard />,
                 children: [
                     {
@@ -29,6 +39,10 @@ export const router = createBrowserRouter([
                     {
                         path: '/login',
                         element: <Login />,
+                    },
+                    {
+                        path: '/suggestions',
+                        element: <Suggestions />,
                     },
                 ],
             },

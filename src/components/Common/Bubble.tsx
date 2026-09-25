@@ -1,15 +1,13 @@
 import { Box, styled } from '@mui/material';
-import { colors } from '@theme';
-import { pxToRem } from '@theme';
 
-export const Bubble = styled(Box)(() => ({
+export const Bubble = styled(Box)(({ theme }) => ({
     position: 'absolute',
-    width: pxToRem(384),
-    height: pxToRem(384),
+    width: theme.functions.pxToRem(384),
+    height: theme.functions.pxToRem(384),
     borderRadius: '50%',
-    background: colors.primary[200],
+    background: theme.colors.primary[200],
     pointerEvents: 'none',
-    filter: `blur(${pxToRem(20)})`,
+    filter: `blur(${theme.functions.pxToRem(20)})`,
 }));
 
 export default Bubble;

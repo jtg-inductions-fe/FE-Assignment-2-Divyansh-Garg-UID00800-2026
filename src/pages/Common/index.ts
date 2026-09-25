@@ -1,0 +1,1 @@
+export { useGithubSocial } from './useGithubSocial';

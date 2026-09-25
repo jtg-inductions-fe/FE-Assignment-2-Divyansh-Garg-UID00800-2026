@@ -37,6 +37,10 @@ export const HomeLinkWrapper = styled(Box)(({ theme }) => ({
 
 export const Brand = styled(Typography)(({ theme }) => ({
     fontWeight: theme.variables.fontWeight.bold,
+
+    [theme.breakpoints.down('sm')]: {
+        display: 'none',
+    },
 }));
 
 export const NavLinks = styled(Box)(({ theme }) => ({
@@ -44,13 +48,9 @@ export const NavLinks = styled(Box)(({ theme }) => ({
     gap: theme.variables.spacing.xs,
 
     marginLeft: 'auto',
-
-    [theme.breakpoints.down('md')]: {
-        display: 'none',
-    },
 }));
 
-export const StyledNavButton = styled(Button)(({ theme }) => ({
+export const StyledButton = styled(Button)(({ theme }) => ({
     color: theme.palette.text.secondary,
     borderRadius: theme.variables.radius.pill,
     paddingLeft: theme.variables.spacing.md,
@@ -75,12 +75,10 @@ export const StyledNavButton = styled(Button)(({ theme }) => ({
         paddingLeft: theme.variables.spacing.md,
         paddingRight: theme.variables.spacing.md,
         fontSize: theme.variables.fontSize.md,
-
-        width: '50%',
     },
 })) as typeof Button;
 
-export const StyledLogoutButton = styled(StyledNavButton)(({ theme }) => ({
+export const StyledLogoutButton = styled(StyledButton)(({ theme }) => ({
     color: theme.palette.error.main,
 
     '&:hover': {

@@ -3,13 +3,8 @@ import { Box, Button, Drawer, IconButton, styled } from '@mui/material';
 export const MobileMenuTrigger = styled(Button)(({ theme }) => ({
     color: theme.palette.primary.dark,
 
-    display: 'none',
     minWidth: 0,
     padding: 0,
-
-    [theme.breakpoints.down('md')]: {
-        display: 'flex',
-    },
 
     '& .MuiSvgIcon-root': {
         fontSize: theme.variables.iconSize.xl,

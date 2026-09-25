@@ -2,7 +2,7 @@ import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
 
 import { localStorageUtils, STORAGE_KEYS } from '@utils';
 
-import type { SocialState, SocialUser } from './socialTypes';
+import type { ErrorMessage, SocialState, SocialUser } from './socialTypes';
 
 const storedState = localStorageUtils.get<SocialState>(STORAGE_KEYS.following);
 
@@ -12,6 +12,7 @@ const initialState: SocialState = {
     fetchFollowingsLoading: false,
     fetchFollowingsError: null,
     followUnfollowLoading: false,
+    followUnfollowLoadingId: null,
     followUnfollowError: null,
 };
 
@@ -47,8 +48,9 @@ const socialSlice = createSlice({
             state.fetchFollowingsError = action.payload;
         },
 
-        followUnfollowPending: (state) => {
+        followUnfollowPending: (state, action: PayloadAction<number>) => {
             state.followUnfollowLoading = true;
+            state.followUnfollowLoadingId = action.payload;
             state.followUnfollowError = null;
         },
 
@@ -57,6 +59,7 @@ const socialSlice = createSlice({
 
             state.following[user.id] = user;
             state.followUnfollowLoading = false;
+            state.followUnfollowLoadingId = null;
             state.followUnfollowError = null;
 
             localStorageUtils.set(STORAGE_KEYS.following, {
@@ -70,6 +73,7 @@ const socialSlice = createSlice({
 
             delete state.following[userId];
             state.followUnfollowLoading = false;
+            state.followUnfollowLoadingId = null;
             state.followUnfollowError = null;
 
             localStorageUtils.set(STORAGE_KEYS.following, {
@@ -78,14 +82,21 @@ const socialSlice = createSlice({
             });
         },
 
-        followUnfollowFailure: (state, action: PayloadAction<string>) => {
+        followUnfollowFailure: (state, action: PayloadAction<ErrorMessage>) => {
             state.followUnfollowLoading = false;
-            state.followUnfollowError = action.payload;
+            state.followUnfollowLoadingId = null;
+            state.followUnfollowError = {
+                id: action.payload.id,
+                message: action.payload.message,
+            };
         },
 
         removeSocialState: (state) => {
             state.isFetched = false;
             state.following = {};
+            state.followUnfollowLoading = false;
+            state.followUnfollowLoadingId = null;
+            state.followUnfollowError = null;
 
             localStorageUtils.remove(STORAGE_KEYS.following);
         },

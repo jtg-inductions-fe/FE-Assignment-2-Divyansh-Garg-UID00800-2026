@@ -1,15 +1,12 @@
 import type { AuthData, AuthUser } from '@redux/auth';
 
-import { snakeToCamelCase, getLoginUrl } from '@utils';
+import { snakeToCamelCase, getLoginUrl, getHeaders } from '@utils';
 
 export const authenticateWithGitHub = async (token: string): Promise<AuthData> => {
     const trimmedToken = token.trim();
 
     const response = await fetch(getLoginUrl(), {
-        headers: {
-            Authorization: `Bearer ${trimmedToken}`,
-            Accept: 'application/vnd.github+json',
-        },
+        headers: getHeaders(trimmedToken),
     });
 
     if (!response.ok) {
