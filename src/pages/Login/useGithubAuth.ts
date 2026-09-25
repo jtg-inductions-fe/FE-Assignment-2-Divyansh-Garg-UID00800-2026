@@ -27,27 +27,29 @@ export const useGitHubAuth = () => {
         }
 
         dispatch(loginPending());
-        dispatch(fetchFollowingsPending());
 
         try {
             const authResponse = await authenticateWithGitHub(trimmedToken);
-            const following = await fetchFollowing(authResponse.token);
+
+            dispatch(fetchFollowingsPending());
+            try {
+                const following = await fetchFollowing(authResponse.token);
+                dispatch(fetchFollowingsSuccess(following));
+            } catch (error) {
+                dispatch(
+                    fetchFollowingsFailure(
+                        error instanceof Error
+                            ? error.message
+                            : 'Failed to fetch GitHub followings.',
+                    ),
+                );
+            }
 
             dispatch(loginSuccess(authResponse));
-            dispatch(fetchFollowingsSuccess(following));
-
             return authResponse;
         } catch (error) {
             dispatch(
                 loginFailure(
-                    error instanceof Error
-                        ? error.message
-                        : 'Something went wrong while connecting to GitHub.',
-                ),
-            );
-
-            dispatch(
-                fetchFollowingsFailure(
                     error instanceof Error
                         ? error.message
                         : 'Something went wrong while connecting to GitHub.',
