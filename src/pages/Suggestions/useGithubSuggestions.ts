@@ -20,7 +20,7 @@ export const useGithubSuggestions = () => {
     const controllerRef = useRef<AbortController | null>(null);
 
     const handleSuggestionsSearch = useCallback(
-        async (since: number) => {
+        async (perPage: number, since: number) => {
             const trimmedToken = token?.trim();
 
             if (!trimmedToken) {
@@ -38,7 +38,12 @@ export const useGithubSuggestions = () => {
             dispatch(fetchSuggestionsPending());
 
             try {
-                const data = await fetchGitHubSuggestions(trimmedToken, since, controller.signal);
+                const data = await fetchGitHubSuggestions(
+                    trimmedToken,
+                    perPage,
+                    since,
+                    controller.signal,
+                );
 
                 if (!controller.signal.aborted) {
                     dispatch(fetchSuggestionsSuccess(data as GithubUser[]));

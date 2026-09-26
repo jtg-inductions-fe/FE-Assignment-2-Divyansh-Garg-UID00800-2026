@@ -49,7 +49,7 @@ export const Profile = () => {
     const { username } = useParams<{ username: string }>();
 
     const { user, token, isAuthenticated } = useAppSelector((state) => state.auth);
-    const { isFetched, following, followUnfollowLoadingId, followUnfollowError } = useAppSelector(
+    const { isFetched, following, followUnfollowLoadingIds, followUnfollowError } = useAppSelector(
         (state) => state.social,
     );
 
@@ -66,7 +66,7 @@ export const Profile = () => {
 
     const isFollowed = Boolean(searchUserInfo && String(searchUserInfo.id) in following);
 
-    const isFollowLoading = searchUserInfo?.id === followUnfollowLoadingId;
+    const isFollowLoading = searchUserInfo ? searchUserInfo.id in followUnfollowLoadingIds : false;
 
     const profileFollowError =
         searchUserInfo?.id === followUnfollowError?.id ? followUnfollowError?.message : null;

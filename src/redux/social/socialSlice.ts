@@ -11,8 +11,7 @@ const initialState: SocialState = {
     following: storedState?.following ?? {},
     fetchFollowingsLoading: false,
     fetchFollowingsError: null,
-    followUnfollowLoading: false,
-    followUnfollowLoadingId: null,
+    followUnfollowLoadingIds: {},
     followUnfollowError: null,
 };
 
@@ -49,8 +48,7 @@ const socialSlice = createSlice({
         },
 
         followUnfollowPending: (state, action: PayloadAction<number>) => {
-            state.followUnfollowLoading = true;
-            state.followUnfollowLoadingId = action.payload;
+            state.followUnfollowLoadingIds[action.payload] = true;
             state.followUnfollowError = null;
         },
 
@@ -58,8 +56,7 @@ const socialSlice = createSlice({
             const user = action.payload;
 
             state.following[user.id] = user;
-            state.followUnfollowLoading = false;
-            state.followUnfollowLoadingId = null;
+            delete state.followUnfollowLoadingIds[user.id];
             state.followUnfollowError = null;
 
             localStorageUtils.set(STORAGE_KEYS.following, {
@@ -72,8 +69,7 @@ const socialSlice = createSlice({
             const userId = action.payload.id;
 
             delete state.following[userId];
-            state.followUnfollowLoading = false;
-            state.followUnfollowLoadingId = null;
+            delete state.followUnfollowLoadingIds[userId];
             state.followUnfollowError = null;
 
             localStorageUtils.set(STORAGE_KEYS.following, {
@@ -83,8 +79,7 @@ const socialSlice = createSlice({
         },
 
         followUnfollowFailure: (state, action: PayloadAction<ErrorMessage>) => {
-            state.followUnfollowLoading = false;
-            state.followUnfollowLoadingId = null;
+            delete state.followUnfollowLoadingIds[action.payload.id];
             state.followUnfollowError = {
                 id: action.payload.id,
                 message: action.payload.message,
@@ -94,8 +89,9 @@ const socialSlice = createSlice({
         removeSocialState: (state) => {
             state.isFetched = false;
             state.following = {};
-            state.followUnfollowLoading = false;
-            state.followUnfollowLoadingId = null;
+            state.fetchFollowingsLoading = false;
+            state.fetchFollowingsError = null;
+            state.followUnfollowLoadingIds = {};
             state.followUnfollowError = null;
 
             localStorageUtils.remove(STORAGE_KEYS.following);

@@ -18,5 +18,5 @@ export const getProfileUrl = (username: string): string =>
 export const getFollowingUserUrl = (username: string): string =>
     `${BASE_URL}/${FOLLOWING_URL}/${encodeURIComponent(username)}`;
 
-export const getSuggestionsUrl = (since: number): string =>
-    `${BASE_URL}/${USERS_URL}?per_page=10&since=${since}`;
+export const getSuggestionsUrl = (perPage: number, since: number): string =>
+    `${BASE_URL}/${USERS_URL}?per_page=${perPage}&since=${since}`;

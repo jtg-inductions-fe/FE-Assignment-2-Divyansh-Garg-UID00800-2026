@@ -11,6 +11,9 @@ export const useGithubProfile = () => {
     const [error, setError] = useState('');
     const [response, setResponse] = useState<AuthUser | null>(null);
 
+    const authProfile = useAppSelector((state) => state.auth.user);
+    const myUsername = useAppSelector((state) => state.auth.user?.login);
+
     const token = useAppSelector((state) => state.auth.token);
 
     const controllerRef = useRef<AbortController | null>(null);
@@ -18,6 +21,11 @@ export const useGithubProfile = () => {
     const handleProfileSearch = useCallback(
         async (username: string) => {
             const trimmedUsername = username.trim();
+
+            if (trimmedUsername === myUsername?.trim()) {
+                setResponse(authProfile);
+                return;
+            }
 
             if (!trimmedUsername) {
                 setError('Please enter a GitHub username.');
@@ -67,7 +75,7 @@ export const useGithubProfile = () => {
                 }
             }
         },
-        [token],
+        [token, authProfile, myUsername],
     );
 
     return {

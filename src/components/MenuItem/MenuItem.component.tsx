@@ -22,6 +22,7 @@ interface DismissProps {
 
 interface FollowButtonProps extends ButtonProps {
     isFollowed: boolean;
+    isRemoved: boolean;
     isFetched: boolean;
 }
 
@@ -53,6 +54,10 @@ export const MenuItem = ({
     const theme = useTheme();
     const colors = theme.colors;
     const variables = theme.variables;
+
+    if (followButtonProps?.isFollowed || followButtonProps?.isRemoved) {
+        return;
+    }
 
     return (
         <StyledMenuItem onClick={() => onClick(userProps.username)} sx={sx}>

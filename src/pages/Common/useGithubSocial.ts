@@ -7,11 +7,12 @@ import {
     followUnfollowPending,
     removeFollowingSuccess,
 } from '@redux/social';
+import { decreaseFollowingCount, increaseFollowingCount } from '@redux/auth';
 
 export const useGithubSocial = () => {
     const dispatch = useAppDispatch();
 
-    const { followUnfollowLoadingId, followUnfollowError } = useAppSelector(
+    const { followUnfollowLoadingIds, followUnfollowError } = useAppSelector(
         (state) => state.social,
     );
 
@@ -55,8 +56,10 @@ export const useGithubSocial = () => {
 
             if (isFollowed) {
                 dispatch(removeFollowingSuccess(socialUser));
+                dispatch(decreaseFollowingCount());
             } else {
                 dispatch(addFollowingSuccess(socialUser));
+                dispatch(increaseFollowingCount());
             }
 
             return socialUser;
@@ -76,7 +79,7 @@ export const useGithubSocial = () => {
     };
 
     return {
-        followUnfollowLoadingId,
+        followUnfollowLoadingIds,
         followUnfollowError,
         handleFollowUnfollow,
     };

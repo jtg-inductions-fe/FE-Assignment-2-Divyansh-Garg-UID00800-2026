@@ -21,7 +21,11 @@ export const Suggestions = () => {
     const functions = theme.functions;
 
     const token = useAppSelector((state) => state.auth.token);
-    const isSuggestionsFetched = useAppSelector((state) => state.suggestions.isSuggestionsFetched);
+    const { isSuggestionsFetched, removedSuggestions } = useAppSelector(
+        (state) => state.suggestions,
+    );
+
+    const myFollowing = useAppSelector((state) => state.auth.user?.following);
 
     const [since, setSince] = useState(() => Math.ceil(Math.random() * 100));
     const [isRefreshRequest, setIsRefreshRequest] = useState(false);
@@ -31,21 +35,55 @@ export const Suggestions = () => {
 
     const { handleFollowUnfollow } = useGithubSocial();
 
-    const {
-        isFetched,
+    const { isFetched, following, followUnfollowLoadingIds, followUnfollowError } = useAppSelector(
+        (state) => state.social,
+    );
+
+    useEffect(() => {
+        if (fetchSuggestionsLoading) return;
+
+        const visibleSuggestionsCount = Object.values(suggestions).filter((option) => {
+            const isFollowed = String(option.id) in following;
+            const isRemoved = option.id in removedSuggestions;
+
+            return !isFollowed && !isRemoved;
+        }).length;
+
+        if (visibleSuggestionsCount <= 3) {
+            const removedCount = Object.keys(removedSuggestions).length;
+            const totalToFetch =
+                myFollowing !== undefined ? myFollowing + removedCount + 10 : 10 + removedCount;
+
+            void handleSuggestionsSearch(totalToFetch, since);
+        }
+    }, [
+        suggestions,
+        removedSuggestions,
         following,
-        followUnfollowLoading,
-        followUnfollowLoadingId,
-        followUnfollowError,
-    } = useAppSelector((state) => state.social);
+        myFollowing,
+        since,
+        fetchSuggestionsLoading,
+        handleSuggestionsSearch,
+    ]);
 
     useEffect(() => {
         if ((!token || isSuggestionsFetched) && !isRefreshRequest) {
             return;
         }
 
-        void handleSuggestionsSearch(since);
-    }, [token, handleSuggestionsSearch, isSuggestionsFetched, since, isRefreshRequest]);
+        if (myFollowing !== undefined) {
+            handleSuggestionsSearch(myFollowing + 10, since);
+        } else {
+            handleSuggestionsSearch(10, since);
+        }
+    }, [
+        token,
+        handleSuggestionsSearch,
+        isSuggestionsFetched,
+        since,
+        isRefreshRequest,
+        myFollowing,
+    ]);
 
     const handleRefresh = () => {
         if (fetchSuggestionsLoading || !token) {
@@ -53,7 +91,15 @@ export const Suggestions = () => {
         }
 
         if (Object.keys(suggestions).length === 0) {
-            void handleSuggestionsSearch(since);
+            if (myFollowing !== undefined) {
+                void handleSuggestionsSearch(
+                    myFollowing + Object.keys(removedSuggestions).length + 10,
+                    since,
+                );
+            } else {
+                void handleSuggestionsSearch(10 + Object.keys(removedSuggestions).length, since);
+            }
+
             return;
         }
 
@@ -123,9 +169,10 @@ export const Suggestions = () => {
                                     }}
                                     followButtonProps={{
                                         isFollowed: String(option.id) in following,
+                                        isRemoved: option.id in removedSuggestions,
                                         isFetched,
-                                        loading: followUnfollowLoadingId === option.id,
-                                        disabled: followUnfollowLoading,
+                                        loading: option.id in followUnfollowLoadingIds,
+                                        disabled: option.id in followUnfollowLoadingIds,
                                         onClick: () => {
                                             handleFollowUnfollow(
                                                 option.id,

@@ -3,10 +3,11 @@ import { getSuggestionsUrl, getHeaders } from '@utils';
 
 export const fetchGitHubSuggestions = async (
     token: string,
+    perPage: number,
     since: number,
     signal?: AbortSignal,
 ): Promise<GithubUser[]> => {
-    const response = await fetch(getSuggestionsUrl(since), {
+    const response = await fetch(getSuggestionsUrl(perPage, since), {
         headers: getHeaders(token),
         signal,
     });

@@ -40,6 +40,20 @@ const authSlice = createSlice({
             state.error = action.payload;
         },
 
+        increaseFollowingCount: (state) => {
+            if (state.user) {
+                const following = state.user.following;
+                state.user.following = following + 1;
+            }
+        },
+
+        decreaseFollowingCount: (state) => {
+            if (state.user) {
+                const following = state.user.following;
+                if (following > 0) state.user.following = following - 1;
+            }
+        },
+
         logoutUser: (state) => {
             state.user = null;
             state.token = null;
@@ -51,6 +65,13 @@ const authSlice = createSlice({
     },
 });
 
-export const { loginPending, loginSuccess, loginFailure, logoutUser } = authSlice.actions;
+export const {
+    loginPending,
+    loginSuccess,
+    loginFailure,
+    increaseFollowingCount,
+    decreaseFollowingCount,
+    logoutUser,
+} = authSlice.actions;
 
 export default authSlice.reducer;
